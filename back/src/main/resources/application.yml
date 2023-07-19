@@ -4,7 +4,7 @@ server:
 spring:
   datasource:
     url: jdbc:mysql://localhost:3306/SFDB?useSSL=false
-    username: hunsolo
+    username: root
     password: 1567
     driver-class-name: com.mysql.jdbc.Driver
   jpa:
