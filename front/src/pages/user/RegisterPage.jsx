@@ -21,6 +21,8 @@
   import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
 import { useNavigate } from 'react-router';
 import { styled } from 'styled-components';
+import { set } from 'date-fns';
+import { idCheckDB } from '../../axios/user/registerLogic';
 
 // mui의 css 우선순위가 높기때문에 important를 설정 - 실무하다 보면 종종 발생 우선순위 문제
 const FormHelperTexts = styled(FormHelperText)`
@@ -48,16 +50,26 @@ padding-bottom: 40px !important;
     const [registerError, setRegisterError] = useState('');
    
 
-    /************************************************************************************************/
+  /************************************************************************************************/
   /* 함수 정의 */
   
   //id 중복확인 기능
-  const handleCheckDuplicateId = (id) => {
+  const handleCheckDuplicateId = async(id) => {
     // 중복 확인 로직 처리
-    // ...
-    
-    // ID가 중복되지 않은 경우
-    setIdError('');
+    try {
+      const res = await idCheckDB(id);
+      console.log(res.data);
+      if(res.data){
+        setIdError('이미 존재하는 아이디입니다.');
+      }else{
+        alert('사용 가능한 아이디입니다.');
+        setIdError('');
+      }
+    } catch (error) {
+      console.log(error);
+      setIdError('다시 시도해주세요.')
+    }
+
   }
    
   
@@ -85,91 +97,95 @@ padding-bottom: 40px !important;
 /************************************************************************************************/
 /* 회원가입 데이터 요청 */
   
-  {/* axios 요청*/}
-  const regDataSend = async (data) => {
-    try {
-      const res = await regInsertDB(data);
-      // 요청이 성공한 경우의 처리
-      console.log(res.data); // 응답 데이터 출력 또는 처리
-      navigate('/login'); //로그인 페이지로 이동
-      
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  if (!selectedDate) {
+    setBirthError('생년월일을 선택해주세요.');
+    return;
+  }
 
-    } catch (error) {
-      // 요청이 실패한 경우의 처리
-      console.error(error); // 에러 메시지 출력 또는 처리
-      setRegisterError('회원가입에 실패했습니다. 다시 확인해주세요.');
+
+  const data = new FormData(e.currentTarget);
+  const { id, pw, rePw, name, birth, email } = Object.fromEntries(data.entries());
+
+  // 중복 아이디 체크
+  try {
+    const res = await handleCheckDuplicateId(id);
+    console.log(res.data);
+    if (res.data.duplicate) {
+      setIdError('이미 존재하는 아이디입니다.');
+      return;
+    } else {
+      alert('사용 가능한 아이디입니다.');
+      setIdError('');
     }
+  } catch (error) {
+    console.log(error);
+    setIdError('다시 시도해주세요.');
+    return;
+  }
+
+  // 유효성 검사
+  const idRegex = /^[A-Za-z][A-Za-z0-9]{5,}$/;
+  const pwRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+  const nameRegex = /^[a-zA-Z가-힣]+$/;
+  const emailRegex = /([\w-.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
+
+  if (!idRegex.test(id)) {
+    setIdError('영문자로 시작하고, 영문자와 숫자의 조합으로 6자리 이상이어야 합니다.');
+    return;
+  } else {
+    setIdError('');
+  }
+
+  if (!pwRegex.test(pw)) {
+    setPwError('영문자, 숫자, 특수 문자의 조합으로 8자리 이상이어야 합니다.');
+    return;
+  } else {
+    setPwError('');
+  }
+
+  if (pw !== rePw) {
+    setPwError('비밀번호가 일치하지 않습니다.');
+    return;
+  } else {
+    setPwError('');
+  }
+
+  if (!nameRegex.test(name)) {
+    setNameError('이름은 한글 또는 영문으로 입력해주세요.');
+    return;
+  } else {
+    setNameError('');
+  }
+
+  if (!emailRegex.test(email)) {
+    setEmailError('올바른 이메일 형식이 아닙니다.');
+    return;
+  } else {
+    setEmailError('');
+  }
+
+  if (!checked) {
+    alert('회원가입 약관에 동의해주세요.');
+    return;
+  }
+
+  // 회원가입 데이터 요청
+  const formattedDate = selectedDate ? formatDate(selectedDate) : '';
+  const regData = {
+    userId : id,
+    userPw: pw,
+    userName : name,
+    userBirth: formattedDate,
+    userEmail : email,
   };
 
-
-    {/* form 전송 */} 
-    const handleSubmit = (e) => {
-      e.preventDefault();
-      if (!selectedDate) {
-        setBirthError('생년월일을 선택해주세요.');
-        return;
-      }
-      const data = new FormData(e.currentTarget);
-    
-      // 생년월일을 'yyyy-mm-dd' 형식으로 변환
-    const formattedDate = selectedDate ? formatDate(selectedDate) : '';
-
-
-      const regData = {
-        id: data.get('id'),
-        pw: data.get('pw'),
-        rePw: data.get('rePw'),
-        name: data.get('name'),
-        birth: formattedDate, 
-        email: data.get('email'),
-      };
-      console.log(regData);
-
-      const { id,pw,rePw,name,birth,email } = regData;
-      
-    handleCheckDuplicateId(regData.id); // id 중복 확인 로직 호출
-
-      //유효성 검사
-      // ID
-    const idRegex = /^[A-Za-z][A-Za-z0-9]{5,}$/;
-    if (!idRegex.test(id)) 
-      setIdError('영문자로 시작하고, 영문자와 숫자의 조합으로 6자리 이상이어야 합니다.');
-      else setIdError('');
-
-    // pw
-  const pwRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-  if (!pwRegex.test(pw)) 
-    setPwError('영문자, 숫자, 특수 문자의 조합으로 8자리 이상이어야 합니다.');
-   else setPwError('');
-
-    if (pw !== rePw) setPwError('비밀번호가 일치하지 않습니다.');
-    else setPwError('');
-
-  //이름
-  const nameRegex = /^[a-zA-Z가-힣]+$/;
-  if(!nameRegex.test(name)) 
-  setNameError('이름은 한글 또는 영문으로 입력해주세요.')
-  else setNameError('');
-
-  //이메일
-  const emailRegex = /([\w-.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
-  if (!emailRegex.test(email)) setEmailError('올바른 이메일 형식이 아닙니다.');
-  else setEmailError('');
-  
-  //약관 동의
-  if (!checked) alert('회원가입 약관에 동의해주세요.');
-
-  if (
-    idRegex.test(id) &&
-    pwRegex.test(password) &&
-    pw === rePw &&
-    nameRegex.test(name) &&
-    emailRegex.test(email) &&
-    checked
-  ) {
-    regDataSend(regData);
-  }
+  regDataSend(regData);
 };
+
+
+
 
 
 
@@ -206,6 +222,7 @@ padding-bottom: 40px !important;
     </IconButton>
     {idError && <FormHelperTexts error>{idError}</FormHelperTexts>}
   </Grid>
+  
 
 {/* 비밀번호 입력 및 재확인 */}                  
                   <Grid item xs={12}>
