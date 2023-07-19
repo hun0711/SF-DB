@@ -34,6 +34,8 @@ dependencies {
 	annotationProcessor("org.projectlombok:lombok")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("org.springframework.security:spring-security-test")
+	implementation 'mysql:mysql-connector-java'
+	
 }
 
 tasks.withType<Test> {
