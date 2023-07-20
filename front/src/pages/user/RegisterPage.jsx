@@ -61,8 +61,8 @@ padding-bottom: 40px !important;
     // 중복 확인 로직 처리
     try {
       const res = await idCheckDB(id);
-      console.log(res.data);
-      if(res.data){
+      console.log(res);
+      if(res){
         setIdError('이미 존재하는 아이디입니다.');
       }else{
         alert('사용 가능한 아이디입니다.');

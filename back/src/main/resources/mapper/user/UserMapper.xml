@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mapper namespace="com.back.user.repository.RegisterDao">
+
+<!-- id 중복확인 -->
+<select id="idCheck" parameterType="java.lang.String" resultType="java.lang.Boolean">
+  SELECT COUNT(*) > 0 FROM user WHERE userId = #{userId}
+</select>
+
+<!-- 회원가입 -->
+<insert id="userJoin" parameterType="java.util.HashMap">
+INSERT into user(
+  userId,
+  userPw,
+  userName,
+  userBirth,
+  userEmail
+)VALUES(
+#{userId},
+#{userPw},
+#{userName},
+#{userBirth},
+#{userEmail}
+)
+</insert>
+
+
+</mapper>

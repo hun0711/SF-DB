@@ -1,7 +1,8 @@
 package com.back.user.service;
 
 import org.springframework.stereotype.Service;
-import com.back.user.repository.User;
+
+import com.back.user.repository.RegisterDto;
 
 @Service
 public interface RegisterService {
@@ -10,6 +11,6 @@ public interface RegisterService {
 		boolean idCheck(String userId);
 
 		//회원 가입
-		User userJoin(User user);
+		int userJoin(RegisterDto rDto);
 
 }
