@@ -1,6 +1,7 @@
 import React from 'react'
 import MainPage from './pages/main/MainPage'
 import RegisterPage from './pages/user/RegisterPage'
+import LoginPage from './pages/user/LoginPage'
 import { Route, Routes } from 'react-router'
 
 const App = () => {
@@ -10,7 +11,7 @@ const App = () => {
       {/* 메인페이지 */}
       <Route path="/" exact={true} element={<MainPage />} />
       {/* 로그인페이지 */}
-
+      <Route path="/" exact={true} element={<LoginPage />} />
       {/* 회원가입페이지 */}
       <Route path="/register" exact={true} element={<RegisterPage />} />
     </Routes>

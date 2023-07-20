@@ -22,7 +22,7 @@
 import { useNavigate } from 'react-router';
 import { styled } from 'styled-components';
 import { set } from 'date-fns';
-import { idCheckDB } from '../../axios/user/registerLogic';
+import { idCheckDB, regInsertDB } from '../../axios/user/registerLogic';
 
 // mui의 css 우선순위가 높기때문에 important를 설정 - 실무하다 보면 종종 발생 우선순위 문제
 const FormHelperTexts = styled(FormHelperText)`
@@ -41,7 +41,10 @@ padding-bottom: 40px !important;
     const navigate = useNavigate();
     
     const [checked, setChecked] = useState(false);
+    const [id, setId] = useState('');
     const [idError, setIdError] = useState('');
+    const [pw, setPw] = useState('');
+    const [rePw, setRePw] = useState('');
     const [pwError, setPwError] = useState('');
     const [nameError, setNameError] = useState('');
     const [selectedDate, setSelectedDate] = useState(null);
@@ -72,6 +75,12 @@ padding-bottom: 40px !important;
 
   }
    
+
+  //ID찾기 버튼 클릭 시 'id'입력값을 받아야함
+  const handleSearchButtonClick = () => {
+    const id = document.getElementById('id').value;
+    handleCheckDuplicateId(id);
+  }
   
   // 생년월일 선택
     const handleDateChange = (date) => {
@@ -96,6 +105,22 @@ padding-bottom: 40px !important;
 
 /************************************************************************************************/
 /* 회원가입 데이터 요청 */
+const regDataSend = async (data) => {
+  try {
+    const res = await regInsertDB(data)
+    console.log(res.data);
+    if(res.data){
+     navigate('./login')
+     alert('회원가입이 완료되었습니다. 로그인 해주세요.')
+    }else{
+    console.log('가입 실패');
+    alert('회원가입에 실패하였습니다.')
+    }
+  } catch (error) {
+    console.log(error);
+    alert('다시 시도해주세요.');
+}
+}
   
 const handleSubmit = async (e) => {
   e.preventDefault();
@@ -122,6 +147,11 @@ const handleSubmit = async (e) => {
   } catch (error) {
     console.log(error);
     setIdError('다시 시도해주세요.');
+    return;
+  }
+  // 입력값에 빈 칸이 있는지 확인
+  if (!id || !pw || !rePw || !name || !email) {
+    alert('입력하지 않는 부분을 확인해주세요.');
     return;
   }
 
@@ -214,10 +244,10 @@ const handleSubmit = async (e) => {
                 <Grid container spacing={2}>
 {/* 아이디 입력 및 중복 확인 */}
                   <Grid item xs={12} sm={10}>
-                    <TextField required fullWidth id="id" name="id" label="아이디" />
+                    <TextField required fullWidth id="id" name="id" label="아이디" value={id} onChange={(e) => setId(e.target.value)}/>
                   </Grid>
                 <Grid item xs={12} sm={2}>
-    <IconButton onClick={handleCheckDuplicateId}>
+    <IconButton onClick={handleSearchButtonClick}>
       <SearchIcon />
     </IconButton>
     {idError && <FormHelperTexts error>{idError}</FormHelperTexts>}
@@ -233,6 +263,13 @@ const handleSubmit = async (e) => {
                       id="pw"
                       name="pw"
                       label="비밀번호 (숫자+영문자+특수문자 8자리 이상)"
+                      value={pw}
+                      onChange={(e) => {
+                        const value = e.target.value;
+                        setPw(value);
+                        // 비밀번호 변경 시, 비밀번호 확인과 일치 여부 확인
+                        setPwError(value !== rePw ? '비밀번호가 일치하지 않습니다.' : '');
+                      }}
                       error={pwError !== ''}
                       helperText={pwError}
                     />
@@ -245,6 +282,13 @@ const handleSubmit = async (e) => {
                       id="rePw"
                       name="rePw"
                       label="비밀번호 확인"
+                      value={rePw}
+                      onChange={(e)=>{
+                        const value = e.target.value;
+                        setRePw(value)
+                         // 비밀번호 확인 변경 시, 비밀번호와 일치 여부 확인
+                      setPwError(value !== pw ? '비밀번호가 일치하지 않습니다.' : '');
+                      }} 
                       error={pwError !== ''}
                       helperText={pwError}
                     />
