@@ -11,7 +11,7 @@ const App = () => {
       {/* 메인페이지 */}
       <Route path="/" exact={true} element={<MainPage />} />
       {/* 로그인페이지 */}
-      <Route path="/" exact={true} element={<LoginPage />} />
+      <Route path="/login" exact={true} element={<LoginPage />} />
       {/* 회원가입페이지 */}
       <Route path="/register" exact={true} element={<RegisterPage />} />
     </Routes>

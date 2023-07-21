@@ -31,7 +31,7 @@ public class RegisterController {
 	
 	//ID 중복확인
 	@GetMapping("/idCheck")
-	public Boolean idCheck(@RequestParam String userId) {
+	public Boolean idCheck(@RequestParam(name = "userId") String userId) {
 		log.info("idCheck 확인");
 		 boolean result = registerService.idCheck(userId);
 		 return result;
