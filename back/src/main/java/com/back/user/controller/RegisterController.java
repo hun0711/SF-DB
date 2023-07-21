@@ -21,7 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Controller
 @ResponseBody
-@CrossOrigin(origins="*")
+@CrossOrigin("http://localhost:3000")
 @RequestMapping("/register/*")
 @RequiredArgsConstructor
 @Slf4j
@@ -30,7 +30,7 @@ public class RegisterController {
 	private final RegisterService registerService;
 	
 	//ID 중복확인
-	@GetMapping("idCheck")
+	@GetMapping("/idCheck")
 	public Boolean idCheck(@RequestParam String userId) {
 		log.info("idCheck 확인");
 		 boolean result = registerService.idCheck(userId);
@@ -38,7 +38,7 @@ public class RegisterController {
 	}
 	
 	//회원가입
-	@PostMapping("userJoin")
+	@PostMapping("/userJoin")
 	public int userJoin(@RequestBody RegisterDto rDto) {
 		log.info("memberInsert 확인");
 		int result = registerService.userJoin(rDto);

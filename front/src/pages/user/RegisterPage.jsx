@@ -58,6 +58,7 @@ padding-bottom: 40px !important;
   
   //id 중복확인 기능
   const handleCheckDuplicateId = async(id) => {
+    console.log(id);
     // 중복 확인 로직 처리
     try {
       const res = await idCheckDB(id);
