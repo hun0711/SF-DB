@@ -2,12 +2,12 @@ package com.back.user.service;
 
 import org.springframework.stereotype.Service;
 
-import com.back.user.repository.RegisterDto;
+import com.back.user.repository.UserDto;
 
 @Service
 public interface LoginService {
 
-	int userLogin(RegisterDto rDto);
+	int userLogin(UserDto uDto);
 
 	
 }

@@ -6,5 +6,5 @@ import org.apache.ibatis.annotations.Mapper;
 public interface LoginDao {
 
 	//로그인
-	public int userLogin(RegisterDto rDto);
+	public int userLogin(UserDto uDto);
 }

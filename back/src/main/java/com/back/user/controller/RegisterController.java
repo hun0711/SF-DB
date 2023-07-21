@@ -1,9 +1,5 @@
 package com.back.user.controller;
 
-import java.util.Collections;
-import java.util.Map;
-
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,10 +8,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
 
-import com.back.user.repository.RegisterDto;
+import com.back.user.repository.UserDto;
 import com.back.user.service.RegisterService;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -39,9 +35,9 @@ public class RegisterController {
 	
 	//회원가입
 	@PostMapping("/userJoin")
-	public int userJoin(@RequestBody RegisterDto rDto) {
+	public int userJoin(@RequestBody UserDto uDto) {
 		log.info("memberInsert 확인");
-		int result = registerService.userJoin(rDto);
+		int result = registerService.userJoin(uDto);
 		return result;
 	}
 	

@@ -10,7 +10,7 @@ spring:
 
 mybatis:
   type-aliases-package: com.back.*.repository
-  mapper-locations: classpath:mapper/*.xml
+  mapper-locations: classpath:mapper/*/*.xml
 
 management:
   endpoints:

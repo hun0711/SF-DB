@@ -47,8 +47,13 @@ const LoginPage = () => {
         userPw : pw
       }
       const res = await userLoginDB(loginData)
-      console.log('로그인 성공:', res);
-      navigate('./')
+      console.log('로그인 결과:', res);
+      if(res == 1){
+        alert("로그인 성공!")
+        navigate('/')
+      }else{
+        alert("입력 정보를 다시 확인해주세요.")
+      }
     } catch (error) {
       alert('에러 발생')
       console.error('로그인 실패:', error);

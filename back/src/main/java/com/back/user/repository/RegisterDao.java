@@ -10,7 +10,7 @@ public interface RegisterDao {
 	
 
 	// 회원 가입
-    public int userJoin(RegisterDto rDto);
+    public int userJoin(UserDto uDto);
 
 
 }

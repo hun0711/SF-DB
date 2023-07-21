@@ -7,9 +7,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.back.user.repository.RegisterDto;
+import com.back.user.repository.UserDto;
 import com.back.user.service.LoginService;
-import com.back.user.service.RegisterService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,9 +25,9 @@ public class LoginController {
 	
 	//로그인
 	@PostMapping("/login")
-	public int userLogin(@RequestBody RegisterDto rDto) {
+	public int userLogin(@RequestBody UserDto uDto) {
 		log.info("유저 로그인 호출");
-		int result = loginService.userLogin(rDto);
+		int result = loginService.userLogin(uDto);
 		return result;
 	}
 }

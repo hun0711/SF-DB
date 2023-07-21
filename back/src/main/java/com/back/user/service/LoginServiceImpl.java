@@ -3,8 +3,7 @@ package com.back.user.service;
 import org.springframework.stereotype.Service;
 
 import com.back.user.repository.LoginDao;
-import com.back.user.repository.RegisterDao;
-import com.back.user.repository.RegisterDto;
+import com.back.user.repository.UserDto;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,9 +16,9 @@ public class LoginServiceImpl implements LoginService {
 	private final LoginDao loginDao;
 
 	@Override
-	public int userLogin(RegisterDto rDto) {
+	public int userLogin(UserDto uDto) {
 		log.info("유저로그인 호출");
-		int result = loginDao.userLogin(rDto);
+		int result = loginDao.userLogin(uDto);
 		return result;
 	}
 
