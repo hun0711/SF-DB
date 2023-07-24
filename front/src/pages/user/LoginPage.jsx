@@ -92,7 +92,10 @@ const LoginPage = () => {
                   name="id"
                   label="아이디"
                   value={id}
-                  onChange={(e) => setId(e.target.value)}
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    setId(value);
+                  }}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -104,7 +107,10 @@ const LoginPage = () => {
                   name="pw"
                   label="비밀번호"
                   value={pw}
-                  onChange={(e) => setPw(e.target.value)}
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    setPw(value);
+                  }}
                 />
               </Grid>
         </Grid>

@@ -4,11 +4,13 @@ import axios from "axios";
 
 export const idCheckDB = async (id) => {
   try {
-    const response = await axios.get(`http://localhost:8000/register/idCheck`, {
-      params: { id },
+    const res = await axios.get(`http://localhost:8000/register/idCheck`, {
+      params: {
+        userId: id,
+      },
     });
     // 서버로부터 받은 응답 데이터를 반환합니다.
-    return response.data;
+    return res.data;
   } catch (error) {
     // 요청이 실패했을 때 오류를 콘솔에 출력하고 오류 객체를 반환합니다.
     console.error("Error during idCheckDB request:", error);
