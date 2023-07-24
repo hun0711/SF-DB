@@ -5,7 +5,6 @@ import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import SearchIcon from '@mui/icons-material/Search';
 import InputBase from '@mui/material/InputBase';
-
 import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
 
@@ -19,6 +18,8 @@ const headerPropTypes = {
   title: PropTypes.string.isRequired,
 };
 
+
+function Header(props) {
 /***********************************************************************/
 {/* 함수 정의 */}
 
@@ -27,22 +28,39 @@ const headerPropTypes = {
 
   // 검색 기능
   const handleSearch = () => {
-    // 여기서 searchQuery를 이용하여 검색 기능을 수행합니다.
+    // 여기서 searchQuery를 이용하여 검색 기능을 수행
     console.log('검색어:', searchQuery);
   };
 
-  // InputBase의 onChange 이벤트로 검색어를 업데이트합니다.
+  // InputBase의 onChange 이벤트로 검색어를 업데이트
   const handleInputChange = (event) => {
     setSearchQuery(event.target.value);
   };
 
 
 /************************************************************************/
-export default function Header(props) {
-  const { sections, title } = props;
+
+  const { sections } = props;
 
   return (
     <React.Fragment>
+      {/* 최상위 툴바 */}
+      <Toolbar
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'flex-end',
+          bgcolor: 'background.paper',
+          height: '0px', // 높이 조정 가능
+        }}
+      >
+        {/* 회원가입 버튼 */}
+        <Button variant="outlined" size="small">
+          로그인
+        </Button>
+      </Toolbar>
+
+
       <Toolbar
         sx={{
           display: 'flex',
@@ -52,25 +70,33 @@ export default function Header(props) {
           borderColor: 'divider',
         }}
       >
-        <Box sx={{ display: 'flex', alignItems: 'center' , marginTop:'100px'}}>
-          <Button size="small">Subscribe</Button>
+      {/* Subscribe 버튼 */}
+        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+          <Button size="large">Subscribe</Button>
         </Box>
+
+        {/* 로고 */}
         <Box sx={{ display: 'flex', alignItems: 'center', flex: 1, justifyContent: 'center' }}>
-          <img src="/images/SF-DB.png" alt="SF-DB 로고" style={{ width: '200px', height: '200px', marginRight: '10px' }} />
+          <img
+            src="/images/SF-DB.png"
+            alt="SF-DB 로고"
+            style={{ width: '200px', height: '200px', marginRight: '10px' }}
+          />
         </Box>
-        <Box sx={{ display: 'flex', alignItems: 'center' , marginTop:'100px'}}>
-          <InputBase  placeholder="작품과 배우를 검색해보세요"
-            
+
+        {/* 검색 바 */}
+        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+          <InputBase
+            placeholder="검색어를 입력하세요"
             value={searchQuery}
-            onChange={handleInputChange} />
+            onChange={handleInputChange}
+          />
           <IconButton onClick={handleSearch}>
             <SearchIcon />
           </IconButton>
-          <Button variant="outlined" size="small">
-            Sign up
-          </Button>
         </Box>
       </Toolbar>
+
       <Toolbar
         component="nav"
         variant="dense"
@@ -92,3 +118,6 @@ export default function Header(props) {
     </React.Fragment>
   );
 }
+
+Header.propTypes = headerPropTypes;
+export default Header;

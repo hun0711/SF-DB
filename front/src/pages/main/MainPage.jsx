@@ -86,6 +86,7 @@ const sidebar = {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <Container maxWidth="lg">
+        {/* 헤더 */}
         <Header sections={sections}>
           </Header>
         <main>
@@ -103,6 +104,7 @@ const sidebar = {
           </Grid>
         </main>
       </Container>
+      {/* 푸터 */}
       <Footer
         title="Footer"
         description="Something here to give the footer a purpose!"
