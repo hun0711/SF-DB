@@ -15,6 +15,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useNavigate } from 'react-router';
 import { styled } from 'styled-components';
 import { userLoginDB } from '../../axios/user/loginLogic';
+import HeaderBar from '../../modules/views/HeaderBar';
 
 // mui의 css 우선순위가 높기때문에 important를 설정 - 실무하다 보면 종종 발생 우선순위 문제
 const FormHelperTexts = styled(FormHelperText)`
@@ -31,6 +32,7 @@ padding-bottom: 40px !important;
 
 const LoginPage = () => {
   const theme = createTheme();
+  
   const navigate = useNavigate();
   const [id , setId] = useState('');
   const [pw , setPw] = useState('');
@@ -64,6 +66,7 @@ const LoginPage = () => {
 
   return (
     <ThemeProvider theme={theme}>
+      <HeaderBar/>
     <Container component="main" maxWidth="xs">
       <CssBaseline />
       <Box

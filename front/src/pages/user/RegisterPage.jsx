@@ -10,7 +10,6 @@
       FormHelperText,
       Grid,
       Box,
-      Typography,
       Container,
       Stack,
       IconButton,
@@ -22,8 +21,10 @@
     import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
   import { useNavigate } from 'react-router';
   import { styled } from 'styled-components';
-  import { set } from 'date-fns';
   import { idCheckDB, regInsertDB } from '../../axios/user/registerLogic';
+import { Link } from 'react-router-dom';
+import Typography from '../../modules/components/Typography';
+import Footer from '../../components/Footer';
 
   // mui의 css 우선순위가 높기때문에 important를 설정 - 실무하다 보면 종종 발생 우선순위 문제
   const FormHelperTexts = styled(FormHelperText)`
@@ -32,6 +33,7 @@
   font-weight: 700 !important;
   color: #d32f2f !important;
   `;
+
 
   const Boxs = styled(Box)`
   padding-bottom: 40px !important;
@@ -234,11 +236,21 @@
                 alignItems: 'center',
               }}
             >
-              <Avatar sx={{ m: 2, bgcolor: 'primary.main' }} />
-
-              <Typography component="h1" variant="h5">
-                SF-DB 회원가입
-              </Typography>
+              <Box sx={{ display: 'flex', alignItems: 'center', flex: 1, justifyContent: 'center' }}>
+          <img
+            src="/images/SF-DB.png"
+            alt="SF-DB 로고"
+            style={{ width: '180px', height: '180px' }}
+          />
+        </Box>
+              <Typography variant="h5" gutterBottom marked="center" align="center" sx={{ fontWeight: 'bold' }}>
+            회원가입
+          </Typography>
+          <Typography variant="body2" align="center">
+            <Link href="/login" underline="always">
+              이미 계정이 있으신가요?
+            </Link>
+          </Typography>
               <Boxs component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
                 <FormControl component="fieldset" variant="standard">
                   
@@ -366,6 +378,7 @@
                 </Boxs>
             </Box>
           </Container>
+          <Footer/>
         </ThemeProvider>
       );
     };

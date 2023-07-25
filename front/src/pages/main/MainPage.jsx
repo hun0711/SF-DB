@@ -6,7 +6,6 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import GitHubIcon from '@mui/icons-material/GitHub';
 import FacebookIcon from '@mui/icons-material/Facebook';
 import TwitterIcon from '@mui/icons-material/Twitter';
-import Main from '../../components/Main';
 import Header from '../../components/Header'
 import Sidebar from '../../components/Sidebar';
 import Footer from '../../components/Footer';
@@ -14,6 +13,8 @@ import post1 from './blog-post.1.md';
 import post2 from './blog-post.2.md';
 import post3 from './blog-post.3.md';
 import { Box, Typography } from '@mui/material';
+import Main from './Main';
+import HeaderBar from '../../modules/views/HeaderBar';
 
 
 const MainPage = () => {
@@ -87,6 +88,7 @@ const sidebar = {
       <CssBaseline />
       <Container maxWidth="lg">
         {/* 헤더 */}
+        <HeaderBar/>
         <Header sections={sections}>
           </Header>
         <main>
