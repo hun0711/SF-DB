@@ -45,20 +45,7 @@ function Header(props) {
   return (
     <React.Fragment>
       {/* 최상위 툴바 */}
-      <Toolbar
-        sx={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'flex-end',
-          bgcolor: 'background.paper',
-          height: '0px', // 높이 조정 가능
-        }}
-      >
-        {/* 회원가입 버튼 */}
-        <Button variant="outlined" size="small">
-          로그인
-        </Button>
-      </Toolbar>
+
 
 
       <Toolbar
