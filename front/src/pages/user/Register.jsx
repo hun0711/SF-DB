@@ -15,6 +15,7 @@
       IconButton,
       InputAdornment,
       Link,
+      Typography,
     } from '@mui/material/';
     import SearchIcon from '@mui/icons-material/Search';
     import { createTheme, ThemeProvider } from '@mui/material/styles';
@@ -23,7 +24,6 @@
   import { useNavigate } from 'react-router';
   import { styled } from 'styled-components';
   import { idCheckDB, regInsertDB } from '../../axios/user/registerLogic';
-import Typography from '../../modules/components/Typography';
 
   // mui의 css 우선순위가 높기때문에 important를 설정 - 실무하다 보면 종종 발생 우선순위 문제
   const FormHelperTexts = styled(FormHelperText)`
