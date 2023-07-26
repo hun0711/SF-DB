@@ -11,7 +11,6 @@ import {
   Container,
   Link,
 } from '@mui/material/';
-import Avatar from '@mui/material/Avatar';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useNavigate } from 'react-router';
 import { styled } from 'styled-components';
@@ -52,7 +51,7 @@ const Login = () => {
       console.log('로그인 결과:', res);
       if(res == 1){
         alert("로그인 성공!")
-        navigate('/')
+        navigate('/main')
       }else{
         alert("입력 정보를 다시 확인해주세요.")
       }

@@ -4,7 +4,7 @@ import { BrowserRouter } from "react-router-dom";
 import App from "./App";
 import "./fonts/Font.css";
 
-const root = ReactDOM.createRoot(document.getElementById("root"));
+const root = ReactDOM.unstable_createRoot(document.getElementById("root"));
 
 root.render(
   <>

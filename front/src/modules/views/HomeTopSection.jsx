@@ -1,8 +1,6 @@
 import * as React from "react";
 import Typography from "../components/Typography";
-import HomeTopSectionLayout from "./HomeTopSectionLayout";
-import { Box, Button } from "@mui/material";
-import ArrowCircleDownIcon from "@mui/icons-material/ArrowCircleDown";
+import {  Button } from "@mui/material";
 
 const backgroundImage =
   "https://images.unsplash.com/photo-1534854638093-bada1813ca19?auto=format&fit=crop&w=1400";

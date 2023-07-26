@@ -2,7 +2,6 @@ import React from "react";
 import ProductCategories from "../../modules/views/ProductCategories";
 import ProductValues from "../../modules/views/ProductValues";
 import ProductHowItWorks from "../../modules/views/ProductHowItWorks";
-import Footer from "../../components/Footer";
 import HomeTopSection from "../../modules/views/HomeTopSection";
 import HeaderBar from "../../modules/views/HeaderBar";
 
@@ -14,7 +13,6 @@ function Home() {
       <ProductValues />
       <ProductCategories />
       <ProductHowItWorks />
-      <Footer />
     </>
   );
 }

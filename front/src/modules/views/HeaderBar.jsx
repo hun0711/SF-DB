@@ -1,5 +1,3 @@
-// HeaderBar.js
-
 import React from "react";
 import Box from "@mui/material/Box";
 import Link from "@mui/material/Link";
@@ -8,7 +6,6 @@ import Toolbar from "../components/Toolbar";
 import SearchBar from "./SearchBar";
 import MenuIcon from "@mui/icons-material/Menu";
 import { IconButton } from "@mui/material";
-import MenuDrawer from "./MenuDrawer"; // Import the MenuDrawer component here
 
 const rightLink = {
   fontSize: 18,
@@ -25,9 +22,6 @@ function HeaderBar() {
     setIsMenubarOpen(!isMenubarOpen);
   };
 
-  const handleMenubarClose = () => {
-    setIsMenubarOpen(false);
-  };
 
   return (
     <div>
@@ -89,8 +83,6 @@ function HeaderBar() {
         </Toolbar>
       </AppBar>
 
-      {/* Use the MenuDrawer component here */}
-      <MenuDrawer isOpen={isMenubarOpen} onClose={handleMenubarClose} />
 
       <Toolbar />
     </div>
