@@ -73,7 +73,9 @@
           setIdError('이미 존재하는 아이디입니다.');
           setIsIdCheck(false);
         }else{
-          alert('사용 가능한 아이디입니다.');
+          <Alert severity="success">
+   <strong>사용 가능한 아이디입니다.</strong>
+</Alert>
           setIdError('');
           setIsIdCheck(true);
         }
@@ -134,6 +136,7 @@
     } catch (error) {
       console.log(error);
       alert('다시 시도해주세요.');
+      
   }
   }
     
@@ -142,6 +145,7 @@
     if (!selectedDate) {
       setBirthError('생년월일을 선택해주세요.');
       alert('생년월일을 선택해주세요.')
+      
       return;
     }
     if (!isIdCheck){

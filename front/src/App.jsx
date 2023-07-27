@@ -3,7 +3,7 @@ import RegisterPage from './pages/user/RegisterPage'
 import LoginPage from './pages/user/LoginPage'
 import { Route, Routes } from 'react-router'
 import MainPage from './pages/main/MainPage'
-import theme from './utils/Theme'
+import theme from './utils/theme'
 import { ThemeProvider } from '@mui/material'
 import StartPage from './pages/start/StartPage'
 

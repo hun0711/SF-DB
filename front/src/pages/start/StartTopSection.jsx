@@ -1,6 +1,6 @@
 import * as React from "react";
 import {  Box, Button } from "@mui/material";
-import Typography from "../../utils/Typography";
+import Typography from "../../utils/typography";
 import StartTopSectionLayout from "./StartTopSectionLayout";
 import SouthIcon from '@mui/icons-material/South';
 

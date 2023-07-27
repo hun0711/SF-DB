@@ -6,6 +6,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import { IconButton } from "@mui/material";
 import ToolBar from "./ToolBar";
 import AppBar from "./AppBar";
+import { userAuth } from "../utils/userAuth"
 
 const rightLink = {
   fontSize: 18,
@@ -16,11 +17,18 @@ const rightLink = {
 };
 
 function HeaderBar() {
+  const userId = userAuth(); //회원 아이디
   const [isMenubarOpen, setIsMenubarOpen] = React.useState(false);
 
+  //메뉴바 띄우기
   const handleMenuIconClick = () => {
     setIsMenubarOpen(!isMenubarOpen);
   };
+
+  //로그아웃
+  const handleLogout = () => {
+
+  }
 
 
   return (
@@ -36,7 +44,7 @@ function HeaderBar() {
           </Box>
 
           {/* Logo and "SFDB" centered */}
-          <Box sx={{ flex: 1, display: "flex", justifyContent: "center" }}>
+          <Box sx={{ flex: 1, display: "flex", justifyContent: "center", alignItems:'center' }}>
             <img
               src="/images/SF-DBW.png"
               alt="SF-DB logo"
@@ -46,7 +54,7 @@ function HeaderBar() {
               variant="h6"
               underline="none"
               color="inherit"
-              href="/"
+              href="/main"
               sx={{ fontSize: 24 }}
             >
               {"SFDB"}
@@ -59,26 +67,53 @@ function HeaderBar() {
               <SearchBar />
             </Box>
 
-            {/* Login Link */}
-            <Link
-              color="inherit"
-              variant="h6"
-              underline="none"
-              href="/login"
-              sx={rightLink}
-            >
-              {"로그인"}
-            </Link>
+            {userId ? ( // 로그인 상태에 따라 다른 링크 표시
+              <>
+                {/* Logout Link */}
+                <Link
+                  color="inherit"
+                  variant="h6"
+                  underline="none"
+                  onClick={handleLogout}
+                  sx={rightLink}
+                >
+                  {"로그아웃"}
+                </Link>
 
-            {/* Register Link */}
-            <Link
-              variant="h6"
-              underline="none"
-              href="/register"
-              sx={{ ...rightLink, color: "science.main" }}
-            >
-              {"가입하기"}
-            </Link>
+                {/* My Info Link */}
+                <Link
+                  variant="h6"
+                  underline="none"
+                  href="/my-info" // 내 정보 페이지로 설정
+                  sx={{ ...rightLink, color: "science.main" }}
+                >
+                  {"내 정보"}
+                </Link>
+              </>
+            ) : (
+              <>
+                {/* Login Link */}
+                <Link
+                  color="inherit"
+                  variant="h6"
+                  underline="none"
+                  href="/login"
+                  sx={rightLink}
+                >
+                  {"로그인"}
+                </Link>
+
+                {/* Register Link */}
+                <Link
+                  variant="h6"
+                  underline="none"
+                  href="/register"
+                  sx={{ ...rightLink, color: "science.main" }}
+                >
+                  {"가입하기"}
+                </Link>
+              </>
+            )}
           </Box>
         </ToolBar>
       </AppBar>

@@ -11,3 +11,16 @@ export const userLoginDB = async (data) => {
     throw error; // 이 오류를 호출자에게 전달하여 처리하도록 합니다.
   }
 };
+
+export const googleSocialLogin = async (data) => {
+  try {
+    const res = await axios.post(
+      "http://localhost:8000/user/login/google",
+      data
+    );
+    return res.data;
+  } catch (error) {
+    console.error("Error : ", error);
+    throw error;
+  }
+};

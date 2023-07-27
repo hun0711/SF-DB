@@ -1,5 +1,10 @@
 package com.back.user.controller;
 
+import java.util.Map;
+
+import javax.servlet.http.HttpSession;
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -30,4 +35,25 @@ public class LoginController {
 		int result = loginService.userLogin(uDto);
 		return result;
 	}
-}
+	
+	
+	//구글로그인
+	@PostMapping("/login/google")
+	public int googleSocialLogin(@RequestBody Map<String, String> googleLoginData) {
+		  log.info("구글 소셜 로그인 호출");
+	        // 구글 로그인 데이터에서 tokenId 추출
+	        String tokenId = googleLoginData.get("tokenId");
+	        try {
+
+	            // 로그인 성공 시, 사용자 인증 처리 (예시: 세션 사용)
+	            HttpSession session = request.getSession(true);
+	            session.setAttribute("userId", googleLoginData.get("email"));
+	            // 로그인 성공에 대한 응답
+	            return 1;
+	        } catch (Exception e) {
+	            // 로그인 실패에 대한 처리
+	            log.error("구글 소셜 로그인 실패:", e);
+	            return 0;
+	        }
+	    }
+	}
