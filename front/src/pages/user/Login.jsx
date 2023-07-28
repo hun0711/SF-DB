@@ -8,6 +8,7 @@ import { serialize } from 'cookie';
 import config from '../../config';
 import { gapi } from 'gapi-script';
 
+
 const FormHelperTexts = styled(FormHelperText)`
   width: 100%;
   padding-left: 16px;
@@ -19,14 +20,17 @@ const Boxs = styled(Box)`
   padding-bottom: 40px !important;
 `;
 
+
 const Login = () => {
   const theme = createTheme();
   const navigate = useNavigate();
   const [id, setId] = useState('');
   const [pw, setPw] = useState('');
   const [loginAlert, setLoginAlert] = useState(null);
+  const [naverScriptLoaded, setNaverScriptLoaded] = useState(false);
 
 
+{/* 구글 sdk */}
   useEffect(() => {
     const loadGoogleApiScript = async () => {
       try {
@@ -46,7 +50,31 @@ const Login = () => {
   
     loadGoogleApiScript();
   }, []);
-  
+
+  {/* 네이버 sdk */}
+ useEffect(() => {
+  // 네이버 스크립트를 로드하는 함수
+  const loadNaverScript = async () => {
+    try {
+      await new Promise((resolve, reject) => {
+        const script = document.createElement('script');
+        script.src = 'https://static.nid.naver.com/js/naveridlogin_js_sdk_2.0.2.js';
+        script.charset = 'utf-8';
+        script.onload = () => {
+          // 네이버 스크립트 로드 성공 시 상태를 변경합니다.
+          setNaverScriptLoaded(true);
+          resolve();
+        };
+        script.onerror = reject;
+        document.body.appendChild(script);
+      });
+    } catch (error) {
+      console.error('네이버 API 스크립트 로드 실패:', error);
+    }
+  };
+  loadNaverScript();
+}, []);
+
 
   {/* 사이트 자체 로그인 */}
   const handleLogin = async (e) => {
@@ -151,19 +179,33 @@ const Login = () => {
     }
   };
 
+
   {/* 네이버 로그인 */}
      const handleNaverLogin = async () => {
       try {
+        if (!naverScriptLoaded) {
+          // 네이버 스크립트가 로드되지 않았다면, 처리를 중단하거나 오류 메시지를 표시합니다.
+          console.error('네이버 스크립트 로드 중이므로 네이버 로그인을 진행할 수 없습니다.');
+          return;
+        }
         // 네이버 아이디로 로그인 인스턴스 생성
         const naverLogin = new naver.LoginWithNaverId({
           clientId: config.naverClientId,
           callbackUrl: config.naverRedirectUri,
-          isPopup: false,
-          loginButton: { color: 'green', type: 3, height: 60 }, // 로그인 버튼 디자인 설정
+          isPopup: true,
+          loginButton: {
+            color: "green",
+            type: 3,
+            height: 50,
+          },
+          callbackHandle: true,
         });
-
+        console.log(naverLogin);
+        
         // 초기화
         await naverLogin.init();
+        
+        console.log(naverLogin.user);
 
         // 로그인 상태 체크
         if (naverLogin.user) {
@@ -175,7 +217,7 @@ const Login = () => {
            userImage : naverLogin.user.profileImage
           }
           const res = await naverSocialLogin(naverLoginData);
-
+            
           // 로그인 성공 여부에 따라 처리
           if (res.success) {
             console.log('로그인 성공');

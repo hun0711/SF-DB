@@ -72,12 +72,14 @@ public class LoginController {
             HttpSession session = request.getSession(true);
             session.setAttribute("userId", userId);
 
-            // 네이버 로그인 데이터를 UserDto에 담아서 서비스로 전달
-            UserDto naverUser = new UserDto(userId, userEmail, userName, userProfileImage);
-            int result = loginService.userLogin(naverUser);
+			/*
+			 * // 네이버 로그인 데이터를 UserDto에 담아서 서비스로 전달 UserDto naverUser = new UserDto(userId,
+			 * userEmail, userName, userProfileImage); int result =
+			 * loginService.userLogin(naverUser);
+			 */
 
             // 로그인 성공에 대한 응답
-            return result;
+            return 1;
         } catch (Exception e) {
             // 로그인 실패에 대한 처리
             log.error("네이버 소셜 로그인 실패:", e);
