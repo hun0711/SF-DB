@@ -1,7 +1,6 @@
 import axios from "axios";
 
 //ID 중복체크 axios 로직
-
 export const idCheckDB = async (id) => {
   try {
     const res = await axios.get(`http://localhost:8000/register/idCheck`, {

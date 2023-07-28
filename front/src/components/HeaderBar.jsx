@@ -7,6 +7,8 @@ import { IconButton } from "@mui/material";
 import ToolBar from "./ToolBar";
 import AppBar from "./AppBar";
 import { userAuth } from "../utils/userAuth"
+import { useNavigate } from "react-router";
+import { serialize } from "cookie";
 
 const rightLink = {
   fontSize: 18,
@@ -17,7 +19,9 @@ const rightLink = {
 };
 
 function HeaderBar() {
-  const userId = userAuth(); //회원 아이디
+  const userId = userAuth(); //회원 아이디 확인 (쿠키 식별용)
+  const navigate = useNavigate();
+
   const [isMenubarOpen, setIsMenubarOpen] = React.useState(false);
 
   //메뉴바 띄우기
@@ -27,13 +31,16 @@ function HeaderBar() {
 
   //로그아웃
   const handleLogout = () => {
-
+    //쿠키 삭제
+     document.cookie = serialize('userId' , '' ,  { path: '/', maxAge: -1 }) 
+     window.location.reload();
+     navigate('/main');
   }
 
 
   return (
     <div>
-      <AppBar position="fixed">
+      <AppBar position="fixed"> 
         <ToolBar sx={{ justifyContent: "space-between" }}>
           {/* Menu Icon and text aligned at the same height */}
           <Box sx={{ flex: 1, display: "flex", alignItems: "center" }}>

@@ -24,3 +24,16 @@ export const googleSocialLogin = async (data) => {
     throw error;
   }
 };
+
+export const naverSocialLogin = async (data) => {
+  try {
+    const res = await axios.post(
+      "http://localhost:8000/user/login/naver",
+      data
+    );
+    return res.data;
+  } catch (error) {
+    console.error("Error : ", error);
+    throw error;
+  }
+};

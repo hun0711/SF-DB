@@ -16,6 +16,8 @@
       InputAdornment,
       Link,
       Typography,
+      Snackbar,
+      Alert,
     } from '@mui/material/';
     import SearchIcon from '@mui/icons-material/Search';
     import { createTheme, ThemeProvider } from '@mui/material/styles';
@@ -57,7 +59,7 @@
       const [email , setEmail] = useState('')
       const [emailError, setEmailError] = useState('');
       const [registerError, setRegisterError] = useState('');
-    
+      const [regAlert , setRegAlert] = useState(null)
 
     /************************************************************************************************/
     /* 함수 정의 */
@@ -73,9 +75,11 @@
           setIdError('이미 존재하는 아이디입니다.');
           setIsIdCheck(false);
         }else{
-          <Alert severity="success">
-   <strong>사용 가능한 아이디입니다.</strong>
-</Alert>
+          setRegAlert(
+            <Alert severity="success" onClose={() => setRegAlert(null)}>
+              <strong>사용 가능한 아이디입니다.</strong>
+            </Alert>
+          );
           setIdError('');
           setIsIdCheck(true);
         }
@@ -126,16 +130,33 @@
     try {
       const res = await regInsertDB(data)
       console.log(res.data);
+
       if(res.data){
-      navigate('/login')
-      alert('회원가입이 완료되었습니다. 로그인 해주세요.')
+        setRegAlert(
+          <Alert severity="success" onClose={() => setRegAlert(null)}>
+          <AlertTitle>회원가입 완료!</AlertTitle>
+          <strong>로그인을 해주세요</strong>
+        </Alert>
+      );
+      setTimeout (() => {
+        navigate('/login')
+      } , 2000)
       }else{
       console.log('가입 실패');
-      alert('회원가입에 실패하였습니다.')
+      setRegAlert(
+        <Alert severity="warning" onClose={() => setRegAlert(null)}>
+          <AlertTitle>회원가입 실패</AlertTitle>
+          <strong>입력 정보를 다시 확인해주세요.</strong>
+        </Alert>
+      );
       }
     } catch (error) {
       console.log(error);
-      alert('다시 시도해주세요.');
+      setRegAlert(
+        <Alert severity="error" onClose={() => setRegAlert(null)}>
+          <AlertTitle>에러 발생</AlertTitle>
+        </Alert>
+      );
       
   }
   }
@@ -144,17 +165,29 @@
     e.preventDefault();
     if (!selectedDate) {
       setBirthError('생년월일을 선택해주세요.');
-      alert('생년월일을 선택해주세요.')
+      setRegAlert(
+        <Alert severity="warning" onClose={() => setRegAlert(null)}>
+          <strong>생년월일을 선택해주세요</strong>
+        </Alert>
+      );
       
       return;
     }
     if (!isIdCheck){
-      alert('아이디 중복 확인을 해주세요.')
+      setRegAlert(
+        <Alert severity="warning" onClose={() => setRegAlert(null)}>
+          <strong>아이디 중복확인을 해주세요</strong>
+        </Alert>
+      );
       return;
     }
     // 약관 동의 체크
     if (!checked) {
-      alert('회원가입 약관에 동의해주세요.');
+      setRegAlert(
+        <Alert severity="warning" onClose={() => setRegAlert(null)}>
+          <strong>회원가입 약관에 동의해주세요</strong>
+        </Alert>
+      );
       return;
     }
 
@@ -380,6 +413,14 @@
                 <FormHelperTexts>{registerError}</FormHelperTexts>
                 </Boxs>
             </Box>
+            <Snackbar
+          open={regAlert !== null}
+          anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+          autoHideDuration={5000}
+          onClose={() => setRegAlert(null)}
+        >
+          {regAlert}
+        </Snackbar>
           </Container>
         </ThemeProvider>
       );

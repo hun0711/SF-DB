@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { Button, CssBaseline, TextField, FormControl, FormHelperText, Grid, Box, Typography, Container, Link, Alert, AlertTitle } from '@mui/material/';
+import { Button, CssBaseline, TextField, FormControl, FormHelperText, Grid, Box, Typography, Container, Link, Alert, AlertTitle, Snackbar } from '@mui/material/';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useNavigate } from 'react-router';
 import { styled } from 'styled-components';
-import { googleSocialLogin, userLoginDB } from '../../axios/user/loginLogic';
+import { googleSocialLogin, naverSocialLogin, userLoginDB } from '../../axios/user/loginLogic';
 import { serialize } from 'cookie';
-import config from '../../config'; // 추가
+import config from '../../config';
 import { gapi } from 'gapi-script';
 
 const FormHelperTexts = styled(FormHelperText)`
@@ -24,6 +24,7 @@ const Login = () => {
   const navigate = useNavigate();
   const [id, setId] = useState('');
   const [pw, setPw] = useState('');
+  const [loginAlert, setLoginAlert] = useState(null);
 
 
   useEffect(() => {
@@ -47,7 +48,7 @@ const Login = () => {
   }, []);
   
 
-
+  {/* 사이트 자체 로그인 */}
   const handleLogin = async (e) => {
     e.preventDefault();
 
@@ -59,21 +60,31 @@ const Login = () => {
       const res = await userLoginDB(loginData);
       console.log('로그인 결과:', res);
       if (res === 1) {
-        <Alert severity="success" onClose={() => {}}>
-          <AlertTitle>로그인 성공!</AlertTitle>
-        </Alert>;
+        setLoginAlert(
+          <Alert severity="success" onClose={() => setLoginAlert(null)}>
+            <AlertTitle>로그인 성공!</AlertTitle>
+            <strong>메인페이지로 이동합니다</strong>
+          </Alert>
+        );
         document.cookie = serialize('userId', id, { path: '/' });
         console.log(document.cookie);
-        navigate('/main');
+        setTimeout(() => {
+          navigate('/main');
+        }, 2000);
       } else {
-        <Alert severity="warning" onClose={() => {}}>
-          입력 정보를 다시 확인해주세요.
-        </Alert>;
+        setLoginAlert(
+          <Alert severity="warning" onClose={() => setLoginAlert(null)}>
+            <AlertTitle>로그인 실패</AlertTitle>
+            <strong>입력 정보를 다시 확인해주세요</strong>
+          </Alert>
+        );
       }
     } catch (error) {
-      <Alert severity="error" onClose={() => {}}>
-        <AlertTitle>에러 발생</AlertTitle>
-      </Alert>;
+      setLoginAlert(
+        <Alert severity="error" onClose={() => setLoginAlert(null)}>
+          <AlertTitle>에러 발생</AlertTitle>
+        </Alert>
+      );
     }
   };
 
@@ -81,13 +92,13 @@ const Login = () => {
   const handleGoogleLogin = async () => {
     try {
       if (!gapi.auth2) {
-        // 구글 API 스크립트 로드를 기다리기 위해 promise를 사용합니다.
+        // 구글 API 스크립트 로드를 기다리기 위해 promise를 사용
         await new Promise((resolve) => {
           gapi.load('auth2', resolve);
         });
       }
 
-      // 'gapi.auth2'가 초기화되지 않았다면 초기화합니다.
+      // 'gapi.auth2'가 초기화되지 않았다면 초기화
       if (!gapi.auth2.getAuthInstance()) {
         gapi.auth2.init({
           client_id: config.googleClientId,
@@ -95,14 +106,13 @@ const Login = () => {
         });
       }
 
-      // 'gapi.auth2'가 초기화된 후에 'auth2' 인스턴스를 얻습니다.
       const auth2 = gapi.auth2.getAuthInstance();
 
-      // 이제 'auth2' 인스턴스를 안전하게 사용할 수 있습니다.
       const googleUser = await auth2.signIn();
       // 구글 로그인 성공 시 처리
       const googleLoginData = {
         tokenId: googleUser.getAuthResponse().id_token,
+        userId : googleUser.getBasicProfile().getEmail()
       };
 
       // 스프링 백엔드와 통신하여 처리
@@ -110,16 +120,94 @@ const Login = () => {
       console.log('Google 로그인 결과:', res);
 
       if (res === 1) {
-        document.cookie = serialize('userId', googleLoginData.tokenId, { path: '/' });
+        document.cookie = serialize('userId', googleLoginData.userId, { path: '/' });
+        document.cookie = serialize('tokenId', googleLoginData.tokenId, { path: '/'});
         console.log(document.cookie);
-        navigate('/main');
+        setLoginAlert(
+          <Alert severity="success" onClose={() => setLoginAlert(null)}>
+            <AlertTitle>로그인 성공!</AlertTitle>
+            <strong>메인페이지로 이동합니다</strong>
+          </Alert>
+        );
+        setTimeout(() => {
+          navigate('/main');
+        }, 2000)
       } else {
         console.log('Google 로그인 실패');
+        setLoginAlert(
+          <Alert severity="warning" onClose={() => setLoginAlert(null)}>
+            <AlertTitle>로그인 실패</AlertTitle>
+            <strong>입력 정보를 다시 확인해주세요</strong>
+          </Alert>
+        );
       }
     } catch (error) {
+      setLoginAlert(
+        <Alert severity="error" onClose={() => setLoginAlert(null)}>
+          <AlertTitle>에러 발생</AlertTitle>
+        </Alert>
+      );
       console.error('Google 로그인 에러:', error);
     }
   };
+
+  {/* 네이버 로그인 */}
+     const handleNaverLogin = async () => {
+      try {
+        // 네이버 아이디로 로그인 인스턴스 생성
+        const naverLogin = new naver.LoginWithNaverId({
+          clientId: config.naverClientId,
+          callbackUrl: config.naverRedirectUri,
+          isPopup: false,
+          loginButton: { color: 'green', type: 3, height: 60 }, // 로그인 버튼 디자인 설정
+        });
+
+        // 초기화
+        await naverLogin.init();
+
+        // 로그인 상태 체크
+        if (naverLogin.user) {
+          // 사용자 정보
+          const naverLoginData = {
+           userId : naverLogin.user.id,
+           userEmail : naverLogin.user.email,
+           userName : naverLogin.user.nickname,
+           userImage : naverLogin.user.profileImage
+          }
+          const res = await naverSocialLogin(naverLoginData);
+
+          // 로그인 성공 여부에 따라 처리
+          if (res.success) {
+            console.log('로그인 성공');
+            document.cookie = serialize('userId' , naverLoginData.userId , { path : '/'})
+            document.cookie = serialize('userEmail' , naverLoginData.userEmail , { path : '/'})
+            document.cookie = serialize('userName' , naverLoginData.userName , { path : '/'})
+            document.cookie = serialize('userImage' , naverLoginData.userImage , { path : '/'})
+            navigate('/main')
+          } else {
+            console.log('백엔드에서 로그인 처리 실패:', res.error);
+          }
+        } else {
+          console.log('네이버 아이디로 로그인을 취소하였습니다.');
+        }
+      } catch (error) {
+        console.error('네이버 아이디로 로그인 실패:', error);
+      }
+    };
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   return (
     <ThemeProvider theme={theme}>
@@ -192,7 +280,6 @@ const Login = () => {
                 로그인
               </Button>
 
-     {/* 소셜로그인 */}
       {/* 소셜로그인 */}
       <div style={{ display: 'flex', justifyContent: 'center', gap: '60px', width: '280px', margin: 'auto' }}>
             <div style={{ textAlign: 'center' }}>
@@ -208,6 +295,7 @@ const Login = () => {
                 src="/images/logo/naver.png"
                 alt="네이버 로그인"
                 style={{ width: '70px', height: '70px', cursor: 'pointer' }}
+                onClick={handleNaverLogin}
               />
             </div>
             <div style={{ textAlign: 'center' }}>
@@ -240,6 +328,14 @@ const Login = () => {
             <FormHelperTexts></FormHelperTexts>
           </Boxs>
         </Box>
+           <Snackbar
+          open={loginAlert !== null}
+          anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+          autoHideDuration={5000}
+          onClose={() => setLoginAlert(null)}
+        >
+          {loginAlert}
+        </Snackbar>
       </Container>
     </ThemeProvider>
   );

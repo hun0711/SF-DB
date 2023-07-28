@@ -14,13 +14,15 @@ INSERT into user(
   userPw,
   userName,
   userBirth,
-  userEmail
+  userEmail,
+  userProfileImage
 )VALUES(
 #{userId},
 #{userPw},
 #{userName},
 #{userBirth},
-#{userEmail}
+#{userEmail},
+#{userProfileImage}
 )
 </insert>
 
