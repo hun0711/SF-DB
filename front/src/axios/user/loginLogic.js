@@ -37,3 +37,4 @@ export const naverSocialLogin = async (data) => {
     throw error;
   }
 };
+

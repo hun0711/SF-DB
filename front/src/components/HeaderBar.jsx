@@ -22,6 +22,7 @@ function HeaderBar() {
   const userId = userAuth(); //회원 아이디 확인 (쿠키 식별용)
   const navigate = useNavigate();
 
+
   const [isMenubarOpen, setIsMenubarOpen] = React.useState(false);
 
   //메뉴바 띄우기
@@ -33,6 +34,7 @@ function HeaderBar() {
   const handleLogout = () => {
     //쿠키 삭제
      document.cookie = serialize('userId' , '' ,  { path: '/', maxAge: -1 }) 
+
      window.location.reload();
      navigate('/main');
   }

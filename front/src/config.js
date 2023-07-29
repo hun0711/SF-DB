@@ -7,7 +7,7 @@ const config = {
   //naver api
   naverClientId: "oizN99Oi1Z5vhgeRLGMB",
   naverClientSecret: "oEkoNiO2bk",
-  naverRedirectUri: "http://localhost:8000/user/login/naver",
+  naverRedirectUri: "http://localhost:3000/login",
 };
 
 export default config;

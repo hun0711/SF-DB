@@ -6,6 +6,7 @@ import MainPage from './pages/main/MainPage'
 import theme from './utils/theme'
 import { ThemeProvider } from '@mui/material'
 import StartPage from './pages/start/StartPage'
+import NaverLogin from './pages/user/NaverLogin'
 
 const App = () => {
   return (
@@ -20,6 +21,7 @@ const App = () => {
       <Route path="/login" exact={true} element={<LoginPage />} />
       {/* 회원가입페이지 */}
       <Route path="/register" exact={true} element={<RegisterPage />} />
+    
     </Routes>
     </ThemeProvider>
     </>

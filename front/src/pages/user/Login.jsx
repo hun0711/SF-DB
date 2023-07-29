@@ -3,10 +3,11 @@ import { Button, CssBaseline, TextField, FormControl, FormHelperText, Grid, Box,
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useNavigate } from 'react-router';
 import { styled } from 'styled-components';
-import { googleSocialLogin, naverSocialLogin, userLoginDB } from '../../axios/user/loginLogic';
+import { googleSocialLogin,userLoginDB } from '../../axios/user/loginLogic';
 import { serialize } from 'cookie';
 import config from '../../config';
-import { gapi } from 'gapi-script';
+import NaverLogin from './NaverLogin';
+import GoogleLogin from './GoogleLogin';
 
 
 const FormHelperTexts = styled(FormHelperText)`
@@ -27,53 +28,7 @@ const Login = () => {
   const [id, setId] = useState('');
   const [pw, setPw] = useState('');
   const [loginAlert, setLoginAlert] = useState(null);
-  const [naverScriptLoaded, setNaverScriptLoaded] = useState(false);
 
-
-{/* 구글 sdk */}
-  useEffect(() => {
-    const loadGoogleApiScript = async () => {
-      try {
-        await new Promise((resolve, reject) => {
-          const script = document.createElement('script');
-          script.src = 'https://apis.google.com/js/api.js';
-  
-          script.onload = resolve;
-          script.onerror = reject;
-  
-          document.body.appendChild(script);
-        });
-      } catch (error) {
-        console.error('Google API 스크립트 로드 실패:', error);
-      }
-    };
-  
-    loadGoogleApiScript();
-  }, []);
-
-  {/* 네이버 sdk */}
- useEffect(() => {
-  // 네이버 스크립트를 로드하는 함수
-  const loadNaverScript = async () => {
-    try {
-      await new Promise((resolve, reject) => {
-        const script = document.createElement('script');
-        script.src = 'https://static.nid.naver.com/js/naveridlogin_js_sdk_2.0.2.js';
-        script.charset = 'utf-8';
-        script.onload = () => {
-          // 네이버 스크립트 로드 성공 시 상태를 변경합니다.
-          setNaverScriptLoaded(true);
-          resolve();
-        };
-        script.onerror = reject;
-        document.body.appendChild(script);
-      });
-    } catch (error) {
-      console.error('네이버 API 스크립트 로드 실패:', error);
-    }
-  };
-  loadNaverScript();
-}, []);
 
 
   {/* 사이트 자체 로그인 */}
@@ -115,140 +70,6 @@ const Login = () => {
       );
     }
   };
-
- {/*  구글 로그인 처리 함수 */}
-  const handleGoogleLogin = async () => {
-    try {
-      if (!gapi.auth2) {
-        // 구글 API 스크립트 로드를 기다리기 위해 promise를 사용
-        await new Promise((resolve) => {
-          gapi.load('auth2', resolve);
-        });
-      }
-
-      // 'gapi.auth2'가 초기화되지 않았다면 초기화
-      if (!gapi.auth2.getAuthInstance()) {
-        gapi.auth2.init({
-          client_id: config.googleClientId,
-          cookie_policy: 'single_host_origin',
-        });
-      }
-
-      const auth2 = gapi.auth2.getAuthInstance();
-
-      const googleUser = await auth2.signIn();
-      // 구글 로그인 성공 시 처리
-      const googleLoginData = {
-        tokenId: googleUser.getAuthResponse().id_token,
-        userId : googleUser.getBasicProfile().getEmail()
-      };
-
-      // 스프링 백엔드와 통신하여 처리
-      const res = await googleSocialLogin(googleLoginData); // 스프링 백엔드의 구글 로그인 API 엔드포인트로 대체
-      console.log('Google 로그인 결과:', res);
-
-      if (res === 1) {
-        document.cookie = serialize('userId', googleLoginData.userId, { path: '/' });
-        document.cookie = serialize('tokenId', googleLoginData.tokenId, { path: '/'});
-        console.log(document.cookie);
-        setLoginAlert(
-          <Alert severity="success" onClose={() => setLoginAlert(null)}>
-            <AlertTitle>로그인 성공!</AlertTitle>
-            <strong>메인페이지로 이동합니다</strong>
-          </Alert>
-        );
-        setTimeout(() => {
-          navigate('/main');
-        }, 2000)
-      } else {
-        console.log('Google 로그인 실패');
-        setLoginAlert(
-          <Alert severity="warning" onClose={() => setLoginAlert(null)}>
-            <AlertTitle>로그인 실패</AlertTitle>
-            <strong>입력 정보를 다시 확인해주세요</strong>
-          </Alert>
-        );
-      }
-    } catch (error) {
-      setLoginAlert(
-        <Alert severity="error" onClose={() => setLoginAlert(null)}>
-          <AlertTitle>에러 발생</AlertTitle>
-        </Alert>
-      );
-      console.error('Google 로그인 에러:', error);
-    }
-  };
-
-
-  {/* 네이버 로그인 */}
-     const handleNaverLogin = async () => {
-      try {
-        if (!naverScriptLoaded) {
-          // 네이버 스크립트가 로드되지 않았다면, 처리를 중단하거나 오류 메시지를 표시합니다.
-          console.error('네이버 스크립트 로드 중이므로 네이버 로그인을 진행할 수 없습니다.');
-          return;
-        }
-        // 네이버 아이디로 로그인 인스턴스 생성
-        const naverLogin = new naver.LoginWithNaverId({
-          clientId: config.naverClientId,
-          callbackUrl: config.naverRedirectUri,
-          isPopup: true,
-          loginButton: {
-            color: "green",
-            type: 3,
-            height: 50,
-          },
-          callbackHandle: true,
-        });
-        console.log(naverLogin);
-        
-        // 초기화
-        await naverLogin.init();
-        
-        console.log(naverLogin.user);
-
-        // 로그인 상태 체크
-        if (naverLogin.user) {
-          // 사용자 정보
-          const naverLoginData = {
-           userId : naverLogin.user.id,
-           userEmail : naverLogin.user.email,
-           userName : naverLogin.user.nickname,
-           userImage : naverLogin.user.profileImage
-          }
-          const res = await naverSocialLogin(naverLoginData);
-            
-          // 로그인 성공 여부에 따라 처리
-          if (res.success) {
-            console.log('로그인 성공');
-            document.cookie = serialize('userId' , naverLoginData.userId , { path : '/'})
-            document.cookie = serialize('userEmail' , naverLoginData.userEmail , { path : '/'})
-            document.cookie = serialize('userName' , naverLoginData.userName , { path : '/'})
-            document.cookie = serialize('userImage' , naverLoginData.userImage , { path : '/'})
-            navigate('/main')
-          } else {
-            console.log('백엔드에서 로그인 처리 실패:', res.error);
-          }
-        } else {
-          console.log('네이버 아이디로 로그인을 취소하였습니다.');
-        }
-      } catch (error) {
-        console.error('네이버 아이디로 로그인 실패:', error);
-      }
-    };
-  
-
-
-
-
-
-
-
-
-
-
-
-
 
 
   return (
@@ -323,23 +144,12 @@ const Login = () => {
               </Button>
 
       {/* 소셜로그인 */}
-      <div style={{ display: 'flex', justifyContent: 'center', gap: '60px', width: '280px', margin: 'auto' }}>
-            <div style={{ textAlign: 'center' }}>
-              <img
-                src="/images/logo/google.png"
-                alt="구글 로그인"
-                style={{ width: '75px', height: '75px', cursor: 'pointer' }}
-                onClick={handleGoogleLogin}
-              />
-            </div>
-            <div style={{ textAlign: 'center' }}>
-              <img
-                src="/images/logo/naver.png"
-                alt="네이버 로그인"
-                style={{ width: '70px', height: '70px', cursor: 'pointer' }}
-                onClick={handleNaverLogin}
-              />
-            </div>
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px', width: '280px', margin: 'auto' }}>
+            {/*구글*/}
+            <GoogleLogin />
+            {/*네이버*/}
+              <NaverLogin/>
+            {/*카카오*/}
             <div style={{ textAlign: 'center' }}>
               <img
                 src="/images/logo/kakao.png"
