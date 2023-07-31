@@ -38,3 +38,16 @@ export const naverSocialLogin = async (data) => {
   }
 };
 
+export const kakaoSocialLogin = async (id) => {
+  try {
+    const res = await axios.get(`http://localhost:8000/user/login/kakao`, {
+      params: {
+        userId: id,
+      },
+    });
+    return res.data;
+  } catch (error) {
+    console.log("Error : ", error);
+    throw error;
+  }
+};

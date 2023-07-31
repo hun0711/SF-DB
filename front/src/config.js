@@ -8,6 +8,10 @@ const config = {
   naverClientId: "oizN99Oi1Z5vhgeRLGMB",
   naverClientSecret: "oEkoNiO2bk",
   naverRedirectUri: "http://localhost:3000/login",
+
+  //kakao api
+  kakaoClientId: "5eafe7bdd6fe123db54226ee4c6826b2", //REST_API_KEY
+  kakaoRedirectUri: "http://localhost:3000/auth/kakao",
 };
 
 export default config;

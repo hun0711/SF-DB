@@ -4,10 +4,12 @@ import { Alert, AlertTitle } from '@mui/material';
 import { googleSocialLogin } from '../../axios/user/loginLogic';
 import config from '../../config';
 import { serialize } from 'cookie';
+import { useNavigate } from 'react-router';
 
 
 const GoogleLogin = () => {
   const [loginAlert, setLoginAlert] = useState(null);
+  const navigate = useNavigate()
 
 
 {/* 구글 sdk */}
@@ -48,15 +50,19 @@ useEffect(() => {
       gapi.auth2.init({
         client_id: config.googleClientId,
         cookie_policy: 'single_host_origin',
+        scope : 'profile email'
       });
     }
 
     const auth2 = gapi.auth2.getAuthInstance();
 
     const googleUser = await auth2.signIn();
-    // 구글 로그인 성공 시 처리
+
+    const googleAccessToken = googleUser.getAuthResponse().access_token;
+    console.log('Google Access Token:', googleAccessToken);
+
     const googleLoginData = {
-      tokenId: googleUser.getAuthResponse().id_token,
+      accessToken : googleAccessToken,
       userId : googleUser.getBasicProfile().getEmail()
     };
 
@@ -66,8 +72,6 @@ useEffect(() => {
 
     if (res === 1) {
       document.cookie = serialize('userId', googleLoginData.userId, { path: '/' });
-      document.cookie = serialize('tokenId', googleLoginData.tokenId, { path: '/'});
-      console.log(document.cookie);
       setLoginAlert(
         <Alert severity="success" onClose={() => setLoginAlert(null)}>
           <AlertTitle>로그인 성공!</AlertTitle>
@@ -77,6 +81,8 @@ useEffect(() => {
       setTimeout(() => {
         navigate('/main');
       }, 2000)
+      
+
     } else {
       console.log('Google 로그인 실패');
       setLoginAlert(
@@ -104,9 +110,10 @@ useEffect(() => {
           <img
           src="/images/logo/googlebtn2.png"
           alt="구글 로그인"
-          style={{ width: '237px', height: '55px', cursor: 'pointer' }}
+          style={{ width: '220px', height: '50px', cursor: 'pointer' }}
           onClick={handleGoogleLogin}
         />
+        {loginAlert}
             </div>
     </>
   )

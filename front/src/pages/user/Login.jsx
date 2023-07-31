@@ -8,6 +8,7 @@ import { serialize } from 'cookie';
 import config from '../../config';
 import NaverLogin from './NaverLogin';
 import GoogleLogin from './GoogleLogin';
+import KakaoLogin from './KakaoLogin';
 
 
 const FormHelperTexts = styled(FormHelperText)`
@@ -150,13 +151,7 @@ const Login = () => {
             {/*네이버*/}
               <NaverLogin/>
             {/*카카오*/}
-            <div style={{ textAlign: 'center' }}>
-              <img
-                src="/images/logo/kakao.png"
-                alt="카카오 로그인"
-                style={{ width: '70px', height: '70px', cursor: 'pointer' }}
-              />
-            </div>
+            <KakaoLogin/>
           </div>
 
               {/* 아이디 찾기와 비밀번호 찾기를 가로로 정렬 */}

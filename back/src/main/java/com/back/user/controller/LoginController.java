@@ -49,8 +49,6 @@ public class LoginController {
 	@PostMapping("/login/google")
 	public int googleSocialLogin(@RequestBody Map<String, String> googleLoginData, HttpServletRequest request) {
 		  log.info("구글 소셜 로그인 호출");
-	        // 구글 로그인 데이터에서 tokenId 추출
-	        String tokenId = googleLoginData.get("tokenId");
 	        try {
 
 	            // 로그인 성공 시, 사용자 인증 처리 (예시: 세션 사용)
@@ -79,4 +77,18 @@ public class LoginController {
       }
 	}
 
+	
+	// 카카오로그인 
+	  @GetMapping("/login/kakao")
+	  public int kakaoSocialLogin(@RequestParam(name="userId") String userId, HttpServletRequest request) {
+	    log.info("Kakao 소셜 로그인 호출");
+	    try {
+	      HttpSession session = request.getSession(true);
+	      session.setAttribute("userId", userId);
+	      return 1;
+	    } catch (Exception e) {
+	      log.error("Kakao 소셜 로그인 실패:", e);
+	      return 0;
+	    }
+	  }
 }

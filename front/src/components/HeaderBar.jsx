@@ -30,13 +30,59 @@ function HeaderBar() {
     setIsMenubarOpen(!isMenubarOpen);
   };
 
-  //로그아웃
-  const handleLogout = () => {
-    //쿠키 삭제
-     document.cookie = serialize('userId' , '' ,  { path: '/', maxAge: -1 }) 
+  const handleGoogleLogout = async () => {
+    try {
+      if (!gapi.auth2) {
+        // 구글 API 스크립트 로드를 기다리기 위해 promise를 사용
+        await new Promise((resolve) => {
+          gapi.load('auth2', resolve);
+        });
+      }
+  
+      const auth2 = gapi.auth2.getAuthInstance();
+      await auth2.signOut();
+  
+    } catch (error) {
+      console.error('Google 로그아웃 에러:', error);
+    }
+  };
+  
 
-     window.location.reload();
-     navigate('/main');
+  
+
+  //로그아웃 수행
+  const handleLogout = () => {
+    // 쿠키 삭제
+    document.cookie = serialize('userId', '', { path: '/', maxAge: -1 });
+  
+    // 'naverToken' 쿠키가 존재할 경우 삭제 - 네이버 로그아웃
+    const naverToken = getCookieValue('naverToken');
+    if (naverToken) {
+      document.cookie = serialize('naverToken', '', { path: '/', maxAge: -1 });
+    }
+  
+     // 구글 로그아웃
+    handleGoogleLogout();
+
+
+    // 로컬 스토리지에 저장된 데이터를 모두 삭제
+    localStorage.clear();
+
+  
+    window.location.reload();
+    navigate('/main');
+  };
+  
+  // 쿠키 이름으로 쿠키 값을 가져오는 함수
+  function getCookieValue(name) {
+    const cookies = document.cookie.split(';');
+    for (let i = 0; i < cookies.length; i++) {
+      const cookie = cookies[i].trim();
+      if (cookie.startsWith(`${name}=`)) {
+        return cookie.substring(name.length + 1);
+      }
+    }
+    return null;
   }
 
 
