@@ -3,9 +3,18 @@ import config from "../../config";
 import { serialize } from "cookie";
 import { useNavigate } from "react-router";
 import { naverSocialLogin } from "../../axios/user/loginLogic";
+import { useSnackbar } from "notistack";
+import { Alert, Snackbar } from "@mui/material";
 
 const NaverLogin = () => {
   const navigate = useNavigate();
+  const [alertOn, setAlertOn] = useState(false);
+  const { enqueueSnackbar } = useSnackbar(); 
+  
+  const handleClose = () => {
+    setAlertOn(false)
+  }
+
 
   const userAccessToken = () => {
     window.location.href.includes('access_token') && getToken();
@@ -55,10 +64,16 @@ const NaverLogin = () => {
           document.cookie = serialize("userImage", profile_image, { path: '/' });
 
           navigate('/main')
+          enqueueSnackbar('로그인에 성공했습니다!', { variant: 'success' });
+          setAlertOn(true);
         } else {
           console.log("Naver 로그인 실패");
+          enqueueSnackbar('로그인에 실패했습니다.', { variant: 'warning' });
+          setAlertOn(true);
         }
       } else {
+        enqueueSnackbar('네트워크 오류 발생!', { variant: 'error' });
+        setAlertOn(true);
       }
     });
   };
@@ -77,8 +92,15 @@ const NaverLogin = () => {
   }, []);
 
   return (
+  <>
     <div id="naverIdLogin" style={{ textAlign: "center" }}>
     </div>
+    <Snackbar open={alertOn} autoHideDuration={3000} onClose={handleClose}>
+          <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
+            로그인에 성공했습니다!
+          </Alert>
+        </Snackbar>
+  </>
   );
 };
 

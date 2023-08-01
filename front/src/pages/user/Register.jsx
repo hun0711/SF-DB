@@ -17,6 +17,7 @@
       Link,
       Typography,
       Snackbar,
+      Alert,
     } from '@mui/material/';
     import SearchIcon from '@mui/icons-material/Search';
     import { createTheme, ThemeProvider } from '@mui/material/styles';
@@ -25,6 +26,7 @@
   import { useNavigate } from 'react-router';
   import { styled } from 'styled-components';
   import { idCheckDB, regInsertDB } from '../../axios/user/registerLogic';
+import { useSnackbar } from 'notistack';
 
   // mui의 css 우선순위가 높기때문에 important를 설정 - 실무하다 보면 종종 발생 우선순위 문제
   const FormHelperTexts = styled(FormHelperText)`
@@ -58,6 +60,14 @@
       const [email , setEmail] = useState('')
       const [emailError, setEmailError] = useState('');
       const [registerError, setRegisterError] = useState('');
+      const [alertOn, setAlertOn] = useState(false);
+
+
+      const { enqueueSnackbar } = useSnackbar(); 
+      const handleClose = () => {
+        setAlertOn(false)
+      }
+    
 
     /************************************************************************************************/
     /* 함수 정의 */
@@ -70,10 +80,13 @@
         const res = await idCheckDB(id);
         console.log(res);
         if(res){
+          setAlertOn(true);
           setIdError('이미 존재하는 아이디입니다.');
           setIsIdCheck(false);
         }else{
             console.log("사용 가능한 아이디입니다.");
+            enqueueSnackbar('사용 가능한 아이디입니다.', { variant: 'success' });
+            setAlertOn(true);
           setIdError('');
           setIsIdCheck(true);
         }
@@ -128,11 +141,17 @@
       if(res.data){
         console.log("가입 성공");
         navigate('/login')
+        enqueueSnackbar('회원가입에 성공했습니다!', { variant: 'success' });
+        setAlertOn(true);
       }else{
       console.log('가입 실패');
+      enqueueSnackbar('회원 가입에 실패하였습니다', { variant: 'warning' });
+      setAlertOn(true);
       }
     } catch (error) {
       console.log(error);
+      enqueueSnackbar('네트워크 오류 발생!', { variant: 'error' });
+      setAlertOn(true);
       
   }
   }
@@ -145,11 +164,15 @@
     }
     if (!isIdCheck){
         console.log("아이디 중복확인 해주세요.") 
+        enqueueSnackbar('아이디 중복확인은 필수입니다.', { variant: 'warning' });
+        setAlertOn(true);
       return;
     }
     // 약관 동의 체크
     if (!checked) {
         console.log("회원가입 약관에 동의해주세요.")
+        enqueueSnackbar('약관에 동의해주세요.', { variant: 'warning' });
+        setAlertOn(true);
       return;
     }
 
@@ -372,6 +395,11 @@
                 <FormHelperTexts>{registerError}</FormHelperTexts>
                 </Boxs>
             </Box>
+            <Snackbar open={alertOn} autoHideDuration={3000} onClose={handleClose}>
+          <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
+            로그인에 성공했습니다!
+          </Alert>
+        </Snackbar>
           </Container>
         </ThemeProvider>
       );

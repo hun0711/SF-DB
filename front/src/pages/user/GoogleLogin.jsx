@@ -76,15 +76,18 @@ useEffect(() => {
       document.cookie = serialize('userId', googleLoginData.email, { path: '/' }); 
       document.cookie = serialize('userName', googleLoginData.name, { path: '/' }); 
       document.cookie = serialize('userImage', googleLoginData.picture, { path: '/' }); 
-      enqueueSnackbar('로그인에 성공했습니다!', { variant: 'success' });
       navigate('/main');
-      
-
+      enqueueSnackbar('로그인에 성공했습니다!', { variant: 'success' });
+      setAlertOn(true)      
     } else {
       console.log('Google 로그인 실패');
+      enqueueSnackbar('로그인에 실패했습니다.', { variant: 'warning' });
+      setAlertOn(true);
     }
   } catch (error) {
     console.error('Google 로그인 에러:', error);
+    enqueueSnackbar('네트워크 오류 발생!', { variant: 'error' });
+    setAlertOn(true);
   }
 };
 

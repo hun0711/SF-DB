@@ -56,9 +56,13 @@ const Login = () => {
         setAlertOn(true);
       } else {
         console.log('로그인 정보 재확인 필요');
+        enqueueSnackbar('로그인에 실패했습니다.', { variant: 'warning' });
+        setAlertOn(true);
       }
     } catch (error) {
       console.log(error);
+      enqueueSnackbar('네트워크 오류 발생!', { variant: 'error' });
+      setAlertOn(true);
     }
   };
 

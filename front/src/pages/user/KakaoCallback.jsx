@@ -4,9 +4,17 @@
 import { kakaoSocialLogin } from '../../axios/user/loginLogic';
 import { serialize } from 'cookie';
 import { useNavigate } from 'react-router';
+import { Alert, Snackbar } from '@mui/material';
+import { useSnackbar } from 'notistack';
 
   const KakaoCallback = () => {
     const navigate = useNavigate();
+    const [alertOn, setAlertOn] = useState(false);
+    const { enqueueSnackbar } = useSnackbar(); 
+    const handleClose = () => {
+      setAlertOn(false)
+    }
+  
   
     const kakaoRestAPIKey = config.kakaoClientId;
     const kakaoRedirectUri = config.kakaoRedirectUri;
@@ -60,19 +68,30 @@ import { useNavigate } from 'react-router';
           document.cookie = serialize('userIamge' , kakaoLoginData.image , {path : '/'})
           
           navigate('/main')
+          enqueueSnackbar('로그인에 성공했습니다!', { variant: 'success' });
+          setAlertOn(true);
         }
       });
       } else {
       console.log("access_token 없음");
+      enqueueSnackbar('로그인에 실패했습니다.', { variant: 'warning' });
+      setAlertOn(true);
   }
         })
         .catch((error) => {
           console.error('Error exchanging code for access token:', error);
+          enqueueSnackbar('네트워크 오류 발생!', { variant: 'error' });
+          setAlertOn(true);
         });
     }
 
     return (
       <>
+              <Snackbar open={alertOn} autoHideDuration={3000} onClose={handleClose}>
+          <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
+            로그인에 성공했습니다!
+          </Alert>
+        </Snackbar>
       </>
     )
   }
