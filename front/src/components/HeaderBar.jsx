@@ -54,7 +54,13 @@ function HeaderBar() {
   const handleLogout = () => {
     // 쿠키 삭제
     document.cookie = serialize('userId', '', { path: '/', maxAge: -1 });
+    document.cookie = serialize('userName', '', { path: '/', maxAge: -1 });
+    document.cookie = serialize('userEmail', '', { path: '/', maxAge: -1 });
+    document.cookie = serialize('userBirth', '', { path: '/', maxAge: -1 });
+    document.cookie = serialize('userImage', '', { path: '/', maxAge: -1 });
   
+
+
     // 'naverToken' 쿠키가 존재할 경우 삭제 - 네이버 로그아웃
     const naverToken = getCookieValue('naverToken');
     if (naverToken) {

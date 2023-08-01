@@ -17,7 +17,6 @@
       Link,
       Typography,
       Snackbar,
-      Alert,
     } from '@mui/material/';
     import SearchIcon from '@mui/icons-material/Search';
     import { createTheme, ThemeProvider } from '@mui/material/styles';
@@ -59,7 +58,6 @@
       const [email , setEmail] = useState('')
       const [emailError, setEmailError] = useState('');
       const [registerError, setRegisterError] = useState('');
-      const [regAlert , setRegAlert] = useState(null)
 
     /************************************************************************************************/
     /* 함수 정의 */
@@ -75,11 +73,7 @@
           setIdError('이미 존재하는 아이디입니다.');
           setIsIdCheck(false);
         }else{
-          setRegAlert(
-            <Alert severity="success" onClose={() => setRegAlert(null)}>
-              <strong>사용 가능한 아이디입니다.</strong>
-            </Alert>
-          );
+            console.log("사용 가능한 아이디입니다.");
           setIdError('');
           setIsIdCheck(true);
         }
@@ -132,31 +126,13 @@
       console.log(res.data);
 
       if(res.data){
-        setRegAlert(
-          <Alert severity="success" onClose={() => setRegAlert(null)}>
-          <AlertTitle>회원가입 완료!</AlertTitle>
-          <strong>로그인을 해주세요</strong>
-        </Alert>
-      );
-      setTimeout (() => {
+        console.log("가입 성공");
         navigate('/login')
-      } , 2000)
       }else{
       console.log('가입 실패');
-      setRegAlert(
-        <Alert severity="warning" onClose={() => setRegAlert(null)}>
-          <AlertTitle>회원가입 실패</AlertTitle>
-          <strong>입력 정보를 다시 확인해주세요.</strong>
-        </Alert>
-      );
       }
     } catch (error) {
       console.log(error);
-      setRegAlert(
-        <Alert severity="error" onClose={() => setRegAlert(null)}>
-          <AlertTitle>에러 발생</AlertTitle>
-        </Alert>
-      );
       
   }
   }
@@ -165,34 +141,17 @@
     e.preventDefault();
     if (!selectedDate) {
       setBirthError('생년월일을 선택해주세요.');
-      setRegAlert(
-        <Alert severity="warning" onClose={() => setRegAlert(null)}>
-          <strong>생년월일을 선택해주세요</strong>
-        </Alert>
-      );
-      
       return;
     }
     if (!isIdCheck){
-      setRegAlert(
-        <Alert severity="warning" onClose={() => setRegAlert(null)}>
-          <strong>아이디 중복확인을 해주세요</strong>
-        </Alert>
-      );
+        console.log("아이디 중복확인 해주세요.") 
       return;
     }
     // 약관 동의 체크
     if (!checked) {
-      setRegAlert(
-        <Alert severity="warning" onClose={() => setRegAlert(null)}>
-          <strong>회원가입 약관에 동의해주세요</strong>
-        </Alert>
-      );
+        console.log("회원가입 약관에 동의해주세요.")
       return;
     }
-
-
-
 
     // 유효성 검사
     const idRegex = /^[A-Za-z0-9][A-Za-z0-9]{5,}$/;
@@ -413,14 +372,6 @@
                 <FormHelperTexts>{registerError}</FormHelperTexts>
                 </Boxs>
             </Box>
-            <Snackbar
-          open={regAlert !== null}
-          anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-          autoHideDuration={5000}
-          onClose={() => setRegAlert(null)}
-        >
-          {regAlert}
-        </Snackbar>
           </Container>
         </ThemeProvider>
       );

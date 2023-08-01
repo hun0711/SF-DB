@@ -1,14 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import { gapi } from 'gapi-script';
-import { Alert, AlertTitle } from '@mui/material';
-import { googleSocialLogin } from '../../axios/user/loginLogic';
+import { googleSocialLogin, googleUserInfo } from '../../axios/user/loginLogic';
 import config from '../../config';
 import { serialize } from 'cookie';
 import { useNavigate } from 'react-router';
 
 
 const GoogleLogin = () => {
-  const [loginAlert, setLoginAlert] = useState(null);
   const navigate = useNavigate()
 
 
@@ -55,49 +53,28 @@ useEffect(() => {
     }
 
     const auth2 = gapi.auth2.getAuthInstance();
-
     const googleUser = await auth2.signIn();
-
     const googleAccessToken = googleUser.getAuthResponse().access_token;
     console.log('Google Access Token:', googleAccessToken);
+    const googleLoginData = await googleUserInfo(googleAccessToken)
 
-    const googleLoginData = {
-      accessToken : googleAccessToken,
-      userId : googleUser.getBasicProfile().getEmail()
-    };
 
     // 스프링 백엔드와 통신하여 처리
     const res = await googleSocialLogin(googleLoginData); // 스프링 백엔드의 구글 로그인 API 엔드포인트로 대체
     console.log('Google 로그인 결과:', res);
 
     if (res === 1) {
-      document.cookie = serialize('userId', googleLoginData.userId, { path: '/' });
-      setLoginAlert(
-        <Alert severity="success" onClose={() => setLoginAlert(null)}>
-          <AlertTitle>로그인 성공!</AlertTitle>
-          <strong>메인페이지로 이동합니다</strong>
-        </Alert>
-      );
-      setTimeout(() => {
+      document.cookie = serialize('userId', googleLoginData.id, { path: '/' }); 
+      document.cookie = serialize('userId', googleLoginData.email, { path: '/' }); 
+      document.cookie = serialize('userName', googleLoginData.name, { path: '/' }); 
+      document.cookie = serialize('userImage', googleLoginData.picture, { path: '/' }); 
         navigate('/main');
-      }, 2000)
       
 
     } else {
       console.log('Google 로그인 실패');
-      setLoginAlert(
-        <Alert severity="warning" onClose={() => setLoginAlert(null)}>
-          <AlertTitle>로그인 실패</AlertTitle>
-          <strong>입력 정보를 다시 확인해주세요</strong>
-        </Alert>
-      );
     }
   } catch (error) {
-    setLoginAlert(
-      <Alert severity="error" onClose={() => setLoginAlert(null)}>
-        <AlertTitle>에러 발생</AlertTitle>
-      </Alert>
-    );
     console.error('Google 로그인 에러:', error);
   }
 };
@@ -113,7 +90,6 @@ useEffect(() => {
           style={{ width: '220px', height: '50px', cursor: 'pointer' }}
           onClick={handleGoogleLogin}
         />
-        {loginAlert}
             </div>
     </>
   )

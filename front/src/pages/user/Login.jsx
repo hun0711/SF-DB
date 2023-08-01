@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, CssBaseline, TextField, FormControl, FormHelperText, Grid, Box, Typography, Container, Link, Alert, AlertTitle, Snackbar } from '@mui/material/';
+import { Button, CssBaseline, TextField, FormControl, FormHelperText, Grid, Box, Typography, Container, Link} from '@mui/material/';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useNavigate } from 'react-router';
 import { styled } from 'styled-components';
@@ -28,7 +28,6 @@ const Login = () => {
   const navigate = useNavigate();
   const [id, setId] = useState('');
   const [pw, setPw] = useState('');
-  const [loginAlert, setLoginAlert] = useState(null);
 
 
 
@@ -44,31 +43,14 @@ const Login = () => {
       const res = await userLoginDB(loginData);
       console.log('로그인 결과:', res);
       if (res === 1) {
-        setLoginAlert(
-          <Alert severity="success" onClose={() => setLoginAlert(null)}>
-            <AlertTitle>로그인 성공!</AlertTitle>
-            <strong>메인페이지로 이동합니다</strong>
-          </Alert>
-        );
         document.cookie = serialize('userId', id, { path: '/' });
         console.log(document.cookie);
-        setTimeout(() => {
           navigate('/main');
-        }, 2000);
       } else {
-        setLoginAlert(
-          <Alert severity="warning" onClose={() => setLoginAlert(null)}>
-            <AlertTitle>로그인 실패</AlertTitle>
-            <strong>입력 정보를 다시 확인해주세요</strong>
-          </Alert>
-        );
+        console.log('로그인 정보 재확인 필요');
       }
     } catch (error) {
-      setLoginAlert(
-        <Alert severity="error" onClose={() => setLoginAlert(null)}>
-          <AlertTitle>에러 발생</AlertTitle>
-        </Alert>
-      );
+      console.log(error);
     }
   };
 
@@ -175,14 +157,6 @@ const Login = () => {
             <FormHelperTexts></FormHelperTexts>
           </Boxs>
         </Box>
-           <Snackbar
-          open={loginAlert !== null}
-          anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-          autoHideDuration={5000}
-          onClose={() => setLoginAlert(null)}
-        >
-          {loginAlert}
-        </Snackbar>
       </Container>
     </ThemeProvider>
   );

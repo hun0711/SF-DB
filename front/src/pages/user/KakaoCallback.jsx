@@ -4,10 +4,8 @@
 import { kakaoSocialLogin } from '../../axios/user/loginLogic';
 import { serialize } from 'cookie';
 import { useNavigate } from 'react-router';
-import { Alert, AlertTitle } from '@mui/material';
 
   const KakaoCallback = () => {
-    const [loginAlert, setLoginAlert] = useState(null);
     const navigate = useNavigate();
   
     const kakaoRestAPIKey = config.kakaoClientId;
@@ -45,22 +43,14 @@ import { Alert, AlertTitle } from '@mui/material';
         .then(async (res) => {
         console.log("카카오 유저 데이터  : ");
         console.log(res.data)
-        const kakaoId = res.data.id // 카카오 회원번호
-        const kakaoData = res.data.kakao_account // 카카오 회원 정보
-        console.log(kakaoData);
+        const kakaoLoginData = res.data ;
 
-
-        //서버에 id 전달
-        const response = await kakaoSocialLogin(kakaoId)
+        //서버에 로그인정보 전달
+        const response = await kakaoSocialLogin(kakaoLoginData)
         if(response === 1 ){
           console.log("카카오 로그인 성공");
-          document.cookie = serialize('userId' , kakaoId , {path : '/'})
+          /* document.cookie = serialize('userId' , kakaoId , {path : '/'}) */
           navigate('/main')
-          setLoginAlert(
-            <Alert severity="success" onClose={() => setLoginAlert(null)}>
-              <AlertTitle>로그인 성공!</AlertTitle>
-            </Alert>
-          );
         }
       });
       } else {
@@ -74,7 +64,6 @@ import { Alert, AlertTitle } from '@mui/material';
 
     return (
       <>
-      {loginAlert}
       </>
     )
   }

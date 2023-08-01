@@ -25,6 +25,20 @@ export const googleSocialLogin = async (data) => {
   }
 };
 
+export const googleUserInfo = async (token) => {
+  try {
+    const res = await axios.get("https://www.googleapis.com/userinfo/v2/me", {
+      headers: {
+        Authorization: `Bearer ${token}`, // 액세스 토큰을 베어러 토큰으로 설정합니다.
+      },
+    });
+    return res.data;
+  } catch (error) {
+    console.error("Error : ", error);
+    throw error;
+  }
+};
+
 export const naverSocialLogin = async (data) => {
   try {
     const res = await axios.post(
@@ -38,13 +52,12 @@ export const naverSocialLogin = async (data) => {
   }
 };
 
-export const kakaoSocialLogin = async (id) => {
+export const kakaoSocialLogin = async (data) => {
   try {
-    const res = await axios.get(`http://localhost:8000/user/login/kakao`, {
-      params: {
-        userId: id,
-      },
-    });
+    const res = await axios.post(
+      `http://localhost:8000/user/login/kakao`,
+      data
+    );
     return res.data;
   } catch (error) {
     console.log("Error : ", error);

@@ -1,13 +1,10 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import config from "../../config";
 import { serialize } from "cookie";
-import { Alert, AlertTitle } from "@mui/material";
-import { Navigate, useLocation, useNavigate } from "react-router";
+import { useNavigate } from "react-router";
 import { naverSocialLogin } from "../../axios/user/loginLogic";
 
 const NaverLogin = () => {
-  const [loginAlert, setLoginAlert] = useState(null);
   const navigate = useNavigate();
 
   const userAccessToken = () => {
@@ -35,38 +32,31 @@ const NaverLogin = () => {
 
     naverLogin.getLoginStatus(async function (status) {
       if (status) {
-        const { id, nickname, email, profile_image } = naverLogin.user;
+        const { id, name, email, birthday, profile_image } = naverLogin.user;
 
         const naverLoginData = {
           id,
-          nickname,
+          name,
           email,
+          birthday,
           profile_image,
         };
 
         const res = await naverSocialLogin(naverLoginData);
         if (res === 1) {
           console.log("네이버 로그인 성공!");
-          console.log("사용자 아이디:", id);
-          console.log("사용자 닉네임:", nickname);
-          console.log("사용자 이메일:", email);
           console.log("프로필 이미지 URL:", profile_image);
+
           userAccessToken();
           document.cookie = serialize("userId", id, { path: '/' });
+          document.cookie = serialize("userName", name, { path: '/' });
+          document.cookie = serialize("userEmail", email, { path: '/' });
+          document.cookie = serialize("userBirth", birthday, { path: '/' });
+          document.cookie = serialize("userImage", profile_image, { path: '/' });
+
           navigate('/main')
-          setLoginAlert(
-            <Alert severity="success" onClose={() => setLoginAlert(null)}>
-              <AlertTitle>로그인 성공!</AlertTitle>
-            </Alert>
-          );
         } else {
           console.log("Naver 로그인 실패");
-          setLoginAlert(
-            <Alert severity="warning" onClose={() => setLoginAlert(null)}>
-              <AlertTitle>로그인 실패</AlertTitle>
-              <strong>입력 정보를 다시 확인해주세요</strong>
-            </Alert>
-          );
         }
       } else {
       }
@@ -88,7 +78,6 @@ const NaverLogin = () => {
 
   return (
     <div id="naverIdLogin" style={{ textAlign: "center" }}>
-      {loginAlert}
     </div>
   );
 };
