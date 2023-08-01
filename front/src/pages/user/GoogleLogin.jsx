@@ -4,10 +4,18 @@ import { googleSocialLogin, googleUserInfo } from '../../axios/user/loginLogic';
 import config from '../../config';
 import { serialize } from 'cookie';
 import { useNavigate } from 'react-router';
+import { Alert, Snackbar } from '@mui/material';
+import { useSnackbar } from 'notistack';
 
 
 const GoogleLogin = () => {
   const navigate = useNavigate()
+  const [alertOn, setAlertOn] = useState(false);
+  const { enqueueSnackbar } = useSnackbar(); 
+  
+  const handleClose = () => {
+    setAlertOn(false)
+  }
 
 
 {/* 구글 sdk */}
@@ -68,7 +76,8 @@ useEffect(() => {
       document.cookie = serialize('userId', googleLoginData.email, { path: '/' }); 
       document.cookie = serialize('userName', googleLoginData.name, { path: '/' }); 
       document.cookie = serialize('userImage', googleLoginData.picture, { path: '/' }); 
-        navigate('/main');
+      enqueueSnackbar('로그인에 성공했습니다!', { variant: 'success' });
+      navigate('/main');
       
 
     } else {
@@ -91,6 +100,11 @@ useEffect(() => {
           onClick={handleGoogleLogin}
         />
             </div>
+            <Snackbar open={alertOn} autoHideDuration={3000} onClose={handleClose}>
+          <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
+            로그인에 성공했습니다!
+          </Alert>
+        </Snackbar>
     </>
   )
 }

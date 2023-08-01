@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, CssBaseline, TextField, FormControl, FormHelperText, Grid, Box, Typography, Container, Link} from '@mui/material/';
+import { Button, CssBaseline, TextField, FormControl, FormHelperText, Grid, Box, Typography, Container, Link, Snackbar, Alert} from '@mui/material/';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useNavigate } from 'react-router';
 import { styled } from 'styled-components';
@@ -9,6 +9,7 @@ import config from '../../config';
 import NaverLogin from './NaverLogin';
 import GoogleLogin from './GoogleLogin';
 import KakaoLogin from './KakaoLogin';
+import { useSnackbar } from 'notistack';
 
 
 const FormHelperTexts = styled(FormHelperText)`
@@ -28,8 +29,13 @@ const Login = () => {
   const navigate = useNavigate();
   const [id, setId] = useState('');
   const [pw, setPw] = useState('');
+  const [alertOn, setAlertOn] = useState(false);
 
 
+  const { enqueueSnackbar } = useSnackbar(); 
+  const handleClose = () => {
+    setAlertOn(false)
+  }
 
   {/* 사이트 자체 로그인 */}
   const handleLogin = async (e) => {
@@ -45,7 +51,9 @@ const Login = () => {
       if (res === 1) {
         document.cookie = serialize('userId', id, { path: '/' });
         console.log(document.cookie);
-          navigate('/main');
+        navigate('/main');
+        enqueueSnackbar('로그인에 성공했습니다!', { variant: 'success' });
+        setAlertOn(true);
       } else {
         console.log('로그인 정보 재확인 필요');
       }
@@ -157,6 +165,11 @@ const Login = () => {
             <FormHelperTexts></FormHelperTexts>
           </Boxs>
         </Box>
+        <Snackbar open={alertOn} autoHideDuration={3000} onClose={handleClose}>
+          <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
+            로그인에 성공했습니다!
+          </Alert>
+        </Snackbar>
       </Container>
     </ThemeProvider>
   );

@@ -136,10 +136,10 @@ public class LoginController {
 	    try {
 	      HttpSession session = request.getSession(true);
 	      String kakaoId = kakaoLoginData.get("id");
-	      String kakaoName = kakaoLoginData.get("kakao_account.profile.nickname");
-	      String kakaoEmail = kakaoLoginData.get("kakao_account.email");
-	      String kakaoBirth = kakaoLoginData.get("kakao_account.birthday");
-	      String kakaoImage = kakaoLoginData.get("kakao_account.profile.profile_image_url");
+	      String kakaoName = kakaoLoginData.get("name");
+	      String kakaoEmail = kakaoLoginData.get("email");
+	      String kakaoBirth = kakaoLoginData.get("birth");
+	      String kakaoImage = kakaoLoginData.get("image");
 	      
 	   // 데이터베이스에서 해당 네이버 ID로 등록된 사용자가 있는지 확인
           UserDto existingUser = loginService.getUserByKakaoId(kakaoId);

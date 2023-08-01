@@ -8,10 +8,12 @@ import { ThemeProvider } from '@mui/material'
 import StartPage from './pages/start/StartPage'
 import NaverLogin from './pages/user/NaverLogin'
 import KakaoCallback from './pages/user/KakaoCallback'
+import { SnackbarProvider } from 'notistack'
 
 const App = () => {
   return (
     <>
+    <SnackbarProvider maxSnack={3}>
     <ThemeProvider theme={theme}>
     <Routes>
       {/* 첫 시작 페이지*/}
@@ -27,6 +29,7 @@ const App = () => {
     
     </Routes>
     </ThemeProvider>
+    </SnackbarProvider>
     </>
   )
 }

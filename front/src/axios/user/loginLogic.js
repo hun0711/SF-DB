@@ -54,10 +54,9 @@ export const naverSocialLogin = async (data) => {
 
 export const kakaoSocialLogin = async (data) => {
   try {
-    const res = await axios.post(
-      `http://localhost:8000/user/login/kakao`,
-      data
-    );
+    const res = await axios.post("http://localhost:8000/user/login/kakao", {
+      ...data,
+    });
     return res.data;
   } catch (error) {
     console.log("Error : ", error);

@@ -41,15 +41,24 @@ import { useNavigate } from 'react-router';
           }
         )
         .then(async (res) => {
-        console.log("카카오 유저 데이터  : ");
         console.log(res.data)
-        const kakaoLoginData = res.data ;
+        const kakaoLoginData = {
+          id : res.data.id,
+          name : res.data.kakao_account.profile.nickname,
+          email : res.data.kakao_account.email,
+          birth : res.data.kakao_account.birthday,
+          image : res.data.kakao_account.profile.profile_image_url
+        }
 
         //서버에 로그인정보 전달
         const response = await kakaoSocialLogin(kakaoLoginData)
         if(response === 1 ){
           console.log("카카오 로그인 성공");
-          /* document.cookie = serialize('userId' , kakaoId , {path : '/'}) */
+          document.cookie = serialize('userId' , kakaoLoginData.id , {path : '/'})
+          document.cookie = serialize('userName' , kakaoLoginData.name , {path : '/'})
+          document.cookie = serialize('userBirth' , kakaoLoginData.birth , {path : '/'})
+          document.cookie = serialize('userIamge' , kakaoLoginData.image , {path : '/'})
+          
           navigate('/main')
         }
       });
