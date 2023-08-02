@@ -72,8 +72,6 @@ const NaverLogin = () => {
           setAlertOn(true);
         }
       } else {
-        enqueueSnackbar('네트워크 오류 발생!', { variant: 'error' });
-        setAlertOn(true);
       }
     });
   };

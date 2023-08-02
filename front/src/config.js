@@ -12,6 +12,11 @@ const config = {
   //kakao api
   kakaoClientId: "5eafe7bdd6fe123db54226ee4c6826b2", //REST_API_KEY
   kakaoRedirectUri: "http://localhost:3000/auth/kakao",
+
+  //movie api
+  kmdbKey : "95B85M4L8264VL3I1IYE"
+
+  
 };
 
 export default config;

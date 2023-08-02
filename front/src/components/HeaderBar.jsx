@@ -145,7 +145,7 @@ function HeaderBar() {
                 <Link
                   variant="h6"
                   underline="none"
-                  href="/my-info" // 내 정보 페이지로 설정
+                  href="/myInfo" // 내 정보 페이지로 설정
                   sx={{ ...rightLink, color: "science.main" }}
                 >
                   {"내 정보"}

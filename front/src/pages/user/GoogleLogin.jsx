@@ -73,7 +73,7 @@ useEffect(() => {
 
     if (res === 1) {
       document.cookie = serialize('userId', googleLoginData.id, { path: '/' }); 
-      document.cookie = serialize('userId', googleLoginData.email, { path: '/' }); 
+      document.cookie = serialize('userEmail', googleLoginData.email, { path: '/' }); 
       document.cookie = serialize('userName', googleLoginData.name, { path: '/' }); 
       document.cookie = serialize('userImage', googleLoginData.picture, { path: '/' }); 
       navigate('/main');

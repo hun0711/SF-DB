@@ -1,18 +1,23 @@
 import React from 'react'
-import MainLayout from './MainLayout'
 import HeaderBar from '../../components/HeaderBar'
 import Footer from '../../components/Footer'
+import MainTopSection from './MainTopSection'
 
 const MainPage = () => {
   return (
     <>
     <HeaderBar/>
 
-    <div style={{marginTop:'100px'}}>
-    <MainLayout/>
-    </div>
+<div style={{marginTop:'150px'}}>
+{/* TOP 카루셀 */}
+<MainTopSection/>
+</div>
 
-    <Footer/>
+{/* MID 카루셀 */}
+{/* BTM 카루셀 */}
+
+
+  {/*   <Footer/>  */}
     </>
   )
 }

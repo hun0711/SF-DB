@@ -7,6 +7,7 @@ import theme from './utils/theme'
 import { ThemeProvider } from '@mui/material'
 import StartPage from './pages/start/StartPage'
 import NaverLogin from './pages/user/NaverLogin'
+import MyInfoPage from './pages/user/MyInfoPage'
 import KakaoCallback from './pages/user/KakaoCallback'
 import { SnackbarProvider } from 'notistack'
 
@@ -26,8 +27,9 @@ const App = () => {
       <Route path="/auth/kakao" exact={true} element={<KakaoCallback />} />
       {/* 회원가입페이지 */}
       <Route path="/register" exact={true} element={<RegisterPage />} />
-    
-    </Routes>
+      {/* 마이페이지 */}
+      <Route path="/myInfo" exact={true} element={<MyInfoPage />} />
+   </Routes>
     </ThemeProvider>
     </SnackbarProvider>
     </>

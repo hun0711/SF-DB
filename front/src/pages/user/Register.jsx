@@ -80,13 +80,12 @@ import { useSnackbar } from 'notistack';
         const res = await idCheckDB(id);
         console.log(res);
         if(res){
-          setAlertOn(true);
           setIdError('이미 존재하는 아이디입니다.');
           setIsIdCheck(false);
         }else{
             console.log("사용 가능한 아이디입니다.");
             enqueueSnackbar('사용 가능한 아이디입니다.', { variant: 'success' });
-            setAlertOn(true);
+        setAlertOn(true);
           setIdError('');
           setIsIdCheck(true);
         }
@@ -101,7 +100,12 @@ import { useSnackbar } from 'notistack';
 
     //ID찾기 버튼 클릭 시 'id'입력값을 받아야함
     const handleSearchButtonClick = () => {
-      const id = document.getElementById('id').value;
+      const id = document.getElementById('id').value.trim(); // 앞뒤 공백 제거
+      if (id === '') {
+        setIdError('아이디를 입력해주세요.');
+        setIsIdCheck(false);
+        return;
+      }
       handleCheckDuplicateId(id);
     }
     
