@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -42,8 +43,15 @@ public class LoginController {
 	@PostMapping("/login")
 	public int userLogin(@RequestBody UserDto uDto) {
 		log.info("유저 로그인 호출");
-		int result = loginService.userLogin(uDto);
-		return result;
+		 // 입력한 로그인 비밀번호를 해싱하여 암호화된 비밀번호와 비교
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        String inputPassword = uDto.getUserPw();
+        String storedEncryptedPassword = loginService.getEncryptedPassword(uDto.getUserId()); // 저장된 암호화된 비밀번호 조회
+        if (encoder.matches(inputPassword, storedEncryptedPassword)) {
+           return 1;  
+        }else {
+        	return 0;
+        }
 	}
 	
 	

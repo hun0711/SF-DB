@@ -14,6 +14,7 @@ public class UserDto {
 	private int userNo; //pk
 	private String userId;
 	private String userPw;
+	private String userEncryptedPw;
 	private String userName;
 	private String userBirth;
 	private String userEmail;

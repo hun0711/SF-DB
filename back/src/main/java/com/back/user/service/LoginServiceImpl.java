@@ -17,11 +17,10 @@
 	
 		//사이트 자체 회원 확인
 		@Override
-		public int userLogin(UserDto uDto) {
-			log.info("유저로그인 호출");
-			int result = loginDao.userLogin(uDto);
-			return result;
-		}
+	    public String getEncryptedPassword(String userId) {
+	        UserDto user = loginDao.findByUserId(userId); // 데이터베이스에서 사용자 정보 가져오기
+	        return user.getUserEncryptedPw(); // 암호화된 비밀번호 리턴
+	    }
 	
 		
 	

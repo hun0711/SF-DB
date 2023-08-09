@@ -1,5 +1,6 @@
 package com.back.user.controller;
 
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -37,6 +38,10 @@ public class RegisterController {
 	@PostMapping("/userJoin")
 	public int userJoin(@RequestBody UserDto uDto) {
 		log.info("memberInsert 확인");
+		   // 비밀번호 암호화
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        String encodedPassword = encoder.encode(uDto.getUserPw());
+        uDto.setUserPw(encodedPassword);
 		int result = registerService.userJoin(uDto);
 		return result;
 	}

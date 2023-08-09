@@ -7,12 +7,13 @@ import com.back.user.repository.UserDto;
 @Service
 public interface LoginService {
 
-	int userLogin(UserDto uDto);
 
 	UserDto getUserByGoogleId(String googleId);
 
 	UserDto getUserByNaverId(String naverId);
 
 	UserDto getUserByKakaoId(String kakaoId);
+
+	String getEncryptedPassword(String userId);
 	
 }

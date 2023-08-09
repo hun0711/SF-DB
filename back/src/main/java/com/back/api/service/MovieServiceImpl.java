@@ -1,6 +1,7 @@
 package com.back.api.service;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.http.HttpEntity;
@@ -8,6 +9,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 
 import com.back.api.repository.MovieDao;
@@ -26,28 +28,42 @@ public class MovieServiceImpl implements MovieService {
 	private final MovieDao movieDao;
 	
 	@Override
-	public void fetchAndSaveMovieInfo(String apiKey, List<String> movieIds) {
-		log.info("영화 api 호출");
+	public void saveMoviesFromApi() {
+     log.info("영화 api 호출");
+     List<String> movieSeqs = Arrays.asList("26312" , "32372" , "56635" , "06697" , "34240" , "10779" , "20520" , "57556" , "03559" , "22274" 
+    		 , "09710" , "05440" , "31128" , "02219" , "07555" , "04948" , "05107" , "07998" , "38932" , "13479");
+
+     ObjectMapper objectMapper = new ObjectMapper();
+     
+     for(String movieSeq : movieSeqs) {
+		String apiUrl = "http://api.koreafilm.or.kr/openapi-data2/wisenut/search_api/search_json2.jsp?collection=kmdb_new2&detail=Y&ServiceKey=95B85M4L8264VL3I1IYE&listCount=1&genre=SF&movieSeq=" + movieSeq;
+	
 		 RestTemplate restTemplate = new RestTemplate();
+         ResponseEntity<String> response = restTemplate.getForEntity(apiUrl, String.class);
+         String responseBody = response.getBody();
+     
+    try {
+        // Parse JSON response using ObjectMapper and MovieDto class
+        MovieDto movieDto = objectMapper.readValue(responseBody, MovieDto.class);
 
-	        for (String movieId : movieIds) {
-	            String apiUrl = "https://api.themoviedb.org/3/movie/" + movieId + "?language=ko-KR";
-	            HttpHeaders headers = new HttpHeaders();
-	            headers.set("Authorization", "Bearer " + apiKey);
-	            HttpEntity<String> entity = new HttpEntity<>(headers);
+        movieDto.setMovieTitle(movieDto.getMovieTitle());
+        movieDto.setMovieOrignTitle(movieDto.getMovieOrignTitle());
+        movieDto.setMovieProdYear(movieDto.getMovieProdYear());
+        movieDto.setMovieDirectors(String.join(",", movieDto.getMovieDirectors()));
+        movieDto.setMovieActors(String.join(",", movieDto.getMovieActors()));
+        movieDto.setMovieNation(movieDto.getMovieNation());
+        movieDto.setMoviePlots(String.join(",", movieDto.getMoviePlots()));
+        movieDto.setMovieRuntime(movieDto.getMovieRuntime());
+        movieDto.setMovieRating(movieDto.getMovieRating());
+        movieDto.setMovieRepRlsDate(movieDto.getMovieRepRlsDate());
+        movieDto.setMoviePosters(movieDto.getMoviePosters());
 
-	            ResponseEntity<String> response = restTemplate.exchange(apiUrl, HttpMethod.GET, entity, String.class);
-	            String responseBody = response.getBody();
+        // Save the movie entity to the database
+        movieDao.save(movieDto);
 
-	            ObjectMapper objectMapper = new ObjectMapper();
-	            try {
-	                // Parse JSON response to a Movie object
-	                MovieDto movieDto = objectMapper.readValue(responseBody, MovieDto.class);
-
-	                movieDao.saveMovie(movieDto);
-	            } catch (IOException e) {
-	                e.printStackTrace();
-	            }
-	        }
-	    }
+    } catch (IOException e) {
+        log.error("Error parsing JSON response for movieSeq: {}", movieSeq, e);
+    }
 	}
+}
+}

@@ -3,8 +3,8 @@ import HeaderBar from '../../components/HeaderBar';
 import Footer from '../../components/Footer';
 import { Container, Grid, Paper } from '@mui/material';
 import Chart from './Chart';
-import Deposits from './Deposits';
 import Orders from './Orders';
+import UserProfile from './UserProfile';
 
 
 export default function MtInfoPage() {
@@ -12,10 +12,23 @@ export default function MtInfoPage() {
   return (
     <>
       <HeaderBar/>
-      <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+      <Container maxWidth="lg" sx={{ mt: 4, mb: 4 , marginTop: 15}}>
             <Grid container spacing={3}>
+                 {/* 프로필 */}
+                 <Grid item xs={12} md={4} lg={5}>
+                <Paper
+                  sx={{
+                    p: 2,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    height: 240,
+                  }}
+                >
+                  <UserProfile />
+                </Paper>
+              </Grid>
               {/* Chart */}
-              <Grid item xs={12} md={8} lg={9}>
+              <Grid item xs={12} md={8} lg={7}>
                 <Paper
                   sx={{
                     p: 2,
@@ -27,20 +40,8 @@ export default function MtInfoPage() {
                   <Chart />
                 </Paper>
               </Grid>
-              {/* Recent Deposits */}
-              <Grid item xs={12} md={4} lg={3}>
-                <Paper
-                  sx={{
-                    p: 2,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    height: 240,
-                  }}
-                >
-                  <Deposits />
-                </Paper>
-              </Grid>
-              {/* Recent Orders */}
+           
+              {/* 보관함 */}
               <Grid item xs={12}>
                 <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
                   <Orders />

@@ -1,14 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Button, CssBaseline, TextField, FormControl, FormHelperText, Grid, Box, Typography, Container, Link, Snackbar, Alert} from '@mui/material/';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useNavigate } from 'react-router';
 import { styled } from 'styled-components';
-import { googleSocialLogin,userLoginDB } from '../../axios/user/loginLogic';
+import { userLoginDB } from '../../axios/user/loginLogic';
 import { serialize } from 'cookie';
-import config from '../../config';
-import NaverLogin from './NaverLogin';
 import GoogleLogin from './GoogleLogin';
 import KakaoLogin from './KakaoLogin';
+import NaverLogin from './NaverLogin';
 import { useSnackbar } from 'notistack';
 
 
