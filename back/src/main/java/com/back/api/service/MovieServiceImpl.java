@@ -15,6 +15,7 @@ import org.springframework.web.client.RestTemplate;
 import com.back.api.repository.MovieDao;
 import com.back.api.repository.MovieDto;
 import com.back.user.repository.LoginDao;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.RequiredArgsConstructor;
@@ -25,45 +26,38 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class MovieServiceImpl implements MovieService {
 
-	private final MovieDao movieDao;
-	
-	@Override
-	public void saveMoviesFromApi() {
-     log.info("영화 api 호출");
-     List<String> movieSeqs = Arrays.asList("26312" , "32372" , "56635" , "06697" , "34240" , "10779" , "20520" , "57556" , "03559" , "22274" 
-    		 , "09710" , "05440" , "31128" , "02219" , "07555" , "04948" , "05107" , "07998" , "38932" , "13479");
+	 private final MovieDao movieDao;
+	    private final ObjectMapper objectMapper;
 
-     ObjectMapper objectMapper = new ObjectMapper();
-     
-     for(String movieSeq : movieSeqs) {
-		String apiUrl = "http://api.koreafilm.or.kr/openapi-data2/wisenut/search_api/search_json2.jsp?collection=kmdb_new2&detail=Y&ServiceKey=95B85M4L8264VL3I1IYE&listCount=1&genre=SF&movieSeq=" + movieSeq;
-	
-		 RestTemplate restTemplate = new RestTemplate();
-         ResponseEntity<String> response = restTemplate.getForEntity(apiUrl, String.class);
-         String responseBody = response.getBody();
-     
-    try {
-        // Parse JSON response using ObjectMapper and MovieDto class
-        MovieDto movieDto = objectMapper.readValue(responseBody, MovieDto.class);
+	    @Override
+	    public void saveMoviesFromApi() {
+	        log.info("영화 API 호출");
+	        String movieId = "F";
+	        List<String> movieSeqs = Arrays.asList("26312", "32372", "56635", "06697", "34240", "10779", "20520", "57556", "03559", "22274",
+	                "09710", "05440", "31128", "02219", "07555", "04948", "05107", "07998", "38932", "13479");
 
-        movieDto.setMovieTitle(movieDto.getMovieTitle());
-        movieDto.setMovieOrignTitle(movieDto.getMovieOrignTitle());
-        movieDto.setMovieProdYear(movieDto.getMovieProdYear());
-        movieDto.setMovieDirectors(String.join(",", movieDto.getMovieDirectors()));
-        movieDto.setMovieActors(String.join(",", movieDto.getMovieActors()));
-        movieDto.setMovieNation(movieDto.getMovieNation());
-        movieDto.setMoviePlots(String.join(",", movieDto.getMoviePlots()));
-        movieDto.setMovieRuntime(movieDto.getMovieRuntime());
-        movieDto.setMovieRating(movieDto.getMovieRating());
-        movieDto.setMovieRepRlsDate(movieDto.getMovieRepRlsDate());
-        movieDto.setMoviePosters(movieDto.getMoviePosters());
+	        RestTemplate restTemplate = new RestTemplate();
 
-        // Save the movie entity to the database
-        movieDao.save(movieDto);
+	        for (String movieSeq : movieSeqs) {
+	            String apiUrl = "http://api.koreafilm.or.kr/openapi-data2/wisenut/search_api/search_json2.jsp?collection=kmdb_new2&detail=Y&ServiceKey=95B85M4L8264VL3I1IYE&listCount=1&genre=SF&movieId=" + movieId +"&movieSeq=" + movieSeq;
 
-    } catch (IOException e) {
-        log.error("Error parsing JSON response for movieSeq: {}", movieSeq, e);
-    }
+	            ResponseEntity<String> response = restTemplate.getForEntity(apiUrl, String.class);
+	            String responseBody = response.getBody();
+
+	            try {
+	                // Parse JSON response using ObjectMapper
+	                JsonNode rootNode = objectMapper.readTree(responseBody);
+	                JsonNode dataNode = rootNode.get("Data").get(0);
+	                JsonNode resultNode = dataNode.get("Result").get(0);
+
+	                MovieDto movieDto = objectMapper.treeToValue(resultNode, MovieDto.class);
+
+	                // Save the movie entity to the database
+	                movieDao.save(movieDto);
+
+	            } catch (IOException e) {
+	                log.error("movieSeq: {}에 대한 JSON 응답 파싱 중 오류 발생", movieSeq, e);
+	            }
+	        }
+	    }
 	}
-}
-}

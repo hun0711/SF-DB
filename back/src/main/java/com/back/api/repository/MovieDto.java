@@ -1,5 +1,9 @@
 package com.back.api.repository;
 
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -9,21 +13,22 @@ import lombok.ToString;
 @Setter
 @ToString
 @RequiredArgsConstructor
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class MovieDto {
 
-	private int movieId; //pk
-	private String movieTitle; //제목
-	private String movieOrignTitle; //원제
-	private int movieProdYear; //제작연도
-	private String movieDirectors; //감독
-	private String movieActors; //배우
-	private String movieNation;  //국가
-	private String moviePlots; //줄거리
-	private int movieRuntime; //상영시간
-	private String movieRating; //등급
-	private String movieRepRlsDate; //개봉일
-	private String moviePosters; //포스터
-	
-	
-	
+    private int movieNo; // pk
+    private String movieId; //고유코드
+    private String movieSeq; //고유코드
+    private String title; // 제목
+    private String titleOrg; // 원제
+    private String prodYear; // 제작연도
+    private String nation; // 국가
+    private String runtime; // 상영시간
+    private String rating; // 등급
+    private String repRlsDate; // 개봉일
+
+    
+
+
+
 }
