@@ -7,4 +7,10 @@ public interface MovieService {
 
 	void saveMoviesFromApi();
 
+	void saveMovieDirectorsFromApi();
+
+	void saveMovieActorsFromApi();
+
+	void todayBoxofficeFromApi();
+
 }

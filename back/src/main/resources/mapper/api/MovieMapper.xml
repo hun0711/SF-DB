@@ -1,9 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.back.api.repository.MovieDao">
-    <insert id='save' parameterType="MovieDto">
-        INSERT INTO movies (movieNo, movieId , movieSeq , title, titleOrg, prodYear, nation , runtime, rating, repRlsDate)
-        VALUES (#{movieNo} ,#{movieId} , #{movieSeq} , #{title}, #{titleOrg}, #{prodYear},  #{nation} , #{runtime}, #{rating}, #{repRlsDate})
-    </insert>
 
+   <!-- 영화 정보 -->
+    <insert id='save' parameterType="MovieDto">
+        INSERT INTO movies (movieNo, movieId , movieSeq , title, titleOrg, prodYear, nation , runtime, rating, repRlsDate ,directorIds , actorNms , plotText , keywords , poster ,awards1)
+        VALUES (#{movieNo} ,#{movieId} , #{movieSeq} , #{title}, #{titleOrg}, #{prodYear},  #{nation} , #{runtime}, #{rating}, #{repRlsDate} , #{directorIds} , #{actorNms} , #{plotText} , #{keywords} , #{poster} , #{awards1})
+    </insert>
+  
+  
+  <!-- 감독 정보 -->
+   <insert id='saveDirectors' parameterType="MovieDirectorsDto">
+        INSERT INTO movieDirectors (movieDirectorsNo , directorNm , directorEnNm , directorId)
+        VALUES (#{movieDirectorsNo} , #{directorNm} , #{directorEnNm} , #{directorId})
+   </insert>
+   
+   
+  <!-- 감독 중복 확인 -->
+    <select id="existsDirectorById" parameterType="java.lang.String" resultType="boolean">
+        SELECT EXISTS (SELECT 1 FROM movieDirectors WHERE directorId = #{directorId})
+    </select> 
+   
+   
+  <!-- 배우 정보  --> 
+   <insert id='saveActors' parameterType="MovieActorsDto">
+        INSERT INTO movieActors (movieActorsNo , actorNm , actorEnNm , actorId)
+        VALUES (#{movieActorsNo} , #{actorNm} , #{actorEnNm}, #{actorId})
+   </insert>
+   
+   <!-- 배우 중복 확인 -->
+   <select id="existsActorById" parameterType="java.lang.String" resultType="boolean">
+       SELECT EXISTS (SELECT 1 FROM movieActors WHERE actorId = #{actorId})
+   </select>
+   
+   
+   
+   
 </mapper>
