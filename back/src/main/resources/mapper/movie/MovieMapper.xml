@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.back.movie.repository.MovieDao">
+
+
+
+<!-- 영화 정보 조회 (Top20 , 추천) -->
+  <select id="movieList" resultType="MovieDto">
+  select *
+  from movies
+  </select>
+
+
+   
+<!-- 영화 정보 조건 검색 -->   
+     <select id="selectMovie" parameterType="MovieDto" resultType="MovieDto">
+  select *
+  from movies
+
+  </select>
+   
+
+
+   
+   
+<!-- 영화 정보 상세보기 -->   
+     <select id="movieDetail" parameterType="MovieDto" resultType="MovieDto">
+  select *
+  from movies
+<where>
+  <if test='movieSeq!=null'> 
+    movieSeq = #{movieSeq}
+    </if>
+     </where>
+  </select>
+
+
+
+
+<!-- Top 20 영화  -->
+<select id="top20SfMovie" resultType="Top20SfMovieDto">
+select *
+from top20sfmovies
+</select>
+
+
+
+
+<!--   추천 영화   -->
+<select id="recommendMovie" resultType="RecommendMovieDto">
+select *
+from recommendmovies
+</select>
+
+
+
+
+<!-- 개봉 예정 영화  -->
+<select id="releaseSoonMovie" resultType="ReleaseSoonMovieDto">
+select *
+from releasesoonmovies
+</select>
+
+
+</mapper>

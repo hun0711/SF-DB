@@ -24,7 +24,7 @@ export const regInsertDB = (data) => {
     try {
       const response = axios({
         method: "post", //@RequestBody
-        url: "http://localhost:8000/register/userJoin",
+        url: "http://localhost:8000/register/userJoin", 
         data: data,
       });
       resolve(response);

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.back.api.repository.ApiDao">
+
+   <!-- 영화 정보 -->
+    <insert id='save' parameterType="MovieDto">
+        INSERT INTO movies (movieNo, movieId , movieSeq , title, titleOrg, prodYear, nation , runtime, rating, repRlsDate ,directorIds , actorNms , plotText , keywords , poster ,awards1)
+        VALUES (#{movieNo} ,#{movieId} , #{movieSeq} , #{title}, #{titleOrg}, #{prodYear},  #{nation} , #{runtime}, #{rating}, #{repRlsDate} , #{directorIds} , #{actorNms} , #{plotText} , #{keywords} , #{poster} , #{awards1})
+    </insert>
+  
+  
+  <!-- 감독 정보 -->
+   <insert id='saveDirectors' parameterType="MovieDirectorsDto">
+        INSERT INTO movieDirectors (movieDirectorsNo , directorNm , directorEnNm , directorId)
+        VALUES (#{movieDirectorsNo} , #{directorNm} , #{directorEnNm} , #{directorId})
+   </insert>
+   
+   
+  <!-- 감독 중복 확인 -->
+    <select id="existsDirectorById" parameterType="java.lang.String" resultType="boolean">
+        SELECT EXISTS (SELECT 1 FROM movieDirectors WHERE directorId = #{directorId})
+    </select> 
+   
+   
+  <!-- 배우 정보  --> 
+   <insert id='saveActors' parameterType="MovieActorsDto">
+        INSERT INTO movieActors (movieActorsNo , actorNm , actorEnNm , actorId)
+        VALUES (#{movieActorsNo} , #{actorNm} , #{actorEnNm}, #{actorId})
+   </insert>
+   
+   <!-- 배우 중복 확인 -->
+   <select id="existsActorById" parameterType="java.lang.String" resultType="boolean">
+       SELECT EXISTS (SELECT 1 FROM movieActors WHERE actorId = #{actorId})
+   </select>
+   
+   
+   
+      <!-- Top 20 SF영화 정보 -->
+    <insert id='saveTop20SfMovie' parameterType="Top20SfMovieDto">
+        INSERT INTO top20sfmovies (top20sfmovieNo, movieId , movieSeq , title, titleOrg, prodYear, nation , runtime, rating, repRlsDate ,directorIds , actorNms , plotText , keywords , poster ,awards1)
+        VALUES (#{top20sfmovieNo} ,#{movieId} , #{movieSeq} , #{title}, #{titleOrg}, #{prodYear},  #{nation} , #{runtime}, #{rating}, #{repRlsDate} , #{directorIds} , #{actorNms} , #{plotText} , #{keywords} , #{poster} , #{awards1})
+    </insert>
+   
+   
+   <!-- 추천 SF영화 정보 -->
+    <insert id='saveRecommendMovie' parameterType="RecommendMovieDto">
+        INSERT INTO recommendmovies (recommendmovieNo, movieId , movieSeq , title, titleOrg, prodYear, nation , runtime, rating, repRlsDate ,directorIds , actorNms , plotText , keywords , poster ,awards1)
+        VALUES (#{recommendmovieNo} ,#{movieId} , #{movieSeq} , #{title}, #{titleOrg}, #{prodYear},  #{nation} , #{runtime}, #{rating}, #{repRlsDate} , #{directorIds} , #{actorNms} , #{plotText} , #{keywords} , #{poster} , #{awards1})
+    </insert>
+   
+   
+   <!-- 개봉 예정 SF영화 정보  -->
+   <insert id='saveReleaseSoonMovie' parameterType="ReleaseSoonMovieDto">
+       INSERT INTO releasesoonmovies (releasesoonmovieNo, movieId , movieSeq , title, titleOrg, prodYear, nation , runtime, rating, repRlsDate ,directorIds , actorNms , plotText , keywords , poster ,awards1)
+        VALUES (#{releasesoonmovieNo} ,#{movieId} , #{movieSeq} , #{title}, #{titleOrg}, #{prodYear},  #{nation} , #{runtime}, #{rating}, #{repRlsDate} , #{directorIds} , #{actorNms} , #{plotText} , #{keywords} , #{poster} , #{awards1})
+   </insert>
+   
+   
+   
+      <!-- 박스오피스 정보 -->
+    <insert id='saveBoxOffice' parameterType="BoxOfficeDto">
+        INSERT INTO boxoffice (boxofficeNo, movieId , movieSeq , title, titleOrg, prodYear, nation , runtime, rating, repRlsDate ,directorIds , directorNms , actorNms , plotText , keywords , poster ,awards1)
+        VALUES (#{boxofficeNo} ,#{movieId} , #{movieSeq} , #{title}, #{titleOrg}, #{prodYear},  #{nation} , #{runtime}, #{rating}, #{repRlsDate} , #{directorIds} , #{directorNms} , #{actorNms} , #{plotText} , #{keywords} , #{poster} , #{awards1})
+    </insert>
+   
+   
+    <!-- 박스오피스 중복 확인 -->
+    <select id="existsBoxofficeByTitle" parameterType="java.lang.String" resultType="boolean">
+        SELECT EXISTS (SELECT 1 FROM boxoffice WHERE title = #{title})
+    </select> 
+    
+    <!-- 박스오피스 갱신-삭제 -->
+     <delete id="deleteBoxofficeData">
+       DELETE FROM boxoffice
+     </delete>
+    
+   
+</mapper>

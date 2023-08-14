@@ -19,7 +19,7 @@
 		@Override
 	    public String getEncryptedPassword(String userId) {
 	        UserDto user = loginDao.findByUserId(userId); // 데이터베이스에서 사용자 정보 가져오기
-	        return user.getUserEncryptedPw(); // 암호화된 비밀번호 리턴
+	        return user.getUserPw(); // 암호화된 비밀번호 리턴
 	    }
 	
 		

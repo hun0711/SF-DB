@@ -162,6 +162,7 @@ import { useSnackbar } from 'notistack';
     
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log("가입하기 호출");
     if (!selectedDate) {
       setBirthError('생년월일을 선택해주세요.');
       return;
