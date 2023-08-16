@@ -3,7 +3,7 @@ import { Button, CssBaseline, TextField, FormControl, FormHelperText, Grid, Box,
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useNavigate } from 'react-router';
 import { styled } from 'styled-components';
-import { userLoginDB } from '../../axios/user/loginLogic';
+import { userInfoDB, userLoginDB } from '../../axios/user/loginLogic';
 import { serialize } from 'cookie';
 import GoogleLogin from './GoogleLogin';
 import KakaoLogin from './KakaoLogin';
@@ -48,8 +48,16 @@ const Login = () => {
       const res = await userLoginDB(loginData);
       console.log('로그인 결과:', res);
       if (res === 1) {
-        document.cookie = serialize('userId', id, { path: '/' });
+        const userInfoRes = await userInfoDB(loginData.userId)
+        console.log(userInfoRes);
+
+        document.cookie = serialize('userId', userInfoRes[0].userId, { path: '/' });
+        document.cookie = serialize('userName', userInfoRes[0].userName , { path: '/' });
+        document.cookie = serialize('userBirth', userInfoRes[0].userBirth , { path: '/' });
+        document.cookie = serialize('userEmail', userInfoRes[0].userEmail , { path: '/' });
+        document.cookie = serialize('userProfileImage', userInfoRes[0].userProfileImage , { path: '/' });
         console.log(document.cookie);
+
         navigate('/main');
         enqueueSnackbar('로그인에 성공했습니다!', { variant: 'success' });
         setAlertOn(true);

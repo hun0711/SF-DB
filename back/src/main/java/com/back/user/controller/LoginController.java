@@ -1,5 +1,6 @@
 package com.back.user.controller;
 
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpSession;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 
+import com.back.api.repository.MovieDto;
 import com.back.user.repository.UserDto;
 import com.back.user.service.LoginService;
 import com.back.user.service.RegisterService;
@@ -43,15 +45,23 @@ public class LoginController {
 	@PostMapping("/login")
 	public int userLogin(@RequestBody UserDto uDto) {
 		log.info("유저 로그인 호출");
+		 String storedEncryptedPassword = loginService.getEncryptedPassword(uDto.getUserId()); // 저장된 암호화된 비밀번호 조회
 		 // 입력한 로그인 비밀번호를 해싱하여 암호화된 비밀번호와 비교
-        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-        String inputPassword = uDto.getUserPw();
-        String storedEncryptedPassword = loginService.getEncryptedPassword(uDto.getUserId()); // 저장된 암호화된 비밀번호 조회
+		  BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+		  String inputPassword = uDto.getUserPw();
         if (encoder.matches(inputPassword, storedEncryptedPassword)) {
            return 1;  
         }else {
         	return 0;
         }
+	}
+	
+	//로그인 후 유저 정보
+	@GetMapping("/userInfo")
+	public List<UserDto> userInfo(String userId) {
+		log.info("유저 정보 호출");
+		List<UserDto> userInfo = loginService.userInfo(userId);
+		return userInfo; 
 	}
 	
 	

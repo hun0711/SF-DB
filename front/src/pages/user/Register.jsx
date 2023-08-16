@@ -163,88 +163,88 @@ import { useSnackbar } from 'notistack';
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log("가입하기 호출");
+    
     if (!selectedDate) {
+      console.log('생년월일을 선택해주세요.');
       setBirthError('생년월일을 선택해주세요.');
       return;
     }
-    if (!isIdCheck){
-        console.log("아이디 중복확인 해주세요.") 
-        enqueueSnackbar('아이디 중복확인은 필수입니다.', { variant: 'warning' });
-        setAlertOn(true);
+  
+    if (!isIdCheck) {
+      console.log("아이디 중복확인 해주세요.") 
+      enqueueSnackbar('아이디 중복확인은 필수입니다.', { variant: 'warning' });
+      setAlertOn(true);
       return;
     }
-    // 약관 동의 체크
+  
     if (!checked) {
-        console.log("회원가입 약관에 동의해주세요.")
-        enqueueSnackbar('약관에 동의해주세요.', { variant: 'warning' });
-        setAlertOn(true);
+      console.log("회원가입 약관에 동의해주세요.")
+      enqueueSnackbar('약관에 동의해주세요.', { variant: 'warning' });
+      setAlertOn(true);
       return;
     }
-
-    // 유효성 검사
+  
     const idRegex = /^[A-Za-z0-9][A-Za-z0-9]{5,}$/;
-    const pwRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    const pwRegex = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
     const nameRegex = /^[a-zA-Z가-힣]+$/;
     const emailRegex = /([\w-.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
-
-    if (!idRegex.test(id))
-      setIdError('영문자 혹은 숫자로 시작하고, 영문자와 숫자의 조합으로 6자리 이상이어야 합니다.');
-    else
-      setIdError('');
-
-    if (!pwRegex.test(pw))
-      setPwError('영문자, 숫자, 특수 문자의 조합으로 8자리 이상이어야 합니다.');
-    else 
-      setPwError('');
-    
-    if (pw !== rePw) 
-      setPwError('비밀번호가 일치하지 않습니다.');
-    else 
-      setPwError('');
-
-    if (!nameRegex.test(name)) 
-      setNameError('이름은 한글 또는 영문으로 입력해주세요.');
-    else 
-      setNameError('');
-    
-    if (!emailRegex.test(email)) 
-      setEmailError('올바른 이메일 형식이 아닙니다.');
-    else 
-      setEmailError('');
-
-    
-
-      if (
-        idRegex.test(id) &&
-        pwRegex.test(pw) &&
-        pw === rePw &&
-        nameRegex.test(name) &&
-        emailRegex.test(email) &&
-        checked
-      ) {
-  // 회원가입 데이터 요청
-  const formattedDate = selectedDate ? formatDate(selectedDate) : '';
-  const data = new FormData(e.currentTarget);
-  const regData = {
-    userId : data.get('id'),
-    userPw: data.get('pw'),
-    userName : data.get('name'),
-    userBirth: formattedDate,
-    userEmail : data.get('email'),
-  };
-  console.log(regData);
-  regDataSend(regData);
-      }
-    };
-
   
-    
-
-
-
-
-
-
+    if (!idRegex.test(id)) {
+      setIdError('영문자 혹은 숫자로 시작하고, 영문자와 숫자의 조합으로 6자리 이상이어야 합니다.');
+      return;
+    } else {
+      setIdError('');
+      console.log('올바른 id : ' , id);
+    }
+  
+    if (!pwRegex.test(pw)) {
+      console.log('잘못된 pw : ' , pw);
+      setPwError('영문자, 숫자, 특수 문자의 조합으로 8자리 이상이어야 합니다.');
+      return;
+    } else {
+      setPwError('');
+      console.log('올바른 pw : ' , pw);
+    }
+  
+    if (pw !== rePw) {
+      setPwError('비밀번호가 일치하지 않습니다.');
+      return;
+    } else {
+      setPwError('');
+      console.log('pw - rePw 일치 : ' , pw , rePw );
+    }
+  
+    if (!nameRegex.test(name)) {
+      setNameError('이름은 한글 또는 영문으로 입력해주세요.');
+      return;
+    } else {
+      setNameError('');
+      console.log('올바른 이름 : ' , name);
+    }
+  
+    if (!emailRegex.test(email)) {
+      setEmailError('올바른 이메일 형식이 아닙니다.');
+      return;
+    } else {
+      setEmailError('');
+      console.log('올바른 이메일 : ' , email);
+    }
+  
+    console.log('유효성 검사 통과');
+    const formattedDate = selectedDate ? formatDate(selectedDate) : '';
+    const data = new FormData(e.currentTarget);
+  
+    const regData = {
+      userId : data.get('id'),
+      userPw: data.get('pw'),
+      userName : data.get('name'),
+      userBirth: formattedDate,
+      userEmail : data.get('email'),
+    };
+    console.log(regData);
+    regDataSend(regData);
+  };
+  
   /************************************************************************************************/
 
       return (

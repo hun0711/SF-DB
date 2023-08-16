@@ -15,7 +15,7 @@ INSERT into user(
   userName,
   userBirth,
   userEmail,
-  userProfileImage,
+  userProfileImage
 )VALUES(
 #{userId},
 #{userPw},

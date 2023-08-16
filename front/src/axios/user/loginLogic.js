@@ -12,6 +12,20 @@ export const userLoginDB = async (data) => {
   }
 };
 
+export const userInfoDB = async (userId) => {
+  try {
+    const res = await axios.get(`http://localhost:8000/user/userInfo`, {
+      params: {
+        userId: userId,
+      },
+    });
+    return res.data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+
 export const googleSocialLogin = async (data) => {
   try {
     const res = await axios.post(

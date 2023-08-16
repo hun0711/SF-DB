@@ -1,8 +1,11 @@
 	package com.back.user.service;
 	
-	import org.springframework.stereotype.Service;
-	
-	import com.back.user.repository.LoginDao;
+	import java.util.List;
+
+import org.springframework.stereotype.Service;
+
+import com.back.api.repository.MovieDto;
+import com.back.user.repository.LoginDao;
 	import com.back.user.repository.UserDto;
 	
 	import lombok.RequiredArgsConstructor;
@@ -18,8 +21,7 @@
 		//사이트 자체 회원 확인
 		@Override
 	    public String getEncryptedPassword(String userId) {
-	        UserDto user = loginDao.findByUserId(userId); // 데이터베이스에서 사용자 정보 가져오기
-	        return user.getUserPw(); // 암호화된 비밀번호 리턴
+	        return loginDao.findEncryptedPasswordByUserId(userId); // 암호화된 비밀번호 리턴
 	    }
 	
 		
@@ -89,6 +91,15 @@
         	 // 해당 kakaoId를 가진 사용자가 존재하지 않으면 null을 반환
         	 return null;
          }
+		}
+
+
+
+		@Override
+		public List<UserDto> userInfo(String userId) {
+			log.info("유저 정보 호출");
+			List<UserDto> userInfo = loginDao.userInfo(userId);
+			return userInfo; 
 		}
 		
 	}

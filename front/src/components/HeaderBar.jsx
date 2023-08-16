@@ -75,8 +75,8 @@ function HeaderBar() {
     localStorage.clear();
 
   
-    window.location.reload();
     navigate('/main');
+    window.location.reload();
   };
   
   // 쿠키 이름으로 쿠키 값을 가져오는 함수

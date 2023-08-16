@@ -1,4 +1,4 @@
-package com.back.movie;
+package com.back.movie.controller;
 
 import java.util.List;
 
