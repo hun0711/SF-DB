@@ -1,6 +1,5 @@
 import React from 'react'
 import HeaderBar from '../../components/HeaderBar'
-import Footer from '../../components/Footer'
 import MainTopSection from './MainTopSection'
 
 const MainPage = () => {
@@ -8,7 +7,7 @@ const MainPage = () => {
     <>
     <HeaderBar/>
 
-<div style={{marginTop:'150px'}}>
+<div style={{marginTop:'100px'}}>
 {/* TOP 카루셀 */}
 <MainTopSection/>
 </div>

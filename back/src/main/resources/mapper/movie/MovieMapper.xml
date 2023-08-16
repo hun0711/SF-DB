@@ -41,6 +41,7 @@
 <select id="top20SfMovie" resultType="Top20SfMovieDto">
 select *
 from top20sfmovies
+order by top20sfmovieNo asc
 </select>
 
 
