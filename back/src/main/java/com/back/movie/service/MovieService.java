@@ -4,10 +4,12 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.back.api.repository.BoxOfficeDto;
 import com.back.api.repository.MovieDto;
 import com.back.api.repository.RecommendMovieDto;
 import com.back.api.repository.ReleaseSoonMovieDto;
 import com.back.api.repository.Top20SfMovieDto;
+import com.back.movie.repository.OttExistanceDto;
 
 @Service
 public interface MovieService {
@@ -27,7 +29,15 @@ public interface MovieService {
 	/*********** 추천 영화 ***********/
 	List<RecommendMovieDto> recommendMovie();
 
+	/********** 박스오피스 순위***********/
+	List<BoxOfficeDto> todayBoxofficeRank();
+	
+	
 	/********** 개봉 예정 영화 ********/
 	List<ReleaseSoonMovieDto> releaseSoonMovie();
+
+	/********** ott 유무 *******/
+	List<OttExistanceDto> ottExistance();
+
 
 }

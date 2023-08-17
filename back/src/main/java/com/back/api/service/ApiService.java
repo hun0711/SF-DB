@@ -13,4 +13,6 @@ public interface ApiService {
 
 	void releaseSoonMovies();
 
+	void updateBoxofficeData();
+
 }

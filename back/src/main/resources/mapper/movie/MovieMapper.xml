@@ -16,12 +16,9 @@
      <select id="selectMovie" parameterType="MovieDto" resultType="MovieDto">
   select *
   from movies
-
   </select>
    
 
-
-   
    
 <!-- 영화 정보 상세보기 -->   
      <select id="movieDetail" parameterType="MovieDto" resultType="MovieDto">
@@ -51,8 +48,15 @@ order by top20sfmovieNo asc
 <select id="recommendMovie" resultType="RecommendMovieDto">
 select *
 from recommendmovies
+order by recommendmovieNo asc
 </select>
 
+<!--  박스오피스 순위 -->
+<select id="todayBoxofficeRank" resultType="BoxOfficeDto">
+select *
+from boxoffice
+order by boxofficeNo asc
+</select>
 
 
 
@@ -62,5 +66,10 @@ select *
 from releasesoonmovies
 </select>
 
+<!-- OTT 유무  -->
+<select id="ottExistance" resultType="OttExistanceDto">
+select *
+from ott_existance
+</select>
 
 </mapper>

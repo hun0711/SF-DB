@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { top20sfmoviesDB } from '../../axios/main/movieLogic';
+import { ottExistanceDB, top20sfmoviesDB } from '../../axios/main/movieLogic';
 import Slider from 'react-slick';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -8,6 +8,7 @@ import InfoIcon from '@mui/icons-material/Info';
 
 const MainTopSection = () => {
   const [top20Movies, setTop20Movies] = useState([]);
+  const [ottExistance , setOttExistance] = useState([])
 
   useEffect(() => {
     const getTop20SfMovies = async () => {
@@ -19,10 +20,30 @@ const MainTopSection = () => {
       }
     };
 
+    const getOttExistance = async () => {
+      try {
+        const res = await ottExistanceDB()
+        setOttExistance(res)
+      } catch (error) {
+        console.log('OTT 유무 로드 실패:' , error);
+      }
+    }
+
     getTop20SfMovies();
+    getOttExistance();
   }, []);
 
 
+
+/*   const ottIcons = {
+    netflix: <FaNetflix />,
+    watcha: <FaWatchmanMonitoring />,
+    wavve: <FaWpbeginner />,
+    tving: <FaTv />,
+    disneyplus: <FaDisneyPlus />
+  };
+
+ */
 
 
   
@@ -41,7 +62,7 @@ const MainTopSection = () => {
 
   return (
   <div>
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '16px' , marginRight:'1250px' }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '16px' , marginRight:'1200px' }}>
         <Typography variant="h6" sx={{ fontSize: 25 }}>Top 20 SF 영화</Typography>
         <Tooltip title="왓챠피디아 기준 평균별점이 가장 높은 20개의 SF 영화들입니다." placement="right">
           <IconButton>
@@ -51,14 +72,15 @@ const MainTopSection = () => {
       </div>
     <Slider {...settings}>
       {top20Movies.map((movie, index) => (
-        <div key={index} style={{ position: 'relative' }}>
-          <Card sx={{ maxWidth: 250, height: 430 ,mx: 2 , border:'none'}}>
+        <div key={index} style={{ position: 'relative'  }}>
+          <Card sx={{ maxWidth: 250, height: 450 ,mx: 2 , border:'none',margin: '0 auto' }}>
             <img src={movie.poster} alt={movie.title} style={{ width: '100%', height: '350px' , borderRadius:'3px 3px 3px 3px' }} />
-            <CardContent style={{  display: 'flex', flexDirection: 'column', justifyContent: 'flex-start' }}>
+            <CardContent style={{ border:'none', display: 'flex', flexDirection: 'column', justifyContent: 'flex-start' }}>
               <Typography variant="subtitle2" sx={{fontSize:15}}>{movie.title.length > 18 ? `${movie.title.slice(0, 18)}...` : movie.title}</Typography>
-              <Grid container justifyContent="flex-start">
+              <Grid container justifyContent="flex-start" style={{marginTop:'5px'}}>
                 <Typography variant="body2">{movie.prodYear} · {movie.nation}</Typography>
               </Grid>
+              <Typography variant="caption" style={{marginTop:'5px'}}> OTT 아이콘 </Typography>
             </CardContent>
           </Card>
         </div>

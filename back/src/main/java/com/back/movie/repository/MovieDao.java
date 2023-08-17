@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import com.back.api.repository.BoxOfficeDto;
 import com.back.api.repository.MovieDto;
 import com.back.api.repository.RecommendMovieDto;
 import com.back.api.repository.ReleaseSoonMovieDto;
@@ -27,7 +28,17 @@ public interface MovieDao {
     //추천 영화
 	List<RecommendMovieDto> recommendMovie();
 
+	
+	//박스오피스 순위
+	List<BoxOfficeDto> todayBoxofficeRank();
+
+	
 	//개봉 예정 영화
 	List<ReleaseSoonMovieDto> releaseSoonMovie();
+
+	
+	//ott유무
+	List<OttExistanceDto> ottExistance();
+
 
 }

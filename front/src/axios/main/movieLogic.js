@@ -10,3 +10,40 @@ export const top20sfmoviesDB = async () => {
     throw error;
   }
 };
+
+export const recommendMoviesDB = async () => {
+  try {
+    const res = await axios.get(`http://localhost:8000/movie/recommendMovie`);
+    console.log(res.data);
+    return res.data;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
+export const todayBoxofficeDB = async () => {
+  try {
+    const res = await axios.get(
+      `http://localhost:8000/movie/todayBoxofficeRank`
+    );
+    console.log(res.data);
+    return res.data;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
+export const ottExistanceDB = async () => {
+  try {
+    const res = await axios.get(
+      `http://localhost:8000/movie/ottExistance`
+    );
+    console.log(res.data);
+    return res.data
+  } catch (error) {
+    console.log(error);
+    throw error
+  }
+}

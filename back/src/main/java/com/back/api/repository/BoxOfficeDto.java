@@ -30,5 +30,7 @@ public class BoxOfficeDto {
 	    private String keywords; //키워드
 	    private String poster; //포스터
 	    private String awards1; //수상 내역
+	    private String salesShare; //예매율
+	    private String audiAcc; //누적관객수
 	
 }

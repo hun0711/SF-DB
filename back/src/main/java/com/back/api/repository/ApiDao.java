@@ -30,7 +30,7 @@ public interface ApiDao {
     void saveBoxOffice(BoxOfficeDto boxOfficeDto);
 
     //박스오피스 영화 중복 확인
-	boolean existsBoxofficeByTitle(String movieNm);
+	boolean existsBoxofficeByTitle(String title);
 
     //박스오피스 데이터 삭제(갱신)
 	void deleteBoxofficeData();

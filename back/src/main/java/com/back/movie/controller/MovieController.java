@@ -7,10 +7,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.back.api.repository.BoxOfficeDto;
 import com.back.api.repository.MovieDto;
 import com.back.api.repository.RecommendMovieDto;
 import com.back.api.repository.ReleaseSoonMovieDto;
 import com.back.api.repository.Top20SfMovieDto;
+import com.back.movie.repository.OttExistanceDto;
 import com.back.movie.service.MovieService;
 
 import lombok.RequiredArgsConstructor;
@@ -68,6 +70,15 @@ public class MovieController {
     
     
 
+    /********* 박스오피스 순위 ***************/
+    @GetMapping("/todayBoxofficeRank")
+    public List<BoxOfficeDto> todayBoxofficeRank() {
+    	log.info("MovieController : TodayBoxofficeRank호출");
+        List<BoxOfficeDto> todayBoxofficeRank = movieService.todayBoxofficeRank();
+        return todayBoxofficeRank;
+    }
+    
+    
     /********** 개봉 예정 영화 ********/
     @GetMapping("/releaseSoonMovie")
     public List<ReleaseSoonMovieDto> releaseSoonMovie() {
@@ -76,5 +87,14 @@ public class MovieController {
         return releaseSoonMovie;
     }
 
+
+    
+    /******** OTT 정보 **********/
+    @GetMapping("/ottExistance")
+     public List<OttExistanceDto> ottExistance() {
+     log.info("MovieController : OttExistance 호출");
+     List<OttExistanceDto> ottExistance = movieService.ottExistance();
+     return ottExistance;
+    }
 
 }
