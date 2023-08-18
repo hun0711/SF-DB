@@ -20,30 +20,9 @@ const MainTopSection = () => {
       }
     };
 
-    const getOttExistance = async () => {
-      try {
-        const res = await ottExistanceDB()
-        setOttExistance(res)
-      } catch (error) {
-        console.log('OTT 유무 로드 실패:' , error);
-      }
-    }
-
     getTop20SfMovies();
-    getOttExistance();
   }, []);
 
-
-
-/*   const ottIcons = {
-    netflix: <FaNetflix />,
-    watcha: <FaWatchmanMonitoring />,
-    wavve: <FaWpbeginner />,
-    tving: <FaTv />,
-    disneyplus: <FaDisneyPlus />
-  };
-
- */
 
 
   

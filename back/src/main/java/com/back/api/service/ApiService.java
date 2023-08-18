@@ -8,11 +8,12 @@ public interface ApiService {
 	void saveMoviesFromApi();
 
 	void todayBoxofficeFromApi();
+	
+	void updateBoxofficeFromApi();
 
 	void recommendMovies();
 
 	void releaseSoonMovies();
 
-	void updateBoxofficeData();
 
 }

@@ -59,8 +59,8 @@
    
       <!-- 박스오피스 정보 -->
     <insert id='saveBoxOffice' parameterType="BoxOfficeDto">
-        INSERT INTO boxoffice (boxofficeNo, movieId , movieSeq , title, titleOrg, prodYear, nation , runtime, rating, repRlsDate ,directorIds , directorNms , actorNms , plotText , keywords , poster ,awards1 , salesShare , audiAcc)
-        VALUES (#{boxofficeNo} ,#{movieId} , #{movieSeq} , #{title}, #{titleOrg}, #{prodYear},  #{nation} , #{runtime}, #{rating}, #{repRlsDate} , #{directorIds} , #{directorNms} , #{actorNms} , #{plotText} , #{keywords} , #{poster} , #{awards1} , #{salesShare} , #{audiAcc})
+        INSERT INTO boxoffice (boxofficeRank, movieId , movieSeq , title, titleOrg, prodYear, nation , runtime, rating, repRlsDate ,directorIds , directorNms , actorNms , plotText , keywords , poster ,awards1 , salesShare , audiAcc)
+        VALUES (#{boxofficeRank} ,#{movieId} , #{movieSeq} , #{title}, #{titleOrg}, #{prodYear},  #{nation} , #{runtime}, #{rating}, #{repRlsDate} , #{directorIds} , #{directorNms} , #{actorNms} , #{plotText} , #{keywords} , #{poster} , #{awards1} , #{salesShare} , #{audiAcc})
     </insert>
    
    

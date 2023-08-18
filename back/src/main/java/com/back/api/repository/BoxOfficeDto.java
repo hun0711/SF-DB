@@ -13,7 +13,7 @@ import lombok.ToString;
 @RequiredArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class BoxOfficeDto {
-	    private int boxofficeNo; // pk - 박스오피스랭킹
+	    private int boxofficeRank; // UK - 박스오피스랭킹
 	    private String movieId; //고유코드
 	    private String movieSeq; //고유코드
 	    private String title; // 제목

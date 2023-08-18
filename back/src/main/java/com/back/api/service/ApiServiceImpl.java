@@ -172,6 +172,8 @@ import com.back.user.repository.LoginDao;
 	               JsonNode dailyBoxOfficeList = rootNode.path("boxOfficeResult").path("dailyBoxOfficeList");
 	
 	               for (JsonNode movieNode : dailyBoxOfficeList) {
+	            	   
+	            	   int boxofficeRank = Integer.parseInt(movieNode.path("rank").asText());
 	            	   String salesShare = movieNode.path("salesShare").asText();
 	            	   String audiAcc = movieNode.path("audiAcc").asText();
 	            	   String title = movieNode.path("movieNm").asText();
@@ -192,6 +194,7 @@ import com.back.user.repository.LoginDao;
 	
 	                 
 		               BoxOfficeDto boxOfficeDto = objectMapper.treeToValue(resultNode, BoxOfficeDto.class);
+		               boxOfficeDto.setBoxofficeRank(boxofficeRank);
 		               boxOfficeDto.setTitle(title);
 		               boxOfficeDto.setSalesShare(salesShare);
 		               boxOfficeDto.setAudiAcc(audiAcc);
@@ -288,8 +291,11 @@ import com.back.user.repository.LoginDao;
 
 	         //박스오피스 변경 사항 반영
 				@Override
-				public void updateBoxofficeData() {
+				public void updateBoxofficeFromApi() {
 			           log.info("박스오피스 업데이트 호출");
+			           // 기존 데이터 삭제
+	                   apiDao.deleteBoxofficeData();
+	                   
 			           // 현재 날짜 가져오기
 			           LocalDate currentDate = LocalDate.now();
 			           // 하루 전 날짜 계산
@@ -309,8 +315,7 @@ import com.back.user.repository.LoginDao;
 			               JsonNode dailyBoxOfficeList = rootNode.path("boxOfficeResult").path("dailyBoxOfficeList");
 			
 			               for (JsonNode movieNode : dailyBoxOfficeList) {
-			            	   // 기존 데이터 삭제
-			                   apiDao.deleteBoxofficeData();
+			            	   int boxofficeRank = Integer.parseInt(movieNode.path("rank").asText()); 
 			                   String salesShare = movieNode.path("salesShare").asText();
 			            	   String audiAcc = movieNode.path("audiAcc").asText();
 			                   
@@ -332,6 +337,7 @@ import com.back.user.repository.LoginDao;
 			
 			                 
 				               BoxOfficeDto boxOfficeDto = objectMapper.treeToValue(resultNode, BoxOfficeDto.class);
+				               boxOfficeDto.setBoxofficeRank(boxofficeRank);
 				               boxOfficeDto.setTitle(title);
 				               boxOfficeDto.setSalesShare(salesShare);
 				               boxOfficeDto.setAudiAcc(audiAcc);
@@ -409,7 +415,6 @@ import com.back.user.repository.LoginDao;
 			                   
 				             // movieDao에 저장
 				                if (!apiDao.existsBoxofficeByTitle(title)) {
-				                	System.out.println(title);
 				                    apiDao.saveBoxOffice(boxOfficeDto);
 				                } else {
 				                    log.info("영화명 '{}'이(가) 이미 존재하여 저장하지 않음", title);

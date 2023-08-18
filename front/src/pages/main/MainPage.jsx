@@ -6,6 +6,8 @@ import MainMidSection from './MainMidSection'
 import MainBtmSection from './MainBtmSection'
 
 const MainPage = () => {
+
+
   return (
     <>
     <HeaderBar/>

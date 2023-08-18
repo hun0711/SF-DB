@@ -55,7 +55,7 @@ order by recommendmovieNo asc
 <select id="todayBoxofficeRank" resultType="BoxOfficeDto">
 select *
 from boxoffice
-order by boxofficeNo asc
+order by boxofficeRank asc
 </select>
 
 

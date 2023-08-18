@@ -37,13 +37,23 @@ export const todayBoxofficeDB = async () => {
 
 export const ottExistanceDB = async () => {
   try {
-    const res = await axios.get(
-      `http://localhost:8000/movie/ottExistance`
-    );
+    const res = await axios.get(`http://localhost:8000/movie/ottExistance`);
     console.log(res.data);
-    return res.data
+    return res.data;
   } catch (error) {
     console.log(error);
-    throw error
+    throw error;
   }
-}
+};
+
+export const updateBoxofficeDB = async () => {
+  try {
+    const res = await axios.post(
+      `http://localhost:8000/api/movies/updateBoxoffice`
+    );
+    return res;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};

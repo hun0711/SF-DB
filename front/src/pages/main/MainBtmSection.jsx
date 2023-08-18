@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { todayBoxofficeDB } from '../../axios/main/movieLogic'
+import { todayBoxofficeDB, updateBoxofficeDB } from '../../axios/main/movieLogic'
 import { Card, CardContent, Grid, IconButton, Tooltip, Typography } from '@mui/material'
 import InfoIcon from '@mui/icons-material/Info';
 import Slider from 'react-slick'
@@ -8,14 +8,26 @@ const MainBtmSection = () => {
   const [todayBoxofficeRank , setTodayBoxofficeRank] = useState([])
 
   useEffect(() => {
-    const getTodayBoxofficeRank = async() => {
-      try {
-      const res = await todayBoxofficeDB()
-      setTodayBoxofficeRank(res)  
-      } catch (error) {
+ 
+      const getUpdateBoxofficeRank = async() => {
+        try {
+          const res = await updateBoxofficeDB()
+          console.log(res);
+        } catch (error) {
+          console.log("박스오피스 업데이트 로드 실패 : " , error);
+        }
+      }
+      
+      const getTodayBoxofficeRank = async() => {
+        try {
+          const res = await todayBoxofficeDB()
+          setTodayBoxofficeRank(res)  
+        } catch (error) {
         console.log('박스오피스 정보 로드 실패 : ' , error);
       }
     }
+    
+    getUpdateBoxofficeRank() 
     getTodayBoxofficeRank()
   },[])
   
