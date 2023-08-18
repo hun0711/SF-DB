@@ -25,8 +25,11 @@
   select *
   from movies
 <where>
+<if test='movieId!=null'>
+and movieId = #{movieId}
+</if>
   <if test='movieSeq!=null'> 
-    movieSeq = #{movieSeq}
+    and movieSeq = #{movieSeq}
     </if>
      </where>
   </select>

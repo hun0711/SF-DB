@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { todayBoxofficeDB, updateBoxofficeDB } from '../../axios/main/movieLogic'
+import { todayBoxofficeDB } from '../../axios/main/movieLogic'
 import { Card, CardContent, Grid, IconButton, Tooltip, Typography } from '@mui/material'
 import InfoIcon from '@mui/icons-material/Info';
 import Slider from 'react-slick'
@@ -9,14 +9,6 @@ const MainBtmSection = () => {
 
   useEffect(() => {
  
-      const getUpdateBoxofficeRank = async() => {
-        try {
-          const res = await updateBoxofficeDB()
-          console.log(res);
-        } catch (error) {
-          console.log("박스오피스 업데이트 로드 실패 : " , error);
-        }
-      }
       
       const getTodayBoxofficeRank = async() => {
         try {
@@ -27,7 +19,6 @@ const MainBtmSection = () => {
       }
     }
     
-    getUpdateBoxofficeRank() 
     getTodayBoxofficeRank()
   },[])
   
@@ -52,9 +43,9 @@ const MainBtmSection = () => {
   const formatAudience = (audience) => {
     if (audience >= 10000) {
       const tenThousand = Math.floor(audience / 10000);
-        return `${tenThousand}만명`;
+        return `${tenThousand}만 명`;
     } else {
-      return audience.toLocaleString() + '명';
+      return audience.toLocaleString() + ' 명';
     }
   };
   
@@ -80,7 +71,7 @@ const MainBtmSection = () => {
               <Grid container justifyContent="flex-start" style={{marginTop:'5px'}}>
   <Typography variant="body2">{movie.prodYear} · {movie.nation}</Typography>
 </Grid>
-<Typography variant="caption" style={{marginTop:'5px'}}> 예매율 {movie.salesShare} % · 관객 {formatAudience(parseInt(movie.audiAcc))} </Typography>
+<Typography variant="caption" style={{marginTop:'5px'}}> 예매율 {movie.salesShare}% · 관객 {formatAudience(parseInt(movie.audiAcc))} </Typography>
             </CardContent>
           </Card>
         </div>

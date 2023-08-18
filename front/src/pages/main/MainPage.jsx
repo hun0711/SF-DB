@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import HeaderBar from '../../components/HeaderBar'
 import Footer from '../../components/Footer'
 import MainTopSection from './MainTopSection'
@@ -6,6 +6,18 @@ import MainMidSection from './MainMidSection'
 import MainBtmSection from './MainBtmSection'
 
 const MainPage = () => {
+  useEffect(() => {
+
+    const getUpdateBoxofficeRank = async() => {
+      try {
+        const res = await updateBoxofficeDB()
+        console.log(res);
+      } catch (error) {
+        console.log("박스오피스 업데이트 로드 실패 : " , error);
+      }
+    }
+     getUpdateBoxofficeRank()
+  },[])
 
 
   return (

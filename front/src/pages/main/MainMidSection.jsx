@@ -3,8 +3,10 @@ import { recommendMoviesDB } from '../../axios/main/movieLogic';
 import { Card, CardContent, Grid, IconButton, Tooltip, Typography } from '@mui/material';
 import InfoIcon from '@mui/icons-material/Info';
 import Slider from 'react-slick';
+import { useNavigate } from 'react-router';
 
 const MainMidSection = () => {
+   const navigate = useNavigate()
    const [recommendMovies, setRecommendMovies] = useState([]);
 
   useEffect(() => {
@@ -29,6 +31,25 @@ const MainMidSection = () => {
     slidesToScroll: 5
   };
 
+  //상영시간 표시
+  function formatRuntime(runtimeStr) {
+    const runtime = parseInt(runtimeStr, 10);
+  
+    if (isNaN(runtime)) {
+      return '';
+    }
+  
+    const hours = Math.floor(runtime / 60);
+    const minutes = runtime % 60;
+  
+    if (hours > 0) {
+      return `${hours}시간 ${minutes}분`;
+    } else {
+      return `${minutes}분`;
+    }
+  }
+  
+  
 
 
   return (
@@ -45,15 +66,21 @@ const MainMidSection = () => {
     <Slider {...settings}>
       {recommendMovies.map((movie, index) => (
         <div key={index} style={{ position: 'relative' }}>
-          <Card sx={{ maxWidth: 250, height: 450 ,mx: 2 , border:'none' , margin: '0 auto'}}>
+          <Card sx={{ maxWidth: 250, height: 450 ,mx: 2 , border:'none' , margin: '0 auto', cursor:'pointer'}}
+          onClick={() => navigate(`/movieDetail/${movie.movieId}${movie.movieSeq}`)}>
+          
             <img src={movie.poster} alt={movie.title} style={{ width: '100%', height: '350px' , borderRadius:'3px 3px 3px 3px' }} />
+          
             <CardContent style={{ border:'none', display: 'flex', flexDirection: 'column', justifyContent: 'flex-start' }}>
               <Typography variant="subtitle2" sx={{fontSize:15}}>{movie.title.length > 18 ? `${movie.title.slice(0, 18)}...` : movie.title}</Typography>
+          
               <Grid container justifyContent="flex-start" style={{marginTop:'5px'}}>
                 <Typography variant="body2">{movie.prodYear} · {movie.nation}</Typography>
               </Grid>
-              <Typography variant="caption" style={{marginTop:'5px'}}> OTT 아이콘 </Typography>
+          
+              <Typography variant="caption" style={{marginTop:'5px'}}> {movie.titleOrg} · {formatRuntime(movie.runtime)}</Typography>
             </CardContent>
+          
           </Card>
         </div>
       ))}

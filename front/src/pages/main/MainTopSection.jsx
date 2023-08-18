@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { ottExistanceDB, top20sfmoviesDB } from '../../axios/main/movieLogic';
+import { top20sfmoviesDB } from '../../axios/main/movieLogic';
 import Slider from 'react-slick';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { Card, CardContent, Grid, IconButton, Tooltip, Typography} from '@mui/material';
 import InfoIcon from '@mui/icons-material/Info';
+import { useNavigate } from 'react-router';
 
 const MainTopSection = () => {
+  const navigate = useNavigate()
   const [top20Movies, setTop20Movies] = useState([]);
-  const [ottExistance , setOttExistance] = useState([])
 
   useEffect(() => {
     const getTop20SfMovies = async () => {
@@ -52,15 +53,23 @@ const MainTopSection = () => {
     <Slider {...settings}>
       {top20Movies.map((movie, index) => (
         <div key={index} style={{ position: 'relative'  }}>
-          <Card sx={{ maxWidth: 250, height: 450 ,mx: 2 , border:'none',margin: '0 auto' }}>
+          <Card sx={{ maxWidth: 250, height: 450 ,mx: 2 , border:'none',margin: '0 auto' ,cursor: 'pointer' }}
+            onClick={() => navigate(`/movieDetail/${movie.movieId}${movie.movieSeq}`)}>
+
             <img src={movie.poster} alt={movie.title} style={{ width: '100%', height: '350px' , borderRadius:'3px 3px 3px 3px' }} />
+            
             <CardContent style={{ border:'none', display: 'flex', flexDirection: 'column', justifyContent: 'flex-start' }}>
+          
               <Typography variant="subtitle2" sx={{fontSize:15}}>{movie.title.length > 18 ? `${movie.title.slice(0, 18)}...` : movie.title}</Typography>
               <Grid container justifyContent="flex-start" style={{marginTop:'5px'}}>
                 <Typography variant="body2">{movie.prodYear} · {movie.nation}</Typography>
               </Grid>
-              <Typography variant="caption" style={{marginTop:'5px'}}> OTT 아이콘 </Typography>
+          
+              <Typography variant="caption" style={{marginTop:'5px'}}> {movie.awards1.split('-')[0].length > 20
+    ? `${movie.awards1.split('-')[0].slice(0, 20)}...`
+    : movie.awards1.split('-')[0]} </Typography>
             </CardContent>
+          
           </Card>
         </div>
       ))}
