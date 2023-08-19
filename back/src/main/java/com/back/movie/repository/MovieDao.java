@@ -38,7 +38,7 @@ public interface MovieDao {
 
 	
 	//ott유무
-	List<OttExistanceDto> ottExistance();
+	List<OttExistanceDto> ottExistance(OttExistanceDto oDto);
 
 
 }

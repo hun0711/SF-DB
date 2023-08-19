@@ -7,7 +7,7 @@ import Orders from './Orders';
 import UserProfile from './UserProfile';
 
 
-export default function MtInfoPage() {
+export default function MyInfoPage() {
 
   return (
     <>

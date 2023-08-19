@@ -98,9 +98,9 @@ public class MovieServiceImpl implements MovieService {
 
     //ott유무
 	@Override
-	public List<OttExistanceDto> ottExistance() {
+	public List<OttExistanceDto> ottExistance(OttExistanceDto oDto) {
 		log.info("MovieServiceImpl : ottExistence 호출");
-		List<OttExistanceDto> ottExistance = movieDao.ottExistance();
+		List<OttExistanceDto> ottExistance = movieDao.ottExistance(oDto);
 		return ottExistance;
 	}
 

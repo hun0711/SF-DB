@@ -6,10 +6,12 @@ import "slick-carousel/slick/slick-theme.css";
 import { Card, CardContent, Grid, IconButton, Tooltip, Typography} from '@mui/material';
 import InfoIcon from '@mui/icons-material/Info';
 import { useNavigate } from 'react-router';
+import { firebaseStorage } from '../../utils/firebase';
 
 const MainTopSection = () => {
   const navigate = useNavigate()
   const [top20Movies, setTop20Movies] = useState([]);
+  const [posterUrls, setPosterUrls] = useState([]);
 
   useEffect(() => {
     const getTop20SfMovies = async () => {
@@ -23,6 +25,24 @@ const MainTopSection = () => {
 
     getTop20SfMovies();
   }, []);
+
+  useEffect(() => {
+    const getPosterUrls = async () => {
+      const urls = await Promise.all(top20Movies.map(async (movie) => {
+        const storageRef = firebaseStorage.ref(`poster/${movie.movieId}${movie.movieSeq}.jpg`);
+        try {
+          const url = await storageRef.getDownloadURL();
+          return url;
+        } catch (error) {
+          console.log("포스터 URL 페칭 에러 : " , error);
+          return null;
+        }
+      }));
+      setPosterUrls(urls);
+    };
+
+    getPosterUrls();
+  }, [top20Movies]);
 
 
 
@@ -56,7 +76,7 @@ const MainTopSection = () => {
           <Card sx={{ maxWidth: 250, height: 450 ,mx: 2 , border:'none',margin: '0 auto' ,cursor: 'pointer' }}
             onClick={() => navigate(`/movieDetail/${movie.movieId}${movie.movieSeq}`)}>
 
-            <img src={movie.poster} alt={movie.title} style={{ width: '100%', height: '350px' , borderRadius:'3px 3px 3px 3px' }} />
+            <img src={posterUrls[index]} alt={movie.title} style={{ width: '100%', height: '350px' , borderRadius:'3px 3px 3px 3px' }} />
             
             <CardContent style={{ border:'none', display: 'flex', flexDirection: 'column', justifyContent: 'flex-start' }}>
           

@@ -2,7 +2,7 @@ import React from 'react';
 
 const MovieDetailTopSection = ({ imageUrl, movieDetail }) => {
   const topSectionStyle = {
-    width: '1500px',
+    width: '1525px',
     height: '500px', // 고정된 높이
     overflow: 'hidden',
     position: 'relative',
@@ -12,7 +12,8 @@ const MovieDetailTopSection = ({ imageUrl, movieDetail }) => {
     display: 'block',
     width: '100%',
     height: '100%',
-    objectFit: 'cover', // 이미지의 크기를 조절하여 화면에 맞춤
+    objectFit: 'cover',
+    objectPosition: 'center 35%'
   };
 
   const overlayStyle = {
@@ -20,7 +21,7 @@ const MovieDetailTopSection = ({ imageUrl, movieDetail }) => {
     bottom: 0,
     left: 0,
     width: '100%',
-    height: '40%', // 높이 조정
+    height: '50%', // 높이 조정
     padding: '20px',
     background: 'linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.9))',
     color: 'white',
@@ -37,19 +38,21 @@ const MovieDetailTopSection = ({ imageUrl, movieDetail }) => {
   };
 
   const titleStyle = {
+    marginTop:'105px',
     marginBottom: '5px', // 간격 조절
-    marginLeft: '30px', 
-    fontSize: '50px',
+    marginLeft: '75px', 
+    fontSize: '40px',
   };
 
   const titleOrgStyle = {
     fontSize: '15px',
-    marginLeft: '40px', 
+    marginLeft: '80px', 
   };
   
   const yearNationStyle = {
-    fontSize: '20px',
-    marginTop: '10px'
+    fontSize: '15px',
+    marginTop: '10px',
+    marginLeft: '40px'
   };
 
   return (

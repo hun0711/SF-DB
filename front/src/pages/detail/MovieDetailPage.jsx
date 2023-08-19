@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useLocation } from 'react-router';
 import { movieDetailDB } from '../../axios/main/movieLogic';
-import firebase from 'firebase/compat/app'; // 이 부분을 수정
-import 'firebase/compat/storage'; // 이 부분도 수정
+import { firebaseStorage } from '../../utils/firebase';
 import MovieDetailTopSection from './MovieDetailTopSection';
 import MovieDetailMidSection from './MovieDetailMidSection';
 import MovieDetailBtmSection from './MovieDetailBtmSection';
@@ -19,6 +18,7 @@ const MovieDetailPage = () => {
   
   const [movieDetail , setMovieDetail] = useState([])
   const [imageUrl, setImageUrl] = useState(null);
+  const [posterUrl, setPosterUrl] = useState(null)
 
   useEffect(() => {
   const getMovieDetail = async () => {
@@ -32,36 +32,46 @@ const MovieDetailPage = () => {
     getMovieDetail()
   },[])
 
-  const firebaseConfig = {
-    apiKey: "AIzaSyC2pRmeDsy_q0pjRI7LOneIXjSQHE_UMbA",
-    authDomain: "sfdb-394203.firebaseapp.com",
-    projectId: "sfdb-394203",
-    storageBucket: "sfdb-394203.appspot.com",
-    messagingSenderId: "266208771379",
-    appId: "1:266208771379:web:8e6778a2435c486a2dd246",
-    measurementId: "G-RYBHGGV295"
-  };
-  
-
-  if (!firebase.apps.length) {
-    firebase.initializeApp(firebaseConfig);
-  }
 
   const getImageUrl = async () => {
-    const storageRef = firebase.storage().ref(`${movieId}${movieSeq}.jpg`);
-    const url = await storageRef.getDownloadURL();
-    return url;
+    const storageRef = firebaseStorage.ref(`${movieId}${movieSeq}.jpg`);
+    try {
+      const url = await storageRef.getDownloadURL();
+      return url;
+    } catch (error) {
+      console.log("이미지 URL 페칭 에러 : " , error);
+      return null;
+    }
+   
   };
+
+  const getPosterUrl = async () => {
+    const storageRef = firebaseStorage.ref(`poster/${movieId}${movieSeq}.jpg`)
+    try {
+      const url = await storageRef.getDownloadURL();
+      return url;
+    } catch (error) {
+      console.log("포스터 URL 페칭 에러 : " , error);
+      return null;
+    }
+  }
 
   useEffect(() => {
     getImageUrl()
       .then((url) => {
-        setImageUrl(url)
-        console.log('Image URL:', url);
-      })
-      .catch((error) => {
-        console.log('Error fetching image URL:', error);
+        if (url) {
+          setImageUrl(url);
+          console.log('Image URL:', url);
+        }
       });
+      getPosterUrl()
+      .then((url) => {
+        if (url) {
+          setPosterUrl(url);
+          console.log('Poster URL:', url);
+        }
+      });
+
   }, []);
 
 
@@ -72,13 +82,13 @@ const MovieDetailPage = () => {
 <HeaderBar/>
 
   {/* Top Section */}
-    <div style={{marginTop:'70px'}}>
+    <div style={{marginTop:'70px' , marginLeft:'-10px'}}>
     <MovieDetailTopSection movieDetail={movieDetail} imageUrl={imageUrl} />
     </div>
   
    {/* Mid Section */}
-   <div style={{marginTop:'100px'}}>
-    <MovieDetailMidSection/>
+   <div>
+    <MovieDetailMidSection movieDetail={movieDetail} posterUrl={posterUrl}/>
   </div>
 
  {/* Btm Section */}

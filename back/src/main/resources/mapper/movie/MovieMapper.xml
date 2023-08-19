@@ -70,9 +70,14 @@ from releasesoonmovies
 </select>
 
 <!-- OTT 유무  -->
-<select id="ottExistance" resultType="OttExistanceDto">
+<select id="ottExistance" parameterType="OttExistanceDto" resultType="OttExistanceDto">
 select *
 from ott_existance
+<where>
+<if test='movieSeq!=null'>
+and movieSeq = #{movieSeq}
+</if>
+</where>
 </select>
 
 </mapper>

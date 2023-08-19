@@ -91,9 +91,9 @@ public class MovieController {
     
     /******** OTT 정보 **********/
     @GetMapping("/ottExistance")
-     public List<OttExistanceDto> ottExistance() {
+     public List<OttExistanceDto> ottExistance(OttExistanceDto oDto) {
      log.info("MovieController : OttExistance 호출");
-     List<OttExistanceDto> ottExistance = movieService.ottExistance();
+     List<OttExistanceDto> ottExistance = movieService.ottExistance(oDto);
      return ottExistance;
     }
 

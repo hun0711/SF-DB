@@ -35,9 +35,13 @@ export const todayBoxofficeDB = async () => {
   }
 };
 
-export const ottExistanceDB = async () => {
+export const ottExistanceDB = async (movieSeq) => {
   try {
-    const res = await axios.get(`http://localhost:8000/movie/ottExistance`);
+    const res = await axios.get(`http://localhost:8000/movie/ottExistance`, {
+      params: {
+        movieSeq: movieSeq,
+      },
+    });
     console.log(res.data);
     return res.data;
   } catch (error) {

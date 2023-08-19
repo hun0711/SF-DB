@@ -4,10 +4,12 @@ import { Card, CardContent, Grid, IconButton, Tooltip, Typography } from '@mui/m
 import InfoIcon from '@mui/icons-material/Info';
 import Slider from 'react-slick';
 import { useNavigate } from 'react-router';
+import { firebaseStorage } from '../../utils/firebase';
 
 const MainMidSection = () => {
    const navigate = useNavigate()
    const [recommendMovies, setRecommendMovies] = useState([]);
+   const [posterUrls , setPosterUrls] = useState([])
 
   useEffect(() => {
     const getRecommendMovies = async () => {
@@ -20,6 +22,27 @@ const MainMidSection = () => {
     };
     getRecommendMovies();
   }, []);
+
+
+
+  useEffect(() => {
+    const getPosterUrls = async () => {
+      const urls = await Promise.all(recommendMovies.map(async (movie) => {
+        const storageRef = firebaseStorage.ref(`poster/${movie.movieId}${movie.movieSeq}.jpg`);
+        try {
+          const url = await storageRef.getDownloadURL();
+          return url;
+        } catch (error) {
+          console.log("포스터 URL 페칭 에러 : " , error);
+          return null;
+        }
+      }));
+      setPosterUrls(urls);
+    };
+
+    getPosterUrls();
+  }, [recommendMovies]);
+
 
 
   const settings = {
@@ -69,7 +92,7 @@ const MainMidSection = () => {
           <Card sx={{ maxWidth: 250, height: 450 ,mx: 2 , border:'none' , margin: '0 auto', cursor:'pointer'}}
           onClick={() => navigate(`/movieDetail/${movie.movieId}${movie.movieSeq}`)}>
           
-            <img src={movie.poster} alt={movie.title} style={{ width: '100%', height: '350px' , borderRadius:'3px 3px 3px 3px' }} />
+            <img src={posterUrls[index]} alt={movie.title} style={{ width: '100%', height: '350px' , borderRadius:'3px 3px 3px 3px' }} />
           
             <CardContent style={{ border:'none', display: 'flex', flexDirection: 'column', justifyContent: 'flex-start' }}>
               <Typography variant="subtitle2" sx={{fontSize:15}}>{movie.title.length > 18 ? `${movie.title.slice(0, 18)}...` : movie.title}</Typography>

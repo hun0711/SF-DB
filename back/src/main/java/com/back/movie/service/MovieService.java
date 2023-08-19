@@ -37,7 +37,7 @@ public interface MovieService {
 	List<ReleaseSoonMovieDto> releaseSoonMovie();
 
 	/********** ott 유무 *******/
-	List<OttExistanceDto> ottExistance();
+	List<OttExistanceDto> ottExistance(OttExistanceDto oDto);
 
 
 }
