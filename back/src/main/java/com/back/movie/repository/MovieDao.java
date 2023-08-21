@@ -5,6 +5,8 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 
 import com.back.api.repository.BoxOfficeDto;
+import com.back.api.repository.MovieActorsDto;
+import com.back.api.repository.MovieDirectorsDto;
 import com.back.api.repository.MovieDto;
 import com.back.api.repository.RecommendMovieDto;
 import com.back.api.repository.ReleaseSoonMovieDto;
@@ -39,6 +41,14 @@ public interface MovieDao {
 	
 	//ott유무
 	List<OttExistanceDto> ottExistance(OttExistanceDto oDto);
+
+	
+	//감독 정보
+	List<MovieDirectorsDto> directorsInfo(MovieDirectorsDto mdDto);
+
+	
+	//배우 정보
+	List<MovieActorsDto> actorsInfo(MovieActorsDto maDto);
 
 
 }

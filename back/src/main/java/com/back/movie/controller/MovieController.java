@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.back.api.repository.BoxOfficeDto;
+import com.back.api.repository.MovieActorsDto;
+import com.back.api.repository.MovieDirectorsDto;
 import com.back.api.repository.MovieDto;
 import com.back.api.repository.RecommendMovieDto;
 import com.back.api.repository.ReleaseSoonMovieDto;
@@ -97,4 +99,23 @@ public class MovieController {
      return ottExistance;
     }
 
+    
+    /******* 감독 정보 ***********/
+    @GetMapping("/directorsInfo")
+    public List<MovieDirectorsDto> directorsInfo(MovieDirectorsDto mdDto) {
+        log.info("MovieController : directorsInfo 호출");
+        List<MovieDirectorsDto> directorsInfo = movieService.directorsInfo(mdDto);
+        return directorsInfo;
+       }
+    
+    
+    /******* 배우 정보 ***********/
+    @GetMapping("/actorsInfo")
+    public List<MovieActorsDto> actorsInfo(MovieActorsDto maDto) {
+        log.info("MovieController : actorsInfo 호출");
+        List<MovieActorsDto> actorsInfo = movieService.actorsInfo(maDto);
+        return actorsInfo;
+       }
+    
+    
 }

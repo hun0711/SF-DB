@@ -19,6 +19,7 @@ public class OttExistanceDto {
 	private Boolean wavve;
 	private Boolean tving;
 	private Boolean disneyplus;
+	private Boolean appletv;
 	private String title;
 	
 

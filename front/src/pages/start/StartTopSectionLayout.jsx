@@ -40,6 +40,7 @@ function StartTopSectionLayout(props) {
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
+          marginTop: '120px'  
         }}
       >
         <img

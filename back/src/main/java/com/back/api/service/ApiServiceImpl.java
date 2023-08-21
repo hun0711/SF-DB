@@ -293,8 +293,6 @@ import com.back.user.repository.LoginDao;
 				@Override
 				public void updateBoxofficeFromApi() {
 			           log.info("박스오피스 업데이트 호출");
-			           // 기존 데이터 삭제
-	                   apiDao.deleteBoxofficeData();
 	                   
 			           // 현재 날짜 가져오기
 			           LocalDate currentDate = LocalDate.now();
@@ -310,6 +308,8 @@ import com.back.user.repository.LoginDao;
 			           ResponseEntity<String> response = restTemplate.getForEntity(kobisApiUrl, String.class);
 			           String responseBody = response.getBody();
 			           try {
+			        	   // 기존 데이터 삭제
+		                   apiDao.deleteBoxofficeData();
 			               // JSON 파싱
 			               JsonNode rootNode = objectMapper.readTree(responseBody);
 			               JsonNode dailyBoxOfficeList = rootNode.path("boxOfficeResult").path("dailyBoxOfficeList");

@@ -77,3 +77,17 @@ export const movieDetailDB = async (movieId, movieSeq) => {
     throw error;
   }
 };
+
+export const directorInfoDB = async (directorId) => {
+  try {
+    const res = await axios.get(`http://localhost:8000/movie/directorsInfo`, {
+      params: {
+        directorId: directorId,
+      },
+    });
+    return res.data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};

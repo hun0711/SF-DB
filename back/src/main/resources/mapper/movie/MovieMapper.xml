@@ -80,4 +80,26 @@ and movieSeq = #{movieSeq}
 </where>
 </select>
 
+<!-- 감독 정보 -->
+<select id="directorsInfo" parameterType="MovieDirectorsDto" resultType="MovieDirectorsDto">
+select *
+from movieDirectors
+<where>
+<if test='directorId!=null'>
+and directorId = #{directorId}
+</if>
+</where>
+</select>
+
+
+<!-- 배우 정보  -->
+<select id="actorsInfo" parameterType="MovieActorsDto" resultType="MovieActorsDto">
+select *
+from movieActors
+<where>
+<if test='actorNm!=null'>
+and actorNm = #{actorNm}
+</if>
+</where>
+</select>
 </mapper>

@@ -6,6 +6,8 @@ import org.springframework.stereotype.Service;
 
 import com.back.api.repository.ApiDao;
 import com.back.api.repository.BoxOfficeDto;
+import com.back.api.repository.MovieActorsDto;
+import com.back.api.repository.MovieDirectorsDto;
 import com.back.api.repository.MovieDto;
 import com.back.api.repository.RecommendMovieDto;
 import com.back.api.repository.ReleaseSoonMovieDto;
@@ -102,6 +104,26 @@ public class MovieServiceImpl implements MovieService {
 		log.info("MovieServiceImpl : ottExistence 호출");
 		List<OttExistanceDto> ottExistance = movieDao.ottExistance(oDto);
 		return ottExistance;
+	}
+
+
+
+   //감독정보
+	@Override
+	public List<MovieDirectorsDto> directorsInfo(MovieDirectorsDto mdDto) {
+		log.info("MovieServiceImpl : directorInfo 호출");
+		List<MovieDirectorsDto> directorsInfo = movieDao.directorsInfo(mdDto);
+		return directorsInfo;
+	}
+
+
+
+   //배우정보
+	@Override
+	public List<MovieActorsDto> actorsInfo(MovieActorsDto maDto) {
+		log.info("MovieServiceImpl : actorsInfo 호출");
+		List<MovieActorsDto> actorsInfo = movieDao.actorsInfo(maDto);
+		return actorsInfo;
 	}
 
 
