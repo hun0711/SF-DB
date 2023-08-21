@@ -88,6 +88,9 @@ from movieDirectors
 <if test='directorId!=null'>
 and directorId = #{directorId}
 </if>
+<if test='directorNm!=null'>
+or directorNm = #{directorNm}
+</if>
 </where>
 </select>
 

@@ -1,4 +1,5 @@
 import axios from "axios";
+import qs from "qs";
 
 export const top20sfmoviesDB = async () => {
   try {
@@ -78,11 +79,28 @@ export const movieDetailDB = async (movieId, movieSeq) => {
   }
 };
 
-export const directorInfoDB = async (directorId) => {
+export const directorInfoDB = async (directorIds) => {
   try {
     const res = await axios.get(`http://localhost:8000/movie/directorsInfo`, {
       params: {
-        directorId: directorId,
+        directorId: directorIds,
+      },
+      paramsSerializer: (params) => {
+        return qs.stringify(params, { arrayFormat: "repeat" });
+      },
+    });
+    return res.data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+
+export const directorInfoByNameDB = async (directorNm) => {
+  try {
+    const res = await axios.get(`http://localhost:8000/movie/directorsInfo`, {
+      params: {
+        directorNm: directorNm,
       },
     });
     return res.data;

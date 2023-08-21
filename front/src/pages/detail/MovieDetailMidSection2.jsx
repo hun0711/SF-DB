@@ -1,39 +1,48 @@
-import React, { useEffect, useState } from 'react'
-import { directorInfoDB } from '../../axios/main/movieLogic'
+import React, { useEffect, useState } from 'react';
+import { directorInfoDB } from '../../axios/main/movieLogic';
 
 const MovieDetailMidSection2 = ({ movieDetail }) => {
-  const [directors, setDirectors] = useState([])
-
+  const [directors, setDirectors] = useState([]);
 
   useEffect(() => {
-    const getDirectorInfo = async (directorId) => {
-      try {
-        const res = await directorInfoDB(directorId)
-        return res;
-      } catch (error) {
-        console.log('감독 정보 로드 실패 : ', error);
-        return null;
-      }
+    if (movieDetail && movieDetail.directorIds) {
+      const fetchDirectorsInfo = async () => {
+        const directorIds = movieDetail.directorIds.split(',');
+        const directorPromises = directorIds.map(async (directorId) => {
+          try {
+            const res = await directorInfoDB(directorId);
+            console.log(res);
+            return res;
+          } catch (error) {
+            console.log('감독 정보 로드 실패 : ', error);
+            return null;
+          }
+        });
+
+        const directorsData = await Promise.all(directorPromises);
+        setDirectors(directorsData.filter(director => director !== null));
+      };
+
+      fetchDirectorsInfo();
     }
+  }, [movieDetail]);
 
-    const fetchDirectorsInfo = async () => {
-      const directorIds = movieDetail.directorId.split(','); // 여러 개의 directorId를 배열로 분리
-      const directorsInfo = await Promise.all(directorIds.map(getDirectorInfo));
-      setDirectors(directorsInfo.filter(info => info !== null));
-      console.log(directors);
-    }
-
-    fetchDirectorsInfo();
-  }, [movieDetail.directorId])
-
-
-
+  const creditInfoStyle = {};
+  
+  console.log(directors[0].directorNm);
 
   return (
     <>
-    
+      <div style={creditInfoStyle}>
+        <h3>감독 정보</h3>
+        {directors.map((director, index) => (
+          <div key={index}>
+            <p>이름: {director?.directorNm}</p>
+          </div>
+        ))}
+      </div>
     </>
-  )
-}
+  );
+};
 
-export default MovieDetailMidSection2
+export default MovieDetailMidSection2;

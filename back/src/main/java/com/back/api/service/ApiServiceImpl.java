@@ -435,7 +435,7 @@ import com.back.user.repository.LoginDao;
 				   log.info("추천 영화 API 호출");
 				   String movieId = "F";
 				   List<String> movieSeqs = Arrays.asList(
-						   "55331", "20431" , "29320" , "26048" , "48274" , "45831" , "02817" , "58450" , "25891" , "08856"
+						   "55331", "20431" , "29320" , "26048" , "48274" , "45831" , "28921" , "58450" , "25891" , "08856"
 						  );
 					
 				   

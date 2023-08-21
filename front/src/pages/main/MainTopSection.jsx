@@ -85,9 +85,8 @@ const MainTopSection = () => {
                 <Typography variant="body2">{movie.prodYear} · {movie.nation}</Typography>
               </Grid>
           
-              <Typography variant="caption" style={{marginTop:'5px'}}> {movie.awards1.split('-')[0].length > 20
-    ? `${movie.awards1.split('-')[0].slice(0, 20)}...`
-    : movie.awards1.split('-')[0]} </Typography>
+              <Typography variant="caption" style={{marginTop:'5px'}}> {movie.directorIds}
+ </Typography>
             </CardContent>
           
           </Card>
