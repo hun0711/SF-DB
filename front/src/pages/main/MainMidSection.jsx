@@ -54,24 +54,6 @@ const MainMidSection = () => {
     slidesToScroll: 5
   };
 
-  //상영시간 표시
-  function formatRuntime(runtimeStr) {
-    const runtime = parseInt(runtimeStr, 10);
-  
-    if (isNaN(runtime)) {
-      return '';
-    }
-  
-    const hours = Math.floor(runtime / 60);
-    const minutes = runtime % 60;
-  
-    if (hours > 0) {
-      return `${hours}시간 ${minutes}분`;
-    } else {
-      return `${minutes}분`;
-    }
-  }
-  
   
 
 
@@ -101,7 +83,7 @@ const MainMidSection = () => {
                 <Typography variant="body2">{movie.prodYear} · {movie.nation}</Typography>
               </Grid>
           
-              <Typography variant="caption" style={{marginTop:'5px'}}> {movie.titleOrg} · {formatRuntime(movie.runtime)}</Typography>
+              <Typography variant="caption" style={{marginTop:'5px'}}> {movie.directorNms} </Typography>
             </CardContent>
           
           </Card>

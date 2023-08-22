@@ -27,6 +27,7 @@ public class MovieDto {
     private String rating; // 등급
     private String repRlsDate; // 개봉일
     private String directorIds; //감독 정보
+    private String directorNms; //감독 이름
     private String actorNms; // 배우 정보 (id가 존재하지 않는 배우도 있으므로 이름으로 대체)
     private String plotText; //줄거리
     private String keywords; //키워드

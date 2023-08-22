@@ -8,6 +8,7 @@
   import HeaderBar from '../../components/HeaderBar';
   import Footer from '../../components/Footer';
   import MovieDetailMidSection2 from './MovieDetailMidSection2';
+import MovieDetailBtmSection2 from './MovieDetailBtmSection2';
 
 
 
@@ -113,8 +114,6 @@
     <div>
       <MovieDetailMidSection movieDetail={movieDetail} posterUrl={posterUrl} ottInfo={ottInfo}/>
     </div>
-    
-
     <div>
       <MovieDetailMidSection2 movieDetail={movieDetail} />
     </div>
@@ -123,6 +122,10 @@
   <div style={{marginTop:'100px'}}>
       <MovieDetailBtmSection/>
     </div>
+<div>
+  <MovieDetailBtmSection2/>
+</div>
+
 
 
   <Footer/>

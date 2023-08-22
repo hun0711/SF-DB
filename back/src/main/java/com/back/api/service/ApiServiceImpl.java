@@ -72,10 +72,13 @@ import com.back.user.repository.LoginDao;
 		                //감독
 		                if (directorsNode != null && directorsNode.isArray() && directorsNode.size() > 0) {
 		                    List<String> directorIdList = new ArrayList<>();
+		                    List<String> directorNmList = new ArrayList<>();
 	
 		                    for (JsonNode directorNode : directorsNode) {
 		                        String directorId = directorNode.get("directorId").asText();
+		                        String directorNm = directorNode.get("directorNm").asText();
 		                        directorIdList.add(directorId);
+		                        directorNmList.add(directorNm);
 		                        
 		                        //감독 db 저장
 		                        MovieDirectorsDto movieDirectorsDto = objectMapper.treeToValue(directorNode, MovieDirectorsDto.class);
@@ -86,7 +89,9 @@ import com.back.user.repository.LoginDao;
 				                }
 		                    }
 	                        String directorIds = String.join("," , directorIdList);
+	                        String directorNms = String.join("," , directorIdList);
 		                    movieDto.setDirectorIds(directorIds); 
+		                    movieDto.setDirectorNms(directorNms); 
 		                }
 		                
 		                //배우
@@ -463,10 +468,13 @@ import com.back.user.repository.LoginDao;
 			                //감독
 			                if (directorsNode != null && directorsNode.isArray() && directorsNode.size() > 0) {
 			                    List<String> directorIdList = new ArrayList<>();
+			                    List<String> directorNmList = new ArrayList<>();
 		
 			                    for (JsonNode directorNode : directorsNode) {
 			                        String directorId = directorNode.get("directorId").asText();
+			                        String directorNm = directorNode.get("directorNm").asText();
 			                        directorIdList.add(directorId);
+			                        directorNmList.add(directorNm);
 			                        
 			                        //감독 db 저장
 			                        MovieDirectorsDto movieDirectorsDto = objectMapper.treeToValue(directorNode, MovieDirectorsDto.class);
@@ -477,8 +485,11 @@ import com.back.user.repository.LoginDao;
 					                }
 			                    }
 		                        String directorIds = String.join("," , directorIdList);
+		                        String directorNms = String.join("," , directorNmList);
 			                    recommendmovieDto.setDirectorIds(directorIds); 
+			                    recommendmovieDto.setDirectorNms(directorNms); 
 			                    movieDto.setDirectorIds(directorIds);
+			                    movieDto.setDirectorNms(directorNms);
 			                }
 			                
 			                //배우
@@ -574,10 +585,13 @@ import com.back.user.repository.LoginDao;
 			                //감독
 			                if (directorsNode != null && directorsNode.isArray() && directorsNode.size() > 0) {
 			                    List<String> directorIdList = new ArrayList<>();
+			                    List<String> directorNmList = new ArrayList<>();
 		
 			                    for (JsonNode directorNode : directorsNode) {
 			                        String directorId = directorNode.get("directorId").asText();
+			                        String directorNm = directorNode.get("directorNm").asText();
 			                        directorIdList.add(directorId);
+			                        directorNmList.add(directorNm);
 			                        
 			                        //감독 db 저장
 			                        MovieDirectorsDto movieDirectorsDto = objectMapper.treeToValue(directorNode, MovieDirectorsDto.class);
@@ -588,7 +602,9 @@ import com.back.user.repository.LoginDao;
 					                }
 			                    }
 		                        String directorIds = String.join("," , directorIdList);
+		                        String directorNms = String.join("," , directorNmList);
 		                        releasesoonmovieDto.setDirectorIds(directorIds); 
+		                        releasesoonmovieDto.setDirectorNms(directorNms); 
 			                }
 			                
 			                //배우

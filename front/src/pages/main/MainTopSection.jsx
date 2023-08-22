@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { top20sfmoviesDB } from '../../axios/main/movieLogic';
+import { directorInfoDB, top20sfmoviesDB } from '../../axios/main/movieLogic';
 import Slider from 'react-slick';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -46,6 +46,7 @@ const MainTopSection = () => {
 
 
 
+
   
   const settings = {
     dots: true,
@@ -85,8 +86,8 @@ const MainTopSection = () => {
                 <Typography variant="body2">{movie.prodYear} · {movie.nation}</Typography>
               </Grid>
           
-              <Typography variant="caption" style={{marginTop:'5px'}}> {movie.directorIds}
- </Typography>
+              <Typography variant="caption" style={{marginTop:'5px'}}> {movie.directorNms}
+              </Typography>
             </CardContent>
           
           </Card>
