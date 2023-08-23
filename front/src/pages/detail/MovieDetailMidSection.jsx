@@ -1,13 +1,14 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Alert, Box, Button, IconButton, Modal, Popover, Snackbar, TextareaAutosize, Typography } from '@mui/material';
 import BookmarkAddIcon from '@mui/icons-material/BookmarkAdd';
 import BookmarkAddedIcon from '@mui/icons-material/BookmarkAdded';
+import EditNoteIcon from '@mui/icons-material/EditNote';
 import CampaignOutlinedIcon from '@mui/icons-material/CampaignOutlined';
 import EditIcon from '@mui/icons-material/Edit';
 import CancelIcon from '@mui/icons-material/Cancel';
 import SentimentVeryDissatisfiedIcon from '@mui/icons-material/SentimentVeryDissatisfied';
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
-import { insertMovieCommentDB } from '../../axios/detail/contentsLogic';
+import { getMovieCommentDB, insertMovieCommentDB } from '../../axios/detail/contentsLogic';
 import { getCookie } from '../../utils/getCookies';
 import { useSnackbar } from 'notistack';
 
@@ -18,6 +19,7 @@ import { useSnackbar } from 'notistack';
 
             const movieId = movieDetail.movieId;
             const movieSeq = movieDetail.movieSeq;
+            const [userMovieComment , setUserMovieComment] = useState([])
             const [open, setOpen] = React.useState(false);
             const [alertOn, setAlertOn] = React.useState(false);
             const [textLength, setTextLength] = React.useState(0);
@@ -25,6 +27,20 @@ import { useSnackbar } from 'notistack';
             const [spoilerActive, setSpoilerActive] = React.useState(false);
             const [anchorEl, setAnchorEl] = React.useState(null);
             const { enqueueSnackbar } = useSnackbar(); 
+
+            useEffect(() => {
+              const getMovieComment = async () => {
+                try {
+                 const res = await getMovieCommentDB(movieId , movieSeq ,userId)
+                 setUserMovieComment(res[0])
+                 console.log(userMovieComment);
+                } catch (error) {
+                  console.log("유저 코멘트 로드 실패 : " , error);
+                }
+              }
+              getMovieComment()
+              },[])
+            
 
             const handlePopoverOpen = (event) => {setAnchorEl(event.currentTarget);};
             const handlePopoverClose = () => {setAnchorEl(null);};
@@ -69,6 +85,40 @@ import { useSnackbar } from 'notistack';
                   setAlertOn(true);
               }
             }
+         //코멘트 수정 모달창
+            const handleEditComment = (commentDetail) => {
+              setTextValue(commentDetail);
+              setTextLength(commentDetail.length);
+              setOpen(true);
+            };
+
+            //코멘트 수정
+  const handleUpdateComment = async() => {
+    const commentData = {
+      commentDetail : textValue,
+      spolierStatus : spoilerActive,
+      movieId : movieId,
+      movieSeq : movieSeq,
+      userId : userId
+     }
+     console.log(commentData);
+     try {
+       const res = await updateMovieCommentDB(commentData)
+       console.log(res.data);
+       if(res === 1){
+         window.location.reload();
+         enqueueSnackbar('코멘트를 수정했습니다!', { variant: 'success' });
+         setAlertOn(true);
+       }else{
+         enqueueSnackbar('코멘트를 수정하지 못했습니다!', { variant: 'error' });
+         setAlertOn(true);
+       }
+     } catch (error) {
+       console.log('코멘트 수정 실패 :' , error);
+       enqueueSnackbar('네트워크 오류!', { variant: 'error' });
+         setAlertOn(true);
+     }
+   }
 
 
        //보관함 추가(보고싶어요 함수)
@@ -212,10 +262,23 @@ import { useSnackbar } from 'notistack';
       </div>
 
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', marginLeft: '40px' }}>
-                      <IconButton onClick={handleOpen}>
-        <EditIcon style={{fontSize:'60px'}}/>
-      </IconButton>
-      <Typography variant='subtitle2' style={{opacity:'60%'}}>코멘트</Typography>
+      {userMovieComment.userId === userId ? (
+  <div>
+    <IconButton onClick={() => handleEditComment(userMovieComment.commentDetail)}>
+      <EditNoteIcon style={{ fontSize: '60px' }} />
+    </IconButton>
+    <Typography variant='subtitle2' style={{ opacity: '60%' }}>코멘트 수정</Typography>
+  </div>
+) : (
+  <div>
+    <IconButton onClick={handleOpen}>
+      <EditIcon style={{ fontSize: '60px' }} />
+    </IconButton>
+    <Typography variant='subtitle2' style={{ opacity: '60%' }}>코멘트</Typography>
+  </div>
+)}
+
+
       <Modal
             open={open}
             onClose={handleClose}
@@ -236,6 +299,7 @@ import { useSnackbar } from 'notistack';
         style={{ ...commentField, resize: 'none' }}
         minRows={10} 
         maxRows={20} 
+        value={textValue}
         placeholder={`${movieDetail.title}에 대한 의견을 남겨주세요.`}
         onChange={(e) => {setTextLength(e.target.value.length); setTextValue(e.target.value)}}
       />
@@ -253,7 +317,7 @@ import { useSnackbar } from 'notistack';
         variant="contained"
         disabled={textLength === 0 || textLength > 1000}
         sx={{ backgroundColor: '#1976d2' }}
-        onClick={handleWriteComment}
+        onClick={userMovieComment.userId === userId ? handleUpdateComment : handleWriteComment}
         >
         저장하기
       </Button>
