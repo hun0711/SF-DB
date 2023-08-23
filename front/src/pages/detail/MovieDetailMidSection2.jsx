@@ -27,11 +27,11 @@ const MovieDetailMidSection2 = ({ movieDetail }) => {
   };
 
   const directorStyle = {
-    width : '200px',
+    width : '250px',
     maxWidth: '400px',
     display: 'flex',
     alignItems: 'center',
-    marginRight: '150px'
+    marginRight: '100px'
 
   };
 
@@ -43,7 +43,7 @@ const MovieDetailMidSection2 = ({ movieDetail }) => {
   };
 
   const actorSectionStyle = {
-    maxWidth: '1400px',
+    maxWidth: '1600px',
     marginTop: '50px',
     display: 'flex',
     flexDirection: 'row', 
@@ -56,8 +56,8 @@ const MovieDetailMidSection2 = ({ movieDetail }) => {
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'flex-start',
-    width: '200px',
-    marginRight: '150px',
+    width: '250px',
+    marginRight: '100px',
     marginBottom:'50px'
   }
 

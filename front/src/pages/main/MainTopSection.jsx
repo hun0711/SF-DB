@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { directorInfoDB, top20sfmoviesDB } from '../../axios/main/movieLogic';
+import { top20sfmoviesDB } from '../../axios/main/movieLogic';
 import Slider from 'react-slick';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";

@@ -120,9 +120,9 @@ import MovieDetailBtmSection2 from './MovieDetailBtmSection2';
   
   {/* Btm Section */}
   <div style={{marginTop:'100px'}}>
-      <MovieDetailBtmSection/>
+      <MovieDetailBtmSection movieDetail={movieDetail}/>
     </div>
-<div>
+<div style={{marginTop:'100px'}}>
   <MovieDetailBtmSection2/>
 </div>
 

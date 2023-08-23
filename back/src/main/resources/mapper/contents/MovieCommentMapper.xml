@@ -22,6 +22,7 @@ and actorNm = #{movieId}
   VALUES (#{movieId}, #{movieSeq}, #{commentDetail}, #{spoilerStatus}, #{userId}, #{userName}, #{userProfileImage})
 </insert>
 
+
 <!-- 코멘트 수정하기 -->
 <update id='updateMovieComment' parameterType="MovieCommentDto">
   UPDATE moviecomment
@@ -30,7 +31,7 @@ and actorNm = #{movieId}
     spoilerStatus = #{spoilerStatus}
         <where>
 <if test='movieId!=null'>
-and actorNm = #{movieId}
+and movieId = #{movieId}
 </if>
   <if test='movieSeq!=null'> 
     and movieSeq = #{movieSeq}
@@ -42,8 +43,9 @@ and actorNm = #{movieId}
 </update>
 
 
-<!-- 코멘트 삭제하기 -->
-<delete id='deleteMovieComment' parametetType="MovieCommentDto">
+
+<!-- 코멘트 삭제하기  -->
+<delete id='deleteMovieComment' parameterType="MovieCommentDto">
   DELETE FROM moviecomment
   <where>
     <if test='movieId!=null'>

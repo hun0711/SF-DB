@@ -17,7 +17,7 @@ public class MovieCommentDto {
 	private String movieId;
 	private String movieSeq;
 	private String commentDetail;
-	private Boolean spolierStatus;
+	private Boolean spoilerStatus;
 	private String userId;
 	private String userName;
 	private String userProfileImage;

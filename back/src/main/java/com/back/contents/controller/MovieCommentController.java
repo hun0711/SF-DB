@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -32,7 +33,7 @@ public class MovieCommentController {
 	
 	/******** 코멘트 등록 ********/
 	@PostMapping("/movieDetail/insertMovieComment")
-	public int insertMovieComment(MovieCommentDto mcDto){
+	public int insertMovieComment(@RequestBody MovieCommentDto mcDto){
 		log.info("MovieCommentController : insertMovieComment 호출");
 		int result = movieCommentService.insertMovieComment(mcDto);
 		return result; 
@@ -40,7 +41,7 @@ public class MovieCommentController {
 	
 	/******** 코멘트 수정 ********/
 	@PostMapping("/movieDetail/updateMovieComment")
-	public int updateMovieComment(MovieCommentDto mcDto){
+	public int updateMovieComment(@RequestBody MovieCommentDto mcDto){
 		log.info("MovieCommentController : updateMovieComment 호출");
 		int result = movieCommentService.updateMovieComment(mcDto);
 		return result; 
@@ -48,7 +49,7 @@ public class MovieCommentController {
 	
 	/******** 코멘트 삭제 ********/
 	@PostMapping("/movieDetail/deleteMovieComment")
-	public int deleteMovieComment(MovieCommentDto mcDto){
+	public int deleteMovieComment(@RequestBody MovieCommentDto mcDto){
 		log.info("MovieCommentController : deleteMovieComment 호출");
 		int result = movieCommentService.deleteMovieComment(mcDto);
 		return result; 

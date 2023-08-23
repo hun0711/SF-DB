@@ -1,11 +1,11 @@
 import axios from "axios";
 
-export const insertMovieComment = async (commentData) => {
+export const insertMovieCommentDB = async (commentData) => {
   console.log(commentData);
   try {
     const res = await axios.post(
       "http://localhost:8000/contents/movieDetail/insertMovieComment",
-      data
+      commentData
     );
     return res.data;
   } catch (error) {
@@ -14,12 +14,12 @@ export const insertMovieComment = async (commentData) => {
   }
 };
 
-export const updateMovieComment = async (commentData) => {
+export const updateMovieCommentDB = async (commentData) => {
   console.log(commentData);
   try {
     const res = await axios.post(
       "http://localhost:8000/contents/movieDetail/updateMovieComment",
-      data
+      commentData
     );
     return res.data;
   } catch (error) {
@@ -28,12 +28,12 @@ export const updateMovieComment = async (commentData) => {
   }
 };
 
-export const deleteMovieComment = async (commentData) => {
+export const deleteMovieCommentDB = async (commentData) => {
   console.log(commentData);
   try {
     const res = await axios.post(
       "http://localhost:8000/contents/movieDetail/deleteMovieComment",
-      data
+      commentData
     );
     return res.data;
   } catch (error) {
@@ -42,7 +42,7 @@ export const deleteMovieComment = async (commentData) => {
   }
 };
 
-export const getMovieComment = async (movieId, movieSeq) => {
+export const getMovieCommentDB = async (movieId, movieSeq) => {
   try {
     const res = await axios.get(
       "http://localhost:8000/contents/movieDetail/getMovieComment",
@@ -53,6 +53,7 @@ export const getMovieComment = async (movieId, movieSeq) => {
         },
       }
     );
+    console.log(res.data);
     return res.data;
   } catch (error) {
     console.error("Error : ", error);

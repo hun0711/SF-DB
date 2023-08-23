@@ -1,50 +1,84 @@
-          import React from 'react';
-          import { Box, Button, IconButton, Modal, Popover, TextareaAutosize, Typography } from '@mui/material';
-          import BookmarkAddIcon from '@mui/icons-material/BookmarkAdd';
-          import BookmarkAddedIcon from '@mui/icons-material/BookmarkAdded';
-          import CampaignOutlinedIcon from '@mui/icons-material/CampaignOutlined';
-          import EditIcon from '@mui/icons-material/Edit';
-          import CancelIcon from '@mui/icons-material/Cancel';
-          import SentimentVeryDissatisfiedIcon from '@mui/icons-material/SentimentVeryDissatisfied';
-          import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
-import { insertMovieComment } from '../../axios/detail/contentsLogic';
+import React from 'react';
+import { Alert, Box, Button, IconButton, Modal, Popover, Snackbar, TextareaAutosize, Typography } from '@mui/material';
+import BookmarkAddIcon from '@mui/icons-material/BookmarkAdd';
+import BookmarkAddedIcon from '@mui/icons-material/BookmarkAdded';
+import CampaignOutlinedIcon from '@mui/icons-material/CampaignOutlined';
+import EditIcon from '@mui/icons-material/Edit';
+import CancelIcon from '@mui/icons-material/Cancel';
+import SentimentVeryDissatisfiedIcon from '@mui/icons-material/SentimentVeryDissatisfied';
+import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
+import { insertMovieCommentDB } from '../../axios/detail/contentsLogic';
 import { getCookie } from '../../utils/getCookies';
+import { useSnackbar } from 'notistack';
 
           const MovieDetailMidSection = ({ movieDetail, posterUrl , ottInfo }) => {
+            const userId = getCookie('userId');
+            const userName = getCookie('userName');
+            const userProfileImage = getCookie('userProfileImage')
+
+            const movieId = movieDetail.movieId;
             const movieSeq = movieDetail.movieSeq;
             const [open, setOpen] = React.useState(false);
+            const [alertOn, setAlertOn] = React.useState(false);
             const [textLength, setTextLength] = React.useState(0);
             const [textValue, setTextValue] = React.useState('');
             const [spoilerActive, setSpoilerActive] = React.useState(false);
             const [anchorEl, setAnchorEl] = React.useState(null);
+            const { enqueueSnackbar } = useSnackbar(); 
 
             const handlePopoverOpen = (event) => {setAnchorEl(event.currentTarget);};
             const handlePopoverClose = () => {setAnchorEl(null);};
             const popoverOpen = Boolean(anchorEl);
-            const handleOpen = () => setOpen(true);
+            const handleOpen = () => {
+              if (userId) {
+                setOpen(true);
+              } else {
+                setAlertOn(true);
+                enqueueSnackbar('로그인 후 이용하실 수 있습니다.', { variant: 'error' });
+              }
+            };
             const handleClose = () => setOpen(false); 
 
 
             //코멘트 등록 함수
             const handleWriteComment = async() => {
               const commentData = {
-               movieId : movieDetail.movieId,
-               movieSeq : movieDetail.movieSeq,
+               movieId : movieId,
+               movieSeq : movieSeq,
                commentDetail : textValue,
                spolierStatus : spoilerActive,
-               userId : getCookie('userId'),
-               userName : getCookie('userName'),
-               userProfileImage : getCookie('userProfileImage')
+               userId : userId,
+               userName : userName,
+               userProfileImage : userProfileImage 
               }
               console.log(commentData);
               try {
-                const res = await insertMovieComment(commentData)
+                const res = await insertMovieCommentDB(commentData)
                 console.log(res.data);
+                if(res === 1){
+                  window.location.reload();
+                  enqueueSnackbar('코멘트를 등록했습니다!', { variant: 'success' });
+                  setAlertOn(true);
+                }else{
+                  enqueueSnackbar('코멘트를 등록하지 못했습니다!', { variant: 'error' });
+                  setAlertOn(true);
+                }
               } catch (error) {
                 console.log('코멘트 등록 실패 :' , error);
+                enqueueSnackbar('네트워크 오류!', { variant: 'error' });
+                  setAlertOn(true);
               }
             }
 
+
+       //보관함 추가(보고싶어요 함수)
+       const handleAddtoArchive = async() => {
+        if (userId) {
+
+        }else{
+          setAlertOn(true);
+        }
+       }
 
             const formattedKeywords = movieDetail.keywords
             ? movieDetail.keywords.split(',').map(keyword => `#${keyword.trim()}`).join(' ')
@@ -171,7 +205,7 @@ import { getCookie } from '../../utils/getCookies';
                 </div>
 
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', marginLeft: '80px' }}>
-                      <IconButton>
+                      <IconButton onClick={handleAddtoArchive}>
         <BookmarkAddIcon style={{fontSize:'60px'}}/>
       </IconButton>
       <Typography variant='subtitle2' style={{opacity:'60%'}}>보고싶어요</Typography>
@@ -264,6 +298,9 @@ import { getCookie } from '../../utils/getCookies';
                     </Typography>
                   </div>
                 </div>
+                  {/* 알림 창 */}
+                  <Snackbar open={alertOn} autoHideDuration={3000} onClose={handleClose}>
+         </Snackbar>
               </div>
 
 
