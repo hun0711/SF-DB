@@ -60,3 +60,91 @@ export const getMovieCommentDB = async (movieId, movieSeq) => {
     throw error;
   }
 };
+
+export const getUserMovieCommentDB = async (movieId, movieSeq, userId) => {
+  try {
+    const res = await axios.get(
+      "http://localhost:8000/contents/movieDetail/getUserMovieComment",
+      {
+        params: {
+          movieId: movieId,
+          movieSeq: movieSeq,
+          userId: userId,
+        },
+      }
+    );
+    console.log(res.data);
+    return res.data;
+  } catch (error) {
+    console.error("Error : ", error);
+    throw error;
+  }
+};
+
+{/* 보관함 로직 */}
+export const addToArchiveDB = async (archiveData) => {
+  console.log(archiveData);
+  try {
+    const res = await axios.post(
+      "http://localhost:8000/contents/archive/addToArchive",
+      archiveData
+    );
+    return res.data;
+  } catch (error) {
+    console.error("Error : ", error);
+    throw error;
+  }
+};
+
+export const deleteToArchiveDB = async (archiveData) => {
+  console.log(archiveData);
+  try {
+    const res = await axios.post(
+      "http://localhost:8000/contents/archive/deleteToArchive",
+      archiveData
+    );
+    return res.data;
+  } catch (error) {
+    console.error("Error : ", error);
+    throw error;
+  }
+};
+
+export const checkMovieArchiveDB = async (movieId, movieSeq ,userId) => {
+  try {
+    const res = await axios.get(
+      "http://localhost:8000/contents/archive/checkMovieArchive",
+      {
+        params: {
+          movieId: movieId,
+          movieSeq: movieSeq,
+          userId: userId
+        },
+      }
+    );
+    console.log(res.data);
+    return res.data;
+  } catch (error) {
+    console.error("Error : ", error);
+    throw error;
+  }
+};
+
+export const getUserArchiveDB = async (userId) => {
+  try {
+    const res = await axios.get(
+      "http://localhost:8000/contents/archive/getUserArchive",
+      {
+        params: {
+          userId: userId
+        },
+      }
+    );
+    console.log(res.data);
+    return res.data;
+  } catch (error) {
+    console.error("Error : ", error);
+    throw error;
+  }
+};
+

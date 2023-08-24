@@ -9,9 +9,9 @@ import { getCookie } from '../../utils/getCookies';
 import { useSnackbar } from 'notistack';
 
 const MovieDetailBtmSection = ({ movieDetail }) => {
-  const userId = getCookie('userId')
   const movieId = movieDetail.movieId;
   const movieSeq = movieDetail.movieSeq;
+  const userId = getCookie('userId')
   const [movieCommentList , setMovieCommentList] = useState([])
   const [open, setOpen] = React.useState(false);
   const [alertOn, setAlertOn] = React.useState(false);
@@ -23,16 +23,21 @@ const MovieDetailBtmSection = ({ movieDetail }) => {
   const [dialogOpen, setDialogOpen] = React.useState(false);
 
   useEffect(() => {
-  const getMovieComment = async () => {
-    try {
-     const res = await getMovieCommentDB(movieId , movieSeq)
-     setMovieCommentList(res)
-    } catch (error) {
-      console.log("영화 코멘트 로드 실패 : " , error);
+    const getMovieComment = async () => {
+      try {
+        const res = await getMovieCommentDB(movieId, movieSeq);
+        setMovieCommentList(res);
+        console.log(res);
+      } catch (error) {
+        console.log("영화 코멘트 로드 실패 : ", error);
+      }
     }
-  }
-  getMovieComment()
-  },[])
+  
+    if (movieId !== undefined && movieSeq !== undefined) {
+      console.log(movieId, movieSeq);
+      getMovieComment();
+    }
+  }, [movieId, movieSeq]);
 
 
   const handlePopoverOpen = (event) => {setAnchorEl(event.currentTarget);};
@@ -127,13 +132,13 @@ const MovieDetailBtmSection = ({ movieDetail }) => {
     marginLeft: '100px',
     marginTop: '30px',
     maxWidth: '1500px',
-    minHeight: '500px',
+    minHeight: '450px',
     maxHeight: '1600px',
   } 
 
   const commentListStyle = {
     width :'1350px',
-    height : '500px',
+    height : '450px',
     marginTop : '30px'
   }
 

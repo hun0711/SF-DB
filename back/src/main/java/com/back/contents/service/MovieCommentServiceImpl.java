@@ -24,6 +24,16 @@ public class MovieCommentServiceImpl implements MovieCommentService{
 		return mcList;
 	}
 
+
+	
+	@Override
+	public List<MovieCommentDto> getUserMovieComment(MovieCommentDto mcDto) {
+		log.info("MovieCommentServiceImpl : getUserMovieComment 호출");
+		List<MovieCommentDto> mcList = movieCommentDao.getUserMovieComment(mcDto);
+		return mcList;
+	}
+
+	
 	@Override
 	public int insertMovieComment(MovieCommentDto mcDto) {
 		log.info("MovieCommentServiceImpl : insertMovieComment 호출");
@@ -44,5 +54,6 @@ public class MovieCommentServiceImpl implements MovieCommentService{
 		int result = movieCommentDao.deleteMovieComment(mcDto);
 		return result;
 	}
+
 
 }

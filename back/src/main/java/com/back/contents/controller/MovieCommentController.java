@@ -31,6 +31,17 @@ public class MovieCommentController {
 		return mcList; 
 	}
 	
+	/******** 유저 코멘트 조회 ********/
+	@GetMapping("/movieDetail/getUserMovieComment")
+	public List<MovieCommentDto> getUserMovieComment(MovieCommentDto mcDto){
+		log.info("MovieCommentController : getUserMovieComment 호출");
+		List<MovieCommentDto> mcList = movieCommentService.getUserMovieComment(mcDto);
+		return mcList; 
+	}
+	
+	
+	
+	
 	/******** 코멘트 등록 ********/
 	@PostMapping("/movieDetail/insertMovieComment")
 	public int insertMovieComment(@RequestBody MovieCommentDto mcDto){

@@ -15,4 +15,6 @@ public interface MovieCommentDao {
 
 	int deleteMovieComment(MovieCommentDto mcDto);
 
+	List<MovieCommentDto> getUserMovieComment(MovieCommentDto mcDto);
+
 }

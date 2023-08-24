@@ -2,12 +2,17 @@ import * as React from 'react';
 import HeaderBar from '../../components/HeaderBar';
 import Footer from '../../components/Footer';
 import { Container, Grid, Paper } from '@mui/material';
-import Chart from './Chart';
-import Orders from './Orders';
 import UserProfile from './UserProfile';
+import MovieArchive from './MovieArchive';
+import MyComments from './MyComments';
+import { getCookie } from '../../utils/getCookies';
 
 
 export default function MyInfoPage() {
+ 
+  const userName = getCookie('userName')
+  const userProfileImage = getCookie('userProfileImage');
+  const userInfo = {userName, userProfileImage}
 
   return (
     <>
@@ -24,10 +29,11 @@ export default function MyInfoPage() {
                     height: 240,
                   }}
                 >
-                  <UserProfile />
+                  <UserProfile userInfo={userInfo}/>
                 </Paper>
               </Grid>
-              {/* Chart */}
+
+              {/* 내 코멘트 */}
               <Grid item xs={12} md={8} lg={7}>
                 <Paper
                   sx={{
@@ -37,19 +43,22 @@ export default function MyInfoPage() {
                     height: 240,
                   }}
                 >
-                  <Chart />
+                  <MyComments userInfo={userInfo} />
                 </Paper>
               </Grid>
            
               {/* 보관함 */}
               <Grid item xs={12}>
                 <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
-                  <Orders />
+                  <MovieArchive userInfo={userInfo}/>
                 </Paper>
               </Grid>
             </Grid>
           </Container>
+
+    <div style={{marginTop:'100px'}}>
     <Footer/> 
+    </div>
     </>
   );
 }

@@ -57,7 +57,7 @@ function HeaderBar() {
     document.cookie = serialize('userName', '', { path: '/', maxAge: -1 });
     document.cookie = serialize('userEmail', '', { path: '/', maxAge: -1 });
     document.cookie = serialize('userBirth', '', { path: '/', maxAge: -1 });
-    document.cookie = serialize('userImage', '', { path: '/', maxAge: -1 });
+    document.cookie = serialize('userProfileImage', '', { path: '/', maxAge: -1 });
   
 
 

@@ -8,10 +8,27 @@
     from moviecomment
     <where>
 <if test='movieId!=null'>
-and actorNm = #{movieId}
+and movieId = #{movieId}
 </if>
   <if test='movieSeq!=null'> 
     and movieSeq = #{movieSeq}
+    </if>
+</where>
+</select>
+
+   <!-- 해당영화 유저 코멘트 가져오기 -->
+    <select id='getUserMovieComment' resultType="MovieCommentDto" parameterType="MovieCommentDto">
+    select *
+    from moviecomment
+    <where>
+<if test='movieId!=null'>
+and movieId = #{movieId}
+</if>
+  <if test='movieSeq!=null'> 
+    and movieSeq = #{movieSeq}
+    </if>
+  <if test='userId!=null'> 
+    and userId = #{userId}
     </if>
 </where>
 </select>

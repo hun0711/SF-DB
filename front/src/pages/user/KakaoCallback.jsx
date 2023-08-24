@@ -65,7 +65,7 @@ import { useSnackbar } from 'notistack';
           document.cookie = serialize('userId' , kakaoLoginData.id , {path : '/'})
           document.cookie = serialize('userName' , kakaoLoginData.name , {path : '/'})
           document.cookie = serialize('userBirth' , kakaoLoginData.birth , {path : '/'})
-          document.cookie = serialize('userImage' , kakaoLoginData.image , {path : '/'})
+          document.cookie = serialize('userProfileImage' , kakaoLoginData.image , {path : '/'})
           
           navigate('/main')
           enqueueSnackbar('로그인에 성공했습니다!', { variant: 'success' });

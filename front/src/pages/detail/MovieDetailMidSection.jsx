@@ -8,18 +8,27 @@ import EditIcon from '@mui/icons-material/Edit';
 import CancelIcon from '@mui/icons-material/Cancel';
 import SentimentVeryDissatisfiedIcon from '@mui/icons-material/SentimentVeryDissatisfied';
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
-import { getMovieCommentDB, insertMovieCommentDB } from '../../axios/detail/contentsLogic';
+import { addToArchiveDB, checkMovieArchiveDB, deleteToArchiveDB, getMovieCommentDB, getUserMovieCommentDB, insertMovieCommentDB, updateMovieCommentDB } from '../../axios/detail/contentsLogic';
 import { getCookie } from '../../utils/getCookies';
 import { useSnackbar } from 'notistack';
 
           const MovieDetailMidSection = ({ movieDetail, posterUrl , ottInfo }) => {
+            const movieId = movieDetail.movieId;
+            const movieSeq = movieDetail.movieSeq;
+            const title = movieDetail.title;
+            const titleOrg = movieDetail.titleOrg
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = (now.getMonth() + 1).toString().padStart(2, '0');
+            const day = now.getDate().toString().padStart(2, '0');
+            const formattedDate = `${year}-${month}-${day}`;
+             
             const userId = getCookie('userId');
             const userName = getCookie('userName');
             const userProfileImage = getCookie('userProfileImage')
-
-            const movieId = movieDetail.movieId;
-            const movieSeq = movieDetail.movieSeq;
+         
             const [userMovieComment , setUserMovieComment] = useState([])
+            const [userCheckArchive , setUserCheckArchive] = useState([])
             const [open, setOpen] = React.useState(false);
             const [alertOn, setAlertOn] = React.useState(false);
             const [textLength, setTextLength] = React.useState(0);
@@ -28,19 +37,40 @@ import { useSnackbar } from 'notistack';
             const [anchorEl, setAnchorEl] = React.useState(null);
             const { enqueueSnackbar } = useSnackbar(); 
 
+            {/* useEffect 함수 - 유저 코멘트 유무, 보관함 존재 유무 확인 */}
             useEffect(() => {
-              const getMovieComment = async () => {
+              const getUserMovieComment = async () => {
                 try {
-                 const res = await getMovieCommentDB(movieId , movieSeq ,userId)
+                 const res = await getUserMovieCommentDB(movieId , movieSeq , userId)
                  setUserMovieComment(res[0])
-                 console.log(userMovieComment);
+                 console.log(res);
                 } catch (error) {
                   console.log("유저 코멘트 로드 실패 : " , error);
                 }
               }
-              getMovieComment()
+              if (movieId !== undefined && movieSeq !== undefined && userId !== undefined) {
+                console.log(movieId, movieSeq , userId);
+                getUserMovieComment();
+              }
+              },[])
+
+            useEffect(() => {
+              const checkMovieArchive = async () => {
+                try {
+                 const res = await checkMovieArchiveDB(movieId , movieSeq , userId)
+                 setUserCheckArchive(res[0])
+                 console.log(res);
+                } catch (error) {
+                  console.log("유저 보관함 존재 유무 로드 실패 : " , error);
+                }
+              }
+              if (movieId !== undefined && movieSeq !== undefined && userId !== undefined) {
+                console.log(movieId, movieSeq , userId);
+                checkMovieArchive();
+              }
               },[])
             
+
 
             const handlePopoverOpen = (event) => {setAnchorEl(event.currentTarget);};
             const handlePopoverClose = () => {setAnchorEl(null);};
@@ -55,6 +85,9 @@ import { useSnackbar } from 'notistack';
             };
             const handleClose = () => setOpen(false); 
 
+            const handleAlertClose = () => {
+              setAlertOn(false)
+            }
 
             //코멘트 등록 함수
             const handleWriteComment = async() => {
@@ -124,11 +157,50 @@ import { useSnackbar } from 'notistack';
        //보관함 추가(보고싶어요 함수)
        const handleAddtoArchive = async() => {
         if (userId) {
-
+          const archiveData = {
+            movieId : movieId,
+            movieSeq : movieSeq,
+            title : title,
+            titleOrg : titleOrg,
+            userId : userId,
+            addDate : formattedDate
+          }
+          try{
+            const res = await addToArchiveDB(archiveData)
+            if(res === 1){
+              enqueueSnackbar('영화를 보관함에 추가하였습니다!', { variant: 'success' });
+              setAlertOn(true);
+            }
+          }catch(error){
+            console.log('보관함 추가 실패 : ', error);
+            enqueueSnackbar('네트워크 오류!', { variant: 'error' });
+            setAlertOn(true);
+          }
         }else{
           setAlertOn(true);
         }
        }
+       //보관함 제거 ( 보관된 영화)
+       const handleDeleteToArchive = async() => {
+          const archiveData = {
+            movieId : movieId,
+            movieSeq : movieSeq,
+            userId : userId,
+          }
+          try{
+            const res = await deleteToArchiveDB(archiveData)
+            if(res === 1){
+              enqueueSnackbar('영화를 보관함에서 삭제하였습니다!', { variant: 'success' });
+              setAlertOn(true);
+            }
+          }catch(error){
+            console.log('보관함 삭제 실패 : ', error);
+            enqueueSnackbar('네트워크 오류!', { variant: 'error' });
+            setAlertOn(true);
+          }
+       }
+
+
 
             const formattedKeywords = movieDetail.keywords
             ? movieDetail.keywords.split(',').map(keyword => `#${keyword.trim()}`).join(' ')
@@ -254,12 +326,24 @@ import { useSnackbar } from 'notistack';
                   )}
                 </div>
 
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', marginLeft: '80px' }}>
-                      <IconButton onClick={handleAddtoArchive}>
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', marginLeft: '80px' }}>
+  {userCheckArchive.userId === userId ? (
+    <>
+      <IconButton onClick={handleDeleteToArchive}>
+        <BookmarkAddedIcon style={{fontSize:'60px'}}/>
+      </IconButton>
+      <Typography variant='subtitle2' style={{opacity:'60%'}}>보관된 영화</Typography>
+    </>
+  ) : (
+    <>
+      <IconButton onClick={handleAddtoArchive}>
         <BookmarkAddIcon style={{fontSize:'60px'}}/>
       </IconButton>
       <Typography variant='subtitle2' style={{opacity:'60%'}}>보고싶어요</Typography>
-      </div>
+    </>
+  )}
+</div>
+
 
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', marginLeft: '40px' }}>
       {userMovieComment.userId === userId ? (
@@ -363,7 +447,10 @@ import { useSnackbar } from 'notistack';
                   </div>
                 </div>
                   {/* 알림 창 */}
-                  <Snackbar open={alertOn} autoHideDuration={3000} onClose={handleClose}>
+                  <Snackbar open={alertOn} autoHideDuration={3000} onClose={handleAlertClose}>
+                  <Alert onClose={handleAlertClose} severity="success" sx={{ width: '100%' , height:'50%' , opacity:'0%'}}>
+            로그인에 성공했습니다!
+          </Alert>
          </Snackbar>
               </div>
 

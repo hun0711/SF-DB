@@ -61,7 +61,7 @@ const NaverLogin = () => {
           document.cookie = serialize("userName", name, { path: '/' });
           document.cookie = serialize("userEmail", email, { path: '/' });
           document.cookie = serialize("userBirth", birthday, { path: '/' });
-          document.cookie = serialize("userImage", profile_image, { path: '/' });
+          document.cookie = serialize("userProfileImage", profile_image, { path: '/' });
 
           navigate('/main')
           enqueueSnackbar('로그인에 성공했습니다!', { variant: 'success' });
