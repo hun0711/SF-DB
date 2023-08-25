@@ -3,6 +3,7 @@ import Link from '@mui/material/Link';
 import Typography from '@mui/material/Typography';
 import EditIcon from '@mui/icons-material/Edit';
 import Title from './Title';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
 
 export default function UserProfile({ userInfo }) {
@@ -10,9 +11,11 @@ export default function UserProfile({ userInfo }) {
 
   return (
     <React.Fragment>
-      <Title>내 프로필</Title>
+      <div style={{display:'flex'}}>
+      <AccountCircleIcon style={{marginLeft:'15px',marginRight:'5px',marginTop:'2px'}}/><Title>프로필</Title>
+      </div>
       <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column' }}>
-        <div style={{ width: '100px', height: '100px', borderRadius: '50%', overflow: 'hidden', marginBottom: '10px' }}>
+        <div style={{ width: '120px', height: '120px', borderRadius: '50%', overflow: 'hidden', marginBottom: '10px' }}>
           <img src={userInfo.userProfileImage ? userInfo.userProfileImage : 'images/astronaut.jpg'} style={{ width: '100%', height: '100%', objectFit: 'cover' }}/>
         </div>
         <div>

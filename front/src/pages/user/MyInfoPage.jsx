@@ -10,9 +10,10 @@ import { getCookie } from '../../utils/getCookies';
 
 export default function MyInfoPage() {
  
+  const userId = getCookie('userId')
   const userName = getCookie('userName')
   const userProfileImage = getCookie('userProfileImage');
-  const userInfo = {userName, userProfileImage}
+  const userInfo = {userId, userName, userProfileImage}
 
   return (
     <>

@@ -54,7 +54,9 @@ const MainTopSection = () => {
     infinite: true,
     speed: 500,
     slidesToShow: 5,
-    slidesToScroll: 5
+    slidesToScroll: 2,
+    autoplay: true,
+    autoplaySpeed: 5000,
   };
 
 
@@ -74,7 +76,8 @@ const MainTopSection = () => {
     <Slider {...settings}>
       {top20Movies.map((movie, index) => (
         <div key={index} style={{ position: 'relative'  }}>
-          <Card sx={{ maxWidth: 250, height: 450 ,mx: 2 , border:'none',margin: '0 auto' ,cursor: 'pointer' }}
+          <Card sx={{ maxWidth: 250, height: 450 ,mx: 2 , border:'none',margin: '0 auto' ,cursor: 'pointer' 
+          }}
             onClick={() => navigate(`/movieDetail/${movie.movieId}${movie.movieSeq}`)}>
 
             <img src={posterUrls[index]} alt={movie.title} style={{ width: '100%', height: '350px' , borderRadius:'3px 3px 3px 3px' }} />

@@ -22,6 +22,10 @@ const MovieDetailBtmSection = ({ movieDetail }) => {
   const { enqueueSnackbar } = useSnackbar(); 
   const [dialogOpen, setDialogOpen] = React.useState(false);
 
+  // 스포일러 코멘트 내용 보기 여부와 버튼 클릭 여부
+  const [spoilerCommentVisible, setSpoilerCommentVisible] = useState(false);
+  const [spoilerViewButtonClicked, setSpoilerViewButtonClicked] = useState(false);
+
   useEffect(() => {
     const getMovieComment = async () => {
       try {
@@ -34,7 +38,6 @@ const MovieDetailBtmSection = ({ movieDetail }) => {
     }
   
     if (movieId !== undefined && movieSeq !== undefined) {
-      console.log(movieId, movieSeq);
       getMovieComment();
     }
   }, [movieId, movieSeq]);
@@ -121,7 +124,7 @@ const MovieDetailBtmSection = ({ movieDetail }) => {
   const settings = {
     dots: true,
     arrows : true,
-    infinite: true,
+    infinite: false, 
     speed: 500,
     slidesToShow: movieCommentList.length,
     slidesToScroll: 4,
@@ -207,10 +210,42 @@ const MovieDetailBtmSection = ({ movieDetail }) => {
 
                     <div style={{ width: '320px', borderBottom: '1px solid black', opacity: '10%', marginTop:'10px' ,marginBottom: '10px' }} />
 
-                    {/* 코멘트 내용 */}
-                    <Typography variant="caption" style={{fontSize:'15px'}}>
-                      {movieComment.commentDetail}
-                    </Typography>
+   {/* 코멘트 내용 */}
+   {movieComment.spoilerStatus && !spoilerViewButtonClicked && (
+                      <div
+                        style={{
+                          display: 'flex',
+                          zIndex: 1,
+                        }}
+                      >
+                        <Typography
+                          variant="button"
+                          style={{
+                            fontSize: '15px',
+                            opacity:'50%',
+                            marginTop:'10px',
+                            marginBottom: '10px',
+                            marginRight: '2px',
+                          }}
+                        >
+                          스포일러가 포함된 코멘트입니다.
+                        </Typography>
+                        <Button
+                          variant="text"
+                          style={{ fontSize: '15px'}}
+                          onClick={() => {
+                            setSpoilerViewButtonClicked(true);
+                          }}
+                        >
+                          보기
+                        </Button>
+                      </div>
+                    )}
+                    {spoilerViewButtonClicked ? (
+                      <Typography variant="caption" style={{ fontSize: '15px' }}>
+                        {movieComment.commentDetail}
+                      </Typography>
+                    ) : null}
                   </CardContent>
                 </Card>
               </div>

@@ -6,32 +6,6 @@ const MovieDetailBtmSection2 = ({ movieDetail }) => {
   const title = movieDetail.title
   const prodYear = movieDetail.prodYear
   const [trailerId, setTrailerId] = useState(null);
-  const [stills, setStills] = useState([])
-  
-  useEffect(() => {
-  const fetchStills = async () => {
-    try {
-      const apiKey = "AIzaSyC2pRmeDsy_q0pjRI7LOneIXjSQHE_UMbA";
-      const searchQuery = title + prodYear + '스틸컷';
-      console.log(searchQuery);   
-      const customSearchEngineId = "b17c3642d30a447a2";
-      const response = await fetch(
-        `https://www.googleapis.com/customsearch/v1?key=${apiKey}&cx=${customSearchEngineId}&q=${searchQuery}&searchType=image`
-      )
-      const data = await response.json();
-      if(data.items){
-        const stillsUrls = data.items.map(item => item.link).slice(0, 3);
-        setStills(stillsUrls)
-      }
-    } catch (error) {
-      console.log('구글 이미지 로드 실패 : ' , error);
-    }
-  }
-  if (title !== undefined && prodYear !== undefined) {
-    fetchStills()
-  }
-  },[title,prodYear])
- 
 
 
   useEffect(() => {
@@ -107,11 +81,6 @@ const MovieDetailBtmSection2 = ({ movieDetail }) => {
         </Typography>
         </div>  
         <div style={stillSectionStyle}>
-          <div style={stillStyle} class="gcse-search">
-          {stills.map((imageUrl, index) => (
-        <img key={index} src={imageUrl} alt={`Still ${index}`} />
-      ))}
-           </div> 
         </div>
 
 {/* 동영상 div */}
