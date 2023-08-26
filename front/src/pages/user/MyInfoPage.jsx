@@ -23,6 +23,7 @@ export default function MyInfoPage() {
                  {/* 프로필 */}
                  <Grid item xs={12} md={4} lg={5}>
                 <Paper
+                elevation={3}
                   sx={{
                     p: 2,
                     display: 'flex',
@@ -37,6 +38,7 @@ export default function MyInfoPage() {
               {/* 내 코멘트 */}
               <Grid item xs={12} md={8} lg={7}>
                 <Paper
+                elevation={3}
                   sx={{
                     p: 2,
                     display: 'flex',
@@ -50,7 +52,7 @@ export default function MyInfoPage() {
            
               {/* 보관함 */}
               <Grid item xs={12}>
-                <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
+                <Paper elevation={3} sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
                   <MovieArchive userInfo={userInfo}/>
                 </Paper>
               </Grid>

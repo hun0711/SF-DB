@@ -5,6 +5,7 @@ import { useNavigate } from "react-router";
 import { naverSocialLogin } from "../../axios/user/loginLogic";
 import { useSnackbar } from "notistack";
 import { Alert, Snackbar } from "@mui/material";
+import { getCookie } from "../../utils/getCookies";
 
 const NaverLogin = () => {
   const navigate = useNavigate();
@@ -62,9 +63,9 @@ const NaverLogin = () => {
           document.cookie = serialize("userEmail", email, { path: '/' });
           document.cookie = serialize("userBirth", birthday, { path: '/' });
           document.cookie = serialize("userProfileImage", profile_image, { path: '/' });
-
           navigate('/main')
-          enqueueSnackbar('로그인에 성공했습니다!', { variant: 'success' });
+          const userName = getCookie('userName')
+          enqueueSnackbar(`${userName}님, 어서오세요.`, { variant: 'success' });
           setAlertOn(true);
         } else {
           console.log("Naver 로그인 실패");

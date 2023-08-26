@@ -9,6 +9,7 @@
   import Footer from '../../components/Footer';
   import MovieDetailMidSection2 from './MovieDetailMidSection2';
 import MovieDetailBtmSection2 from './MovieDetailBtmSection2';
+import { MovieProvider } from '../../utils/movieDetailContext';
 
 
 
@@ -102,7 +103,7 @@ import MovieDetailBtmSection2 from './MovieDetailBtmSection2';
 
     return (
       <>
-
+<MovieProvider>
   <HeaderBar/>
 
     {/* Top Section */}
@@ -125,10 +126,8 @@ import MovieDetailBtmSection2 from './MovieDetailBtmSection2';
 <div style={{marginTop:'100px'}}>
   <MovieDetailBtmSection2 movieDetail={movieDetail}/>
 </div>
-
-
-
   <Footer/>
+  </MovieProvider>
       </>
     )
   }

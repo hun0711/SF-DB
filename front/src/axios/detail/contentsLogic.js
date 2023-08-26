@@ -21,6 +21,7 @@ export const updateMovieCommentDB = async (commentData) => {
       "http://localhost:8000/contents/movieDetail/updateMovieComment",
       commentData
     );
+    console.log(res.data);
     return res.data;
   } catch (error) {
     console.error("Error : ", error);

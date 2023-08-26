@@ -9,6 +9,7 @@ import GoogleLogin from './GoogleLogin';
 import KakaoLogin from './KakaoLogin';
 import NaverLogin from './NaverLogin';
 import { useSnackbar } from 'notistack';
+import { getCookie } from '../../utils/getCookies';
 
 
 const FormHelperTexts = styled(FormHelperText)`
@@ -56,10 +57,9 @@ const Login = () => {
         document.cookie = serialize('userBirth', userInfoRes[0].userBirth , { path: '/' });
         document.cookie = serialize('userEmail', userInfoRes[0].userEmail , { path: '/' });
         document.cookie = serialize('userProfileImage', userInfoRes[0].userProfileImage , { path: '/' });
-        console.log(document.cookie);
-
         navigate('/main');
-        enqueueSnackbar('로그인에 성공했습니다!', { variant: 'success' });
+        const userName = getCookie('userName')
+        enqueueSnackbar(`${userName}님, 어서오세요.`, { variant: 'success' });
         setAlertOn(true);
       } else {
         console.log('로그인 정보 재확인 필요');

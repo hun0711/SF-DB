@@ -6,6 +6,7 @@ import { serialize } from 'cookie';
 import { useNavigate } from 'react-router';
 import { Alert, Snackbar } from '@mui/material';
 import { useSnackbar } from 'notistack';
+import { getCookie } from '../../utils/getCookies';
 
 
 const GoogleLogin = () => {
@@ -75,9 +76,10 @@ useEffect(() => {
       document.cookie = serialize('userId', googleLoginData.id, { path: '/' }); 
       document.cookie = serialize('userEmail', googleLoginData.email, { path: '/' }); 
       document.cookie = serialize('userName', googleLoginData.name, { path: '/' }); 
-      document.cookie = serialize('userProfileImage', googleLoginData.picture, { path: '/' }); 
+      document.cookie = serialize('userProfileImage', googleLoginData.picture, { path: '/' });
       navigate('/main');
-      enqueueSnackbar('로그인에 성공했습니다!', { variant: 'success' });
+      const userName = getCookie('userName') 
+      enqueueSnackbar(`${userName}님, 어서오세요.`, { variant: 'success' });
       setAlertOn(true)      
     } else {
       console.log('Google 로그인 실패');

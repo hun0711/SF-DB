@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react'
-import { Box, Button, Card, CardContent, Dialog, DialogActions, DialogTitle, Grid, IconButton, Modal, Popover, Snackbar, TextareaAutosize, Typography } from '@mui/material'
+import { Box, Button, Card, CardContent, Dialog, DialogActions, DialogTitle, Grid, IconButton, Modal, Paper, Popover, Snackbar, TextareaAutosize, Typography } from '@mui/material'
 import EditNoteIcon from '@mui/icons-material/EditNote';
+import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import CancelIcon from '@mui/icons-material/Cancel';
 import CampaignOutlinedIcon from '@mui/icons-material/CampaignOutlined';
 import { deleteMovieCommentDB, getMovieCommentDB, updateMovieCommentDB } from '../../axios/detail/contentsLogic';
-import Slider from 'react-slick';
 import { getCookie } from '../../utils/getCookies';
 import { useSnackbar } from 'notistack';
+import { useMovieContext } from '../../utils/movieDetailContext';
 
 const MovieDetailBtmSection = ({ movieDetail }) => {
   const movieId = movieDetail.movieId;
@@ -21,11 +23,20 @@ const MovieDetailBtmSection = ({ movieDetail }) => {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const { enqueueSnackbar } = useSnackbar(); 
   const [dialogOpen, setDialogOpen] = React.useState(false);
+  const [commentIndex, setCommentIndex] = useState(0);
+
+
 
   // 스포일러 코멘트 내용 보기 여부와 버튼 클릭 여부
-  const [spoilerCommentVisible, setSpoilerCommentVisible] = useState(false);
   const [spoilerViewButtonClicked, setSpoilerViewButtonClicked] = useState(false);
 
+  const { updatedComments } = useMovieContext();
+  
+  useEffect(() => {
+    if (updatedComments) {
+      setMovieCommentList(updatedComments);
+    }
+  }, [updatedComments]);
   useEffect(() => {
     const getMovieComment = async () => {
       try {
@@ -43,16 +54,21 @@ const MovieDetailBtmSection = ({ movieDetail }) => {
   }, [movieId, movieSeq]);
 
 
+
   const handlePopoverOpen = (event) => {setAnchorEl(event.currentTarget);};
   const handlePopoverClose = () => {setAnchorEl(null);};
   const popoverOpen = Boolean(anchorEl);
-  const handleOpen = (commentDetail) => {
+  const handleOpen = (commentDetail, spoilerStatus) => {
     setTextValue(commentDetail);
     setTextLength(commentDetail.length); 
+    setSpoilerActive(spoilerStatus)
     setOpen(true);
   };
   const handleClose = () => setOpen(false); 
 
+  const handleAlertClose = () => {
+    setAlertOn(false)
+  }
 
   const handleDeleteClick = () => {
     setDialogOpen(true);
@@ -62,12 +78,18 @@ const MovieDetailBtmSection = ({ movieDetail }) => {
     setDialogOpen(false);
   };
 
+  const handleNextComment = () => {
+    setCommentIndex(prevIndex => (prevIndex + 1) % movieCommentList.length);
+  };
+  const handlePreviousComment = () => {
+    setCommentIndex(prevIndex => (prevIndex - 1 + movieCommentList.length) % movieCommentList.length);
+  };
 
   //코멘트 수정
   const handleUpdateComment = async() => {
     const commentData = {
       commentDetail : textValue,
-      spolierStatus : spoilerActive,
+      spoilerStatus : spoilerActive,
       movieId : movieId,
       movieSeq : movieSeq,
       userId : userId
@@ -75,11 +97,17 @@ const MovieDetailBtmSection = ({ movieDetail }) => {
      console.log(commentData);
      try {
        const res = await updateMovieCommentDB(commentData)
-       console.log(res.data);
        if(res === 1){
-         window.location.reload();
+        setOpen(false)
          enqueueSnackbar('코멘트를 수정했습니다!', { variant: 'success' });
          setAlertOn(true);
+          // getMovieComment를 호출하여 데이터를 다시 불러옴
+        try {
+          const updatedRes = await getMovieCommentDB(movieId, movieSeq);
+          setMovieCommentList(updatedRes);
+        } catch (error) {
+          console.log("영화 코멘트 로드 실패 : ", error);
+        }
        }else{
          enqueueSnackbar('코멘트를 수정하지 못했습니다!', { variant: 'error' });
          setAlertOn(true);
@@ -103,9 +131,15 @@ const MovieDetailBtmSection = ({ movieDetail }) => {
        const res = await deleteMovieCommentDB(commentData)
        console.log(res.data);
        if(res === 1){
-         window.location.reload();
          enqueueSnackbar('코멘트를 삭제했습니다!', { variant: 'success' });
          setAlertOn(true);
+          // getMovieComment를 호출하여 데이터를 다시 불러옴
+        try {
+          const updatedRes = await getMovieCommentDB(movieId, movieSeq);
+          setMovieCommentList(updatedRes);
+        } catch (error) {
+          console.log("영화 코멘트 로드 실패 : ", error);
+        }
        }else{
          enqueueSnackbar('코멘트를 삭제하지 못했습니다!', { variant: 'error' });
          setAlertOn(true);
@@ -120,16 +154,6 @@ const MovieDetailBtmSection = ({ movieDetail }) => {
 
 
 
-  {/* Style */}
-  const settings = {
-    dots: true,
-    arrows : true,
-    infinite: false, 
-    speed: 500,
-    slidesToShow: movieCommentList.length,
-    slidesToScroll: 4,
-  };
-
 
   const btmSectionStyle = {
     marginLeft: '100px',
@@ -141,15 +165,17 @@ const MovieDetailBtmSection = ({ movieDetail }) => {
 
   const commentListStyle = {
     width :'1350px',
-    height : '450px',
-    marginTop : '30px'
+    height : '350px',
+    marginTop : '30px',
+    display:'flex'
   }
 
   const commentStyle ={
-    width:'350px',
-    height:'450px',
+    width:'320px',
+    height:'350px',
     marginRight : '10px',
     position: 'relative',
+    flexDirection: 'row', 
     
   }
 
@@ -179,9 +205,14 @@ const MovieDetailBtmSection = ({ movieDetail }) => {
         </Typography>
         </div>
 
-
-        <div style={commentListStyle}>
-          <Slider {...settings}>
+        <div
+    style={{
+      display: 'grid',
+      gridTemplateColumns: `repeat(auto-fill, minmax(${commentStyle.width}, 1fr))`,
+      gap: '10px',
+    }}
+  >
+          <Paper elevation={0} style={commentListStyle}>
             {movieCommentList.map((movieComment, index) => (
               <div key={index} style={commentStyle}>
                 <Card sx={{ maxWidth: 350, minHeight: 300, mx: 2, border: 'none', marginRight:'10px', backgroundColor: '#f5f5f5' }}>
@@ -202,7 +233,7 @@ const MovieDetailBtmSection = ({ movieDetail }) => {
   {/* 수정삭제 */}
   {userId === movieComment.userId && (
     <div style={{ display: 'flex', gap: '10px' }}>
-      <Typography variant='button' style={{ opacity: '50%' , cursor:'pointer'}} onClick={() => handleOpen(movieComment.commentDetail)}>수정</Typography>
+      <Typography variant='button' style={{ opacity: '50%' , cursor:'pointer'}} onClick={() => handleOpen(movieComment.commentDetail , movieComment.spoilerStatus)}>수정</Typography>
       <Typography variant='button' style={{ opacity: '50%' , cursor:'pointer'}} onClick={handleDeleteClick}>삭제</Typography>
     </div>
   )}
@@ -240,18 +271,17 @@ const MovieDetailBtmSection = ({ movieDetail }) => {
                           보기
                         </Button>
                       </div>
-                    )}
-                    {spoilerViewButtonClicked ? (
-                      <Typography variant="caption" style={{ fontSize: '15px' }}>
-                        {movieComment.commentDetail}
-                      </Typography>
-                    ) : null}
+               )}
+               {(!movieComment.spoilerStatus || spoilerViewButtonClicked) && (
+                 <Typography variant="caption" style={{ fontSize: '15px' }}>
+                   {movieComment.commentDetail}
+                 </Typography>
+               )}
                   </CardContent>
                 </Card>
               </div>
             ))}
-          </Slider>
-
+            </Paper>
 {/* 코멘트 수정 창 */}
           <Modal
             open={open}
@@ -281,7 +311,7 @@ const MovieDetailBtmSection = ({ movieDetail }) => {
       <Typography variant="button" style={{ opacity: '60%' }}>
         {textLength}/1000
       </Typography>
-      <IconButton onClick={() => setSpoilerActive(!spoilerActive)}    
+      <IconButton onClick={() => setSpoilerActive(prevSpoilerActive => !prevSpoilerActive)}    
         onMouseEnter={handlePopoverOpen}
         onMouseLeave={handlePopoverClose}>
         <CampaignOutlinedIcon style={{ color: spoilerActive ? '#1976d2' : 'inherit' }}/>
@@ -344,7 +374,7 @@ const MovieDetailBtmSection = ({ movieDetail }) => {
       </Dialog>
 
                      {/* 알림 창 */}
-                     <Snackbar open={alertOn} autoHideDuration={3000} onClose={handleClose}>
+                     <Snackbar open={alertOn} autoHideDuration={3000} onClose={handleAlertClose}>
          </Snackbar>
         </div>
       </div>

@@ -12,6 +12,7 @@ import { addToArchiveDB, checkMovieArchiveDB, deleteToArchiveDB, getMovieComment
 import { getCookie } from '../../utils/getCookies';
 import { useSnackbar } from 'notistack';
 import { CheckBoxOutlined } from '@mui/icons-material';
+import { useMovieContext } from '../../utils/movieDetailContext';
 
           const MovieDetailMidSection = ({ movieDetail, posterUrl , ottInfo }) => {
             const movieId = movieDetail.movieId;
@@ -36,6 +37,7 @@ import { CheckBoxOutlined } from '@mui/icons-material';
             const [textValue, setTextValue] = React.useState('');
             const [spoilerActive, setSpoilerActive] = React.useState(false);
             const [anchorEl, setAnchorEl] = React.useState(null);
+            const { updatedComments, setUpdatedComments } = useMovieContext();
             const { enqueueSnackbar } = useSnackbar(); 
 
 
@@ -56,7 +58,7 @@ import { CheckBoxOutlined } from '@mui/icons-material';
                 }
               },[movieId , movieSeq , userId])
 
-            
+             
 
 
             const handlePopoverOpen = (event) => {setAnchorEl(event.currentTarget);};
@@ -90,11 +92,17 @@ import { CheckBoxOutlined } from '@mui/icons-material';
               console.log(commentData);
               try {
                 const res = await insertMovieCommentDB(commentData)
-                console.log(res.data);
                 if(res === 1){
-                  window.location.reload();
+                  setOpen(false)
+                  setUserMovieComment(commentData)
                   enqueueSnackbar('코멘트를 등록했습니다!', { variant: 'success' });
                   setAlertOn(true);
+                  try{
+                   const updatedComments = await getMovieCommentDB(movieId, movieSeq);
+                   setUpdatedComments(updatedComments);
+                  }catch(error){
+                    console.log('업데이트 반영 실패 : ' ,error);
+                  }
                 }else{
                   enqueueSnackbar('코멘트를 등록하지 못했습니다!', { variant: 'error' });
                   setAlertOn(true);
@@ -106,9 +114,10 @@ import { CheckBoxOutlined } from '@mui/icons-material';
               }
             }
          //코멘트 수정 모달창
-            const handleEditComment = (commentDetail) => {
+            const handleEditComment = (commentDetail, spoilerStatus) => {
               setTextValue(commentDetail);
               setTextLength(commentDetail.length);
+              setSpoilerActive(spoilerStatus)
               setOpen(true);
             };
 
@@ -116,7 +125,7 @@ import { CheckBoxOutlined } from '@mui/icons-material';
   const handleUpdateComment = async() => {
     const commentData = {
       commentDetail : textValue,
-      spolierStatus : spoilerActive,
+      spoilerStatus : spoilerActive,
       movieId : movieId,
       movieSeq : movieSeq,
       userId : userId
@@ -126,9 +135,15 @@ import { CheckBoxOutlined } from '@mui/icons-material';
        const res = await updateMovieCommentDB(commentData)
        console.log(res.data);
        if(res === 1){
-         window.location.reload();
+        setOpen(false)
          enqueueSnackbar('코멘트를 수정했습니다!', { variant: 'success' });
          setAlertOn(true);
+         try{
+          const updatedComments = await getMovieCommentDB(movieId, movieSeq);
+          setUpdatedComments(updatedComments);
+         }catch(error){
+           console.log('업데이트 반영 실패 : ' ,error);
+         }
        }else{
          enqueueSnackbar('코멘트를 수정하지 못했습니다!', { variant: 'error' });
          setAlertOn(true);
@@ -155,9 +170,9 @@ import { CheckBoxOutlined } from '@mui/icons-material';
           try{
             const res = await addToArchiveDB(archiveData)
             if(res === 1){
-              window.location.reload();
+              setUserCheckArchive(archiveData)
               enqueueSnackbar('영화를 보관함에 추가하였습니다!', { variant: 'success' });
-              setAlertOn(true);
+                setAlertOn(true);
             }
           }catch(error){
             console.log('보관함 추가 실패 : ', error);
@@ -179,9 +194,11 @@ import { CheckBoxOutlined } from '@mui/icons-material';
           try{
             const res = await deleteToArchiveDB(archiveData)
             if(res === 1){
-              window.location.reload()
+              setUserCheckArchive(null)
               enqueueSnackbar('영화를 보관함에서 삭제하였습니다!', { variant: 'success' });
-              setAlertOn(true);
+              setTimeout(() => {
+                setAlertOn(true);
+              },1500)
             }
           }catch(error){
             console.log('보관함 삭제 실패 : ', error);
@@ -317,7 +334,7 @@ import { CheckBoxOutlined } from '@mui/icons-material';
                 </div>
 
                 <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', marginLeft: '80px' }}>
-  {userCheckArchive && userCheckArchive.userId === userId ? (
+                {userCheckArchive && userCheckArchive.userId === userId  ? (
     <>
       <IconButton onClick={handleDeleteToArchive}>
         <BookmarkAddedIcon style={{fontSize:'60px'}}/>
@@ -338,7 +355,7 @@ import { CheckBoxOutlined } from '@mui/icons-material';
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', marginLeft: '40px' }}>
       {userMovieComment && userMovieComment.userId === userId ? (
   <div>
-    <IconButton onClick={() => handleEditComment(userMovieComment.commentDetail)}>
+    <IconButton onClick={() => handleEditComment(userMovieComment.commentDetail , userMovieComment.spoilerStatus)}>
       <EditNoteIcon style={{ fontSize: '60px' }} />
     </IconButton>
     <Typography variant='subtitle2' style={{ opacity: '60%' }}>코멘트 수정</Typography>
@@ -381,7 +398,7 @@ import { CheckBoxOutlined } from '@mui/icons-material';
       <Typography variant="button" style={{ opacity: '60%' }}>
         {textLength}/1000
       </Typography>
-      <IconButton onClick={() => setSpoilerActive(!spoilerActive)}    
+      <IconButton onClick={() => setSpoilerActive(prevSpoilerActive => !prevSpoilerActive)}    
         onMouseEnter={handlePopoverOpen}
         onMouseLeave={handlePopoverClose}>
         <CampaignOutlinedIcon style={{ color: spoilerActive ? '#1976d2' : 'inherit' }}/>

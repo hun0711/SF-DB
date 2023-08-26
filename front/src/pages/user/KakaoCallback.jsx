@@ -6,6 +6,7 @@ import { serialize } from 'cookie';
 import { useNavigate } from 'react-router';
 import { Alert, Snackbar } from '@mui/material';
 import { useSnackbar } from 'notistack';
+import { getCookie } from '../../utils/getCookies';
 
   const KakaoCallback = () => {
     const navigate = useNavigate();
@@ -66,9 +67,9 @@ import { useSnackbar } from 'notistack';
           document.cookie = serialize('userName' , kakaoLoginData.name , {path : '/'})
           document.cookie = serialize('userBirth' , kakaoLoginData.birth , {path : '/'})
           document.cookie = serialize('userProfileImage' , kakaoLoginData.image , {path : '/'})
-          
           navigate('/main')
-          enqueueSnackbar('로그인에 성공했습니다!', { variant: 'success' });
+          const userName = getCookie('userName')
+          enqueueSnackbar(`${userName}님, 어서오세요.`, { variant: 'success' });
           setAlertOn(true);
         }
       });

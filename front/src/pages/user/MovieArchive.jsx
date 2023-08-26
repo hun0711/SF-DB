@@ -75,7 +75,7 @@ export default function MovieArchive({ userInfo }) {
     try {
       const res = await deleteToArchiveDB(archiveData)
       if(res === 1){
-        window.location.reload()
+        setUserMovieArchive(prevArchive => prevArchive.filter(movie => movie.movieId !== selectedMovie.movieId));
         enqueueSnackbar('선택한 영화를 보관함에서 제거하였습니다.', { variant: 'success' });
         setAlertOn(true);
       }else{
@@ -106,6 +106,9 @@ export default function MovieArchive({ userInfo }) {
     <>
     <div style={{ display: 'flex' }}>
     <BookmarksIcon style={{marginLeft:'15px',marginRight:'5px',marginTop:'3px'}}/><Title>보관함</Title>
+    <Typography variant="h4" style={{ fontSize: '23px' , marginLeft:'10px', color:'#1976d2' }}>
+          {userMovieArchive.length}
+        </Typography>
       <div style={{ marginLeft: '15px' }}>
         {userMovieArchive.length > 0 && (
           <Button variant='contained' color='error' style={{ fontSize: '12px' }} 
@@ -149,12 +152,12 @@ export default function MovieArchive({ userInfo }) {
           </div>
         ))
       ) : (
-        <div style={{marginLeft:'100px' , marginTop:'40px',opacity:'50%',display:'flex'}}>
+        <div style={{marginLeft:'100px' , marginTop:'50px',opacity:'50%',display:'flex'}}>
           <BrowserNotSupportedIcon style={{fontSize:'30px' , marginRight:'5px'}}/><Typography variant='h4' style={{fontSize:'25px'}}>보관중인 영화가 없습니다.</Typography>
           </div>
       )}
     </div>
-    <Link color="primary" href="/main" sx={{ mt: 3 }}>
+    <Link color="primary" href="/main" sx={{ mt: 3 , opacity: '50%' }}>
       See more Movies
     </Link>
       {/* 알림 창 */}
