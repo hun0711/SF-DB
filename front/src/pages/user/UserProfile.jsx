@@ -4,10 +4,12 @@ import Typography from '@mui/material/Typography';
 import EditIcon from '@mui/icons-material/Edit';
 import Title from './Title';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import ExitToAppIcon from '@mui/icons-material/ExitToApp';
+import { IconButton } from '@mui/material';
 
 
 export default function UserProfile({ userInfo }) {
-
+console.log(userInfo.userEmail);
 
   return (
     <React.Fragment>
@@ -21,11 +23,20 @@ export default function UserProfile({ userInfo }) {
         <div>
         <Typography variant="h6">{userInfo.userName}</Typography>
         </div>
-        <div style={{ marginTop: '10px', display: 'flex', alignItems: 'center' }}>
+        <div>
+        <Typography variant="h6">{userInfo.userEmail}</Typography>
+        </div>
+        <div style={{ marginTop: '10px', display: 'flex', alignItems: 'center'}}>
+        <IconButton>
           <EditIcon style={{ fontSize: 15, marginRight: '5px' , marginBottom:'5px' }} />
-          <Link color="primary" href="/editProfile" >
-            프로필 편집
-          </Link>
+          <Typography variant='button'>프로필 편집</Typography>
+          </IconButton>
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+          <IconButton>
+          <ExitToAppIcon style={{ fontSize: 15, marginRight: '5px' , marginBottom:'5px' }}/>
+            <Typography variant='button'>회원 탈퇴</Typography>
+          </IconButton>
         </div>
       </div>
     </React.Fragment>

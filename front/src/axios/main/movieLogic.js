@@ -23,6 +23,16 @@ export const recommendMoviesDB = async () => {
   }
 };
 
+export const releaseSoonMovieDB = async () => {
+  try {
+    const res = await axios.get("http://localhost:8000/movie/releaseSoonMovie");
+    return res.data;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
 export const todayBoxofficeDB = async () => {
   try {
     const res = await axios.get(

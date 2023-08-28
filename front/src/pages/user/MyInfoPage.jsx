@@ -4,8 +4,8 @@ import Footer from '../../components/Footer';
 import { Container, Grid, Paper } from '@mui/material';
 import UserProfile from './UserProfile';
 import MovieArchive from './MovieArchive';
-import MyComments from './MyComments';
 import { getCookie } from '../../utils/getCookies';
+import ReleaseSoon from './ReleaseSoon';
 
 
 export default function MyInfoPage() {
@@ -21,32 +21,32 @@ export default function MyInfoPage() {
       <Container maxWidth="lg" sx={{ mt: 4, mb: 4 , marginTop: 15}}>
             <Grid container spacing={3}>
                  {/* 프로필 */}
-                 <Grid item xs={12} md={4} lg={5}>
+                 <Grid item xs={12} md={5} lg={5}>
                 <Paper
                 elevation={3}
                   sx={{
                     p: 2,
                     display: 'flex',
                     flexDirection: 'column',
-                    height: 240,
+                    height: 300,
                   }}
                 >
                   <UserProfile userInfo={userInfo}/>
                 </Paper>
               </Grid>
 
-              {/* 내 코멘트 */}
-              <Grid item xs={12} md={8} lg={7}>
+              {/* 개봉예정작 */}
+              <Grid item xs={12} md={7} lg={7}>
                 <Paper
                 elevation={3}
                   sx={{
                     p: 2,
                     display: 'flex',
                     flexDirection: 'column',
-                    height: 240,
+                    height: 300,
                   }}
                 >
-                  <MyComments userInfo={userInfo} />
+                  <ReleaseSoon userInfo={userInfo} />
                 </Paper>
               </Grid>
            

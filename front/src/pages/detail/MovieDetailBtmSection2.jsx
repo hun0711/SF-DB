@@ -69,7 +69,6 @@ const MovieDetailBtmSection2 = ({ movieDetail }) => {
     height: '350px',
     minHeight: '350px',
     maxHeight: '500px'
-
   } 
   return (
     <> 

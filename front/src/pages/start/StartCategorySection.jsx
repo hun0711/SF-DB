@@ -4,6 +4,7 @@ import Box from '@mui/material/Box';
 import ButtonBase from '@mui/material/ButtonBase';
 import Container from '@mui/material/Container';
 import Typography from '../../utils/typography';
+import { useNavigate } from 'react-router';
 
 const ImageBackdrop = styled('div')(({ theme }) => ({
   position: 'absolute',
@@ -101,7 +102,12 @@ const images = [
   },
 ];
 
+
 export default function StartCategorySection() {
+const navigate = new useNavigate()
+const handleImageLink = () => {
+  navigate('./main')
+}
   return (
     <Container component="section" sx={{ mt: 8, mb: 4 }}>
       <Typography variant="h4" marked="center" align="center" component="h2">
@@ -114,6 +120,7 @@ export default function StartCategorySection() {
             style={{
               width: image.width,
             }}
+            onClick={handleImageLink}
           >
             <Box
               sx={{
