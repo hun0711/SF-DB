@@ -9,6 +9,7 @@ import AppBar from "./AppBar";
 import { userAuth } from "../utils/userAuth"
 import { useNavigate } from "react-router";
 import { serialize } from "cookie";
+import { useState } from "react";
 
 const rightLink = {
   fontSize: 18,
@@ -23,7 +24,7 @@ function HeaderBar() {
   const navigate = useNavigate();
 
 
-  const [isMenubarOpen, setIsMenubarOpen] = React.useState(false);
+  const [isMenubarOpen, setIsMenubarOpen] = useState(false);
 
   //메뉴바 띄우기
   const handleMenuIconClick = () => {

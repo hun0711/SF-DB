@@ -107,7 +107,6 @@ public class LoginController {
 	
 	//네이버로그인
 	@PostMapping("/login/naver")
-	
 	public int naverSocialLogin(@RequestBody Map<String, String> naverLoginData, HttpServletRequest request) {
 		log.info("네이버 소셜 로그인 호출");
       try {

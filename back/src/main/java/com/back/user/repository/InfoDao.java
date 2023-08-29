@@ -1,0 +1,14 @@
+package com.back.user.repository;
+
+import java.util.Map;
+
+import org.apache.ibatis.annotations.Mapper;
+
+@Mapper
+public interface InfoDao {
+
+
+	public int changeUserName(Map<String, String> requestData);
+
+
+}

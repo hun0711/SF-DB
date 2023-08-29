@@ -31,12 +31,12 @@ import { useMovieContext } from '../../utils/movieDetailContext';
          
             const [userMovieComment , setUserMovieComment] = useState([])
             const [userCheckArchive , setUserCheckArchive] = useState([])
-            const [open, setOpen] = React.useState(false);
-            const [alertOn, setAlertOn] = React.useState(false);
-            const [textLength, setTextLength] = React.useState(0);
-            const [textValue, setTextValue] = React.useState('');
-            const [spoilerActive, setSpoilerActive] = React.useState(false);
-            const [anchorEl, setAnchorEl] = React.useState(null);
+            const [open, setOpen] = useState(false);
+            const [alertOn, setAlertOn] = useState(false);
+            const [textLength, setTextLength] = useState(0);
+            const [textValue, setTextValue] = useState('');
+            const [spoilerActive, setSpoilerActive] = useState(false);
+            const [anchorEl, setAnchorEl] = useState(null);
             const { updatedComments, setUpdatedComments } = useMovieContext();
             const { enqueueSnackbar } = useSnackbar(); 
 

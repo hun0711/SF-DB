@@ -102,7 +102,7 @@ export default function ReleaseSoon({ userInfo }) {
     <div style={{display:'flex'}}>
       <TheatersIcon style={{marginLeft:'15px',marginRight:'5px' ,marginTop:'3px'}}/><Title>개봉 예정</Title>
     <div style={{ marginLeft: '15px' }}>
-          <Button variant='contained' color='primary' style={{ fontSize: '10px' }} >
+          <Button color='science' variant='contained' style={{ fontSize: '10px' ,color:'white'}} >
             알림 설정
           </Button>
       </div>

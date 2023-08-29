@@ -15,6 +15,8 @@ export default function MyInfoPage() {
   const userProfileImage = getCookie('userProfileImage');
   const userInfo = {userId, userName, userProfileImage}
 
+  
+
   return (
     <>
       <HeaderBar/>

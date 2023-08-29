@@ -157,7 +157,7 @@ export default function MovieArchive({ userInfo }) {
           </div>
       )}
     </div>
-    <Link color="primary" href="/main" sx={{ mt: 3 , opacity: '50%' }}>
+    <Link color="primary" href="/main" sx={{ mt: 3 , opacity: '50%' , marginLeft:'16px'}}>
       See more Movies
     </Link>
       {/* 알림 창 */}

@@ -1,0 +1,28 @@
+package com.back.user.service;
+
+import java.util.Map;
+
+import org.springframework.stereotype.Service;
+
+import com.back.user.controller.InfoController;
+import com.back.user.repository.InfoDao;
+import com.back.user.repository.LoginDao;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
+@Service
+@Slf4j
+@RequiredArgsConstructor
+public class InfoServiceImpl implements InfoService {
+       private final InfoDao infoDao;
+
+	@Override
+	public int changeUserName(Map<String, String> requestData) {
+		log.info("InfoServiceImpl : changeUserName 호출");
+		int result = infoDao.changeUserName(requestData);
+		return result;
+	}
+	
+
+}

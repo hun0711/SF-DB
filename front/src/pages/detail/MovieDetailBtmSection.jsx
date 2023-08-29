@@ -9,20 +9,21 @@
   import { getCookie } from '../../utils/getCookies';
   import { useSnackbar } from 'notistack';
   import { useMovieContext } from '../../utils/movieDetailContext';
+import { userInfoDB } from '../../axios/user/loginLogic';
 
   const MovieDetailBtmSection = ({ movieDetail }) => {
     const movieId = movieDetail.movieId;
     const movieSeq = movieDetail.movieSeq;
     const userId = getCookie('userId')
     const [movieCommentList , setMovieCommentList] = useState([])
-    const [open, setOpen] = React.useState(false);
-    const [alertOn, setAlertOn] = React.useState(false);
-    const [textLength, setTextLength] = React.useState(0);
-    const [textValue, setTextValue] = React.useState('');
-    const [spoilerActive, setSpoilerActive] = React.useState(false);
-    const [anchorEl, setAnchorEl] = React.useState(null);
+    const [open, setOpen] = useState(false);
+    const [alertOn, setAlertOn] = useState(false);
+    const [textLength, setTextLength] = useState(0);
+    const [textValue, setTextValue] = useState('');
+    const [spoilerActive, setSpoilerActive] = useState(false);
+    const [anchorEl, setAnchorEl] = useState(null);
     const { enqueueSnackbar } = useSnackbar(); 
-    const [dialogOpen, setDialogOpen] = React.useState(false);
+    const [dialogOpen, setDialogOpen] = useState(false);
     const [currentCommentIndex, setCurrentCommentIndex] = useState(0);
 
     // 스포일러 코멘트 내용 보기 여부와 버튼 클릭 여부
@@ -35,21 +36,45 @@
         setMovieCommentList(updatedComments);
       }
     }, [updatedComments]);
-    useEffect(() => {
-      const getMovieComment = async () => {
-        try {
-          const res = await getMovieCommentDB(movieId, movieSeq);
-          setMovieCommentList(res);
-          console.log(res);
-        } catch (error) {
-          console.log("영화 코멘트 로드 실패 : ", error);
-        }
-      }
-    
-      if (movieId !== undefined && movieSeq !== undefined) {
-        getMovieComment();
-      }
-    }, [movieId, movieSeq]);
+
+useEffect(() => {
+  const getMovieComment = async () => {
+    try {
+      const res = await getMovieCommentDB(movieId, movieSeq);
+      // 코멘트 내 사용자 이름 업데이트
+      const updatedNames = await Promise.all(
+        res.map(async (comment,index) => {
+          try {
+            const userInfo = await fetchUserInfo(comment.userId);
+            return { ...comment, userName: userInfo[index].userName };
+          } catch (error) {
+            console.log("사용자 정보 가져오기 실패: ", error);
+            return comment;
+          }
+        })
+      );
+      setMovieCommentList(updatedNames);
+    } catch (error) {
+      console.log("영화 코멘트 로드 실패: ", error);
+    }
+  };
+
+  if (movieId !== undefined && movieSeq !== undefined) {
+    getMovieComment();
+  }
+}, [movieId, movieSeq]);
+
+// userId를 기반으로 userInfoDB에서 사용자 정보 가져옴
+const fetchUserInfo = async (userId) => {
+  try {
+    const userInfo = await userInfoDB(userId);
+    return userInfo;
+  } catch (error) {
+    throw error;
+  }
+};
+
+
 
 
 
@@ -215,7 +240,7 @@
     <div style={{ display: 'flex', alignItems: 'center' }}>
       {/* 프로필 이미지 */}
       <div style={{ width: 35, height: 35, borderRadius: '50%', overflow: 'hidden', marginRight: '10px' }}>
-        <img src={movieComment.userProfileImage ? movieComment.userProfileImage : 'images/astronaut.jpg'} alt="프로필" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+        <img src={movieComment.userProfileImage ? movieComment.userProfileImage : '/images/astronaut.jpg'} alt="프로필" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
       </div>
       {/* 사용자 이름 */}
       <Typography variant="subtitle2" sx={{ fontSize: 15 }}>

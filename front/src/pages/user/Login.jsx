@@ -51,12 +51,12 @@ const Login = () => {
       if (res === 1) {
         const userInfoRes = await userInfoDB(loginData.userId)
         console.log(userInfoRes);
-
+        const userProfileImageValue = userInfoRes[0].userProfileImage || '';
         document.cookie = serialize('userId', userInfoRes[0].userId, { path: '/' });
         document.cookie = serialize('userName', userInfoRes[0].userName , { path: '/' });
         document.cookie = serialize('userBirth', userInfoRes[0].userBirth , { path: '/' });
         document.cookie = serialize('userEmail', userInfoRes[0].userEmail , { path: '/' });
-        document.cookie = serialize('userProfileImage', userInfoRes[0].userProfileImage , { path: '/' });
+        document.cookie = serialize('userProfileImage', userProfileImageValue , { path: '/' });
         navigate('/main');
         const userName = getCookie('userName')
         enqueueSnackbar(`${userName}님, 어서오세요.`, { variant: 'success' });
