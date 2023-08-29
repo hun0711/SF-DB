@@ -9,17 +9,18 @@ import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import { Box, Button, IconButton, Modal, Snackbar, TextField } from '@mui/material';
 import { useState } from 'react';
 import { useSnackbar } from 'notistack';
-import { changeUserNameDB } from '../../axios/user/editLogic';
+import { changeUserNameDB, updateProfileImageDB } from '../../axios/user/editLogic';
 import { serialize } from 'cookie';
 import { useEffect } from 'react';
 import { userInfoDB } from '../../axios/user/loginLogic';
 import { getCookie } from '../../utils/getCookies';
+import { firebaseStorage } from '../../utils/firebase';
 
 
 export default function UserProfile({ userInfo }) {
-  const userName = getCookie('userName')
   const userId = userInfo.userId
-  const userProfileImage = userInfo.userProfileImage
+  const userName = getCookie('userName')
+  const userProfileImage = getCookie('userProfileImage')
   const [open, setOpen] = useState(false);
   const [userNameValue , setUserNameValue] = useState('')
   const [userProfileImageValue , setUserProfileImageValue] = useState('')
@@ -37,7 +38,7 @@ export default function UserProfile({ userInfo }) {
     }
     }
     getUserInfo()
-  },[userName])
+  },[userName,userProfileImage])
 
   const handleEditProfile = () => {
     setOpen(true)
@@ -46,6 +47,42 @@ export default function UserProfile({ userInfo }) {
   const handleAlertClose = () => {
     setAlertOn(false)
   }
+
+ /* 프사 변경 */
+const handleImageChange = async () => {
+  try {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'image/*';
+    input.onchange = async (event) => {
+      const file = event.target.files[0];
+      if (file) {
+        const fileRef = firebaseStorage.ref(`profileImage/${userId}`);
+        await fileRef.put(file);
+
+        const downloadURL = await fileRef.getDownloadURL();
+        setUserProfileImageValue(downloadURL);
+        try {
+        // 데이터베이스에 이미지 URL 업데이트 로직 수행
+         const requestData = {
+            userId : userId,
+            newUserProfileImage : downloadURL
+        }
+        const res = await updateProfileImageDB(requestData);
+        document.cookie = serialize('userProfileImage', downloadURL , { path: '/' });
+        enqueueSnackbar('프로필 이미지가 업데이트되었습니다!', { variant: 'success' });
+        setAlertOn(true);
+        } catch (error) {
+        console.log('프로필 이미지 변경 실패 : ', error);        }
+      }
+    };
+    input.click();
+  } catch (error) {
+    console.error('프로필 이미지 업로드 에러: ', error);
+    enqueueSnackbar('프로필 이미지 업로드 중 오류가 발생했습니다.', { variant: 'error' });
+    setAlertOn(true);
+  }
+};
 
 
   /* 이름 변경 */
@@ -71,6 +108,9 @@ export default function UserProfile({ userInfo }) {
     setAlertOn(true);
   }
 }
+
+
+
 
 /* Style */
   const modalStyle = {
@@ -128,7 +168,7 @@ export default function UserProfile({ userInfo }) {
     <div style={{ width: '150px', height: '150px', borderRadius: '50%', overflow: 'hidden', marginBottom: '10px'}}>
           <img src={userProfileImage ? userProfileImage : '/images/astronaut.jpg'} style={{ width: '100%', height: '100%', objectFit: 'cover' }}/>
         </div>
-        <Button color="science" variant="contained" style={{ color: 'white',fontSize:'12px',marginBottom:'20px'}}>사진 편집</Button>
+        <Button color="science" variant="contained" onClick={handleImageChange} style={{ color: 'white',fontSize:'12px',marginBottom:'20px'}}>사진 편집</Button>
 
 {/* 이름 변경 */}
 <div style={{display:'flex', flexDirection:'column'}}>

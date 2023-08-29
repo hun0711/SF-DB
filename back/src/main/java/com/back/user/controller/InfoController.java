@@ -35,4 +35,11 @@ public class InfoController {
 	    int result = infoService.changeUserName(requestData);
 	    return result;
 	}
+	//이미지 변경
+	@PostMapping("/updateProfileImage")
+	public int updateProfileImage(@RequestBody Map<String, String> requestData) {
+		log.info("InfoController : updateProfileImage 호출");
+		int result = infoService.updateProfileImage(requestData);
+		return result;
+	}
 }

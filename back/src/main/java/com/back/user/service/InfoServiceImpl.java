@@ -23,6 +23,13 @@ public class InfoServiceImpl implements InfoService {
 		int result = infoDao.changeUserName(requestData);
 		return result;
 	}
+
+	@Override
+	public int updateProfileImage(Map<String, String> requestData) {
+		log.info("InfoServiceImpl : updateProfileImage 호출");
+		int result = infoDao.updateProfileImage(requestData);
+		return result;
+	}
 	
 
 }

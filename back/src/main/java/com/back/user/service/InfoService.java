@@ -10,5 +10,7 @@ public interface InfoService {
 
 	int changeUserName(Map<String, String> requestData);
 
+	int updateProfileImage(Map<String, String> requestData);
+
 
 }

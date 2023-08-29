@@ -41,12 +41,12 @@ useEffect(() => {
   const getMovieComment = async () => {
     try {
       const res = await getMovieCommentDB(movieId, movieSeq);
-      // 코멘트 내 사용자 이름 업데이트
+      // 코멘트 내 사용자 이름,이미지 업데이트
       const updatedNames = await Promise.all(
         res.map(async (comment,index) => {
           try {
             const userInfo = await fetchUserInfo(comment.userId);
-            return { ...comment, userName: userInfo[index].userName };
+            return { ...comment, userName: userInfo[index].userName , userProfileImage: userInfo[index].userProfileImage};
           } catch (error) {
             console.log("사용자 정보 가져오기 실패: ", error);
             return comment;

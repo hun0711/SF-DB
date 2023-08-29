@@ -10,5 +10,7 @@ public interface InfoDao {
 
 	public int changeUserName(Map<String, String> requestData);
 
+	public int updateProfileImage(Map<String, String> requestData);
+
 
 }
