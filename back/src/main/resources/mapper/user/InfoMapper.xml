@@ -16,6 +16,20 @@
         WHERE userId = #{userId}
     </update>
 
+  <!-- 유저 아이디 찾기  -->
+<select id="findIdByUserNameAndEmail" parameterType="map" resultType="java.lang.String">
+SELECT userId 
+FROM user
+WHERE userName = #{userName}
+  AND userEmail = #{userEmail}
+</select>
 
-
+<!-- 유저 비밀번호 찾기  -->
+<select id="findPwByUserNameAndIdAndEmail" parameterType="map" resultType="java.lang.String">
+SELECT userPw
+  FROM user
+WHERE userName = #{userName}
+  AND userId = #{userId}
+  AND userEmail = #{userEmail}
+</select>
 </mapper>

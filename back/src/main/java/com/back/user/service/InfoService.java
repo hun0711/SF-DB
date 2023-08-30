@@ -12,5 +12,9 @@ public interface InfoService {
 
 	int updateProfileImage(Map<String, String> requestData);
 
+	String findIdByUserNameAndEmail(Map<String, String> userData);
+
+	String findPwByUserNameAndIdAndEmail(Map<String, String> userData);
+
 
 }

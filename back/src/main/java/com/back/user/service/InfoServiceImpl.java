@@ -30,6 +30,20 @@ public class InfoServiceImpl implements InfoService {
 		int result = infoDao.updateProfileImage(requestData);
 		return result;
 	}
+
+	@Override
+	public String findIdByUserNameAndEmail(Map<String, String> userData) {
+		log.info("InfoServiceImpl : findIdByUserNameAndEmail 호출");
+		String userId = infoDao.findIdByUserNameAndEmail(userData);
+		return userId;
+	}
+
+	@Override
+	public String findPwByUserNameAndIdAndEmail(Map<String, String> userData) {
+		log.info("InfoServiceImpl : findPwByUserNameAndIdAndEmail 호출");
+		String userPw = infoDao.findPwByUserNameAndIdAndEmail(userData);
+		return userPw;
+	}
 	
 
 }

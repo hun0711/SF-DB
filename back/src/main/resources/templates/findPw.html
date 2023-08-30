@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        /* CSS 스타일 작성 */
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .mail-container {
+            background-color: #f3f3f3;
+            padding: 20px;
+        }
+        .mail-title {
+            color: #333333;
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+        .mail-content {
+            color: #555555;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+<div style="margin:100px;">
+    <h1> 안녕하세요, SFDB 입니다.</h1>
+    <h1> 회원 님의 비밀번호 입니다.</h1>
+</div>
+    <div align='center' class="mail-container">
+        <h1 class="mail-title">비밀번호 찾기 결과</h1>
+        <p class="mail-content">
+          SFDB '{{userId}}'의 비밀번호는 '{{userPw}}' 입니다.
+   </p>
+    </div>
+</body>
+</html>

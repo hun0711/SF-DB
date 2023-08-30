@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Button, CssBaseline, TextField, FormControl, FormHelperText, Grid, Box, Typography, Container, Link, Snackbar, Alert} from '@mui/material/';
+import CancelIcon from '@mui/icons-material/Cancel';
+import { Button, CssBaseline, TextField, FormControl, FormHelperText, Grid, Box, Typography, Container, Link, Snackbar, Alert, Modal, IconButton} from '@mui/material/';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useNavigate } from 'react-router';
 import { styled } from 'styled-components';
@@ -10,6 +11,7 @@ import KakaoLogin from './KakaoLogin';
 import NaverLogin from './NaverLogin';
 import { useSnackbar } from 'notistack';
 import { getCookie } from '../../utils/getCookies';
+import { findId, findPw } from '../../axios/user/mailLogic';
 
 
 const FormHelperTexts = styled(FormHelperText)`
@@ -29,13 +31,32 @@ const Login = () => {
   const navigate = useNavigate();
   const [id, setId] = useState('');
   const [pw, setPw] = useState('');
+  const [emailValue, setEmailValue] = useState('')
+  const [idValue, setIdValue] = useState('')
+  const [nameValue, setNameValue] = useState('')
   const [alertOn, setAlertOn] = useState(false);
+  const [findIdModalopen, setFindIdModalOpen] = useState(false);
+  const [findPwModalopen, setFindPwModalOpen] = useState(false);
+  const [emailError, setEmailError] = useState('');
+  const [isEmailSend, setIsEmailSend] = useState(false);
+  const emailRegex = /([\w-.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
 
 
   const { enqueueSnackbar } = useSnackbar(); 
   const handleClose = () => {
     setAlertOn(false)
   }
+  const handleFindIdClick = () => {
+    setFindIdModalOpen(true)
+  }
+  const handleFindIdModalClose = () => setFindIdModalOpen(false); 
+
+  const handleFindPwClick = () => {
+    setFindPwModalOpen(true)
+  }
+  const handleFindPwModalClose = () => setFindPwModalOpen(false); 
+
+
 
   {/* 사이트 자체 로그인 */}
   const handleLogin = async (e) => {
@@ -73,6 +94,74 @@ const Login = () => {
     }
   };
 
+/* 아이디 찾기 (이메일 발송) */
+   const handleFindId = async() => {
+    if(!emailRegex.test(emailValue)){
+      setEmailError('올바른 이메일 형식이 아닙니다.');
+      return;
+    }
+    const userData = {
+      userName : nameValue,
+      userEmail : emailValue
+    }
+    try {
+      const res = await findId(userData)
+      if(res === 1){
+        enqueueSnackbar('이메일이 발송되었습니다, 확인해주세요.', { variant: 'success' });
+        setAlertOn(true);
+        setIsEmailSend(true);
+      }else{
+        enqueueSnackbar('`${nameValue}님의 아이디가 존재하지 않습니다.`', { variant: 'error' });
+        setAlertOn(true);
+        console.log('아이디 찾기 실패');
+      }
+    } catch (error) {
+      enqueueSnackbar('네트워크 오류', { variant: 'error' });
+        setAlertOn(true);
+      console.log('아이디 찾기 실패 : ', error);
+    }
+   }
+
+/* 비밀번호 찾기 (이메일 발송) */
+   const handleFindPw = async() => {
+    if(!emailRegex.test(emailValue)){
+      setEmailError('올바른 이메일 형식이 아닙니다.');
+      return;
+    }
+    const userData = {
+      userName : nameValue,
+      userId : idValue,
+      userEmail : emailValue
+    }
+    try {
+      const res = await findPw(userData)
+      if(res === 1){
+        enqueueSnackbar('이메일이 발송되었습니다, 확인해주세요.', { variant: 'success' });
+        setAlertOn(true);
+        setIsEmailSend(true);
+      }else{
+        enqueueSnackbar('입력 정보를 다시 확인해주세요.', { variant: 'error' });
+        setAlertOn(true);
+        console.log('아이디 찾기 실패');
+      }
+    } catch (error) {
+      enqueueSnackbar('네트워크 오류', { variant: 'error' });
+        setAlertOn(true);
+      console.log('아이디 찾기 실패 : ', error);
+    }
+   }
+
+
+
+
+  /* Style */
+  const modalStyle = {
+    position: 'absolute', top: '50%',left: '50%',
+    transform: 'translate(-50%, -50%)', width: 500, height: 300,
+    bgcolor: 'background.paper', borderRadius: '10px', boxShadow: 24, p: 4,
+    display: 'flex', flexDirection: 'column', justifyContent: 'space-between'
+  };
+  
 
   return (
     <ThemeProvider theme={theme}>
@@ -144,6 +233,23 @@ const Login = () => {
               >
                 로그인
               </Button>
+   {/* 아이디 찾기와 비밀번호 찾기를 가로로 정렬 */}
+   <Grid container justifyContent="center" spacing={2} sx={{ mt: 1 , marginTop:'-20px', marginBottom:'10px'}}>
+                <Grid item>
+                  <Typography variant="body2">
+                    <Button variant='text' onClick={handleFindIdClick}>
+                      아이디 찾기
+                    </Button>
+                  </Typography>
+                </Grid>
+                <Grid item>
+                  <Typography variant="body2">
+                  <Button variant='text' onClick={handleFindPwClick}>
+                      비밀번호 찾기
+                    </Button>
+                  </Typography>
+                </Grid>
+              </Grid>
 
       {/* 소셜로그인 */}
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px', width: '280px', margin: 'auto' }}>
@@ -155,27 +261,125 @@ const Login = () => {
             <KakaoLogin/>
           </div>
 
-              {/* 아이디 찾기와 비밀번호 찾기를 가로로 정렬 */}
-              <Grid container justifyContent="center" spacing={2} sx={{ mt: 1 }}>
-                <Grid item>
-                  <Typography variant="body2">
-                    <Link href="/findid" underline="always">
-                      아이디 찾기
-                    </Link>
-                  </Typography>
-                </Grid>
-                <Grid item>
-                  <Typography variant="body2">
-                    <Link href="/findpw" underline="always">
-                      비밀번호 찾기
-                    </Link>
-                  </Typography>
-                </Grid>
-              </Grid>
+           
             </FormControl>
             <FormHelperTexts></FormHelperTexts>
           </Boxs>
         </Box>
+
+        <Modal
+  open={findIdModalopen}
+  onClose={handleFindIdModalClose}
+  aria-labelledby="modal-modal-title"
+  aria-describedby="modal-modal-description"
+>
+  <Box sx={modalStyle}>
+  <IconButton
+          style={{ position: 'absolute', top: '25px', right: '20px' }}
+          onClick={handleFindIdModalClose}
+        >
+          <CancelIcon />
+        </IconButton>
+    <Typography id="modal-modal-title" variant="h6" component="h2">
+     아이디 찾기
+    </Typography>
+    <Typography id="modal-modal-title" variant="h6" component="h2" style={{fontSize:'12px'}}>
+     가입 시 등록한 이메일로 아이디를 찾으실 수 있습니다.
+    </Typography>
+<div style={{marginTop:'30px'}}>
+<Typography variant='overline' style={{fontSize:'15px',marginRight:'5px'}}>· 이름 : </Typography>
+<TextField
+  hiddenLabel
+  id="userName"
+  variant="standard"
+  onChange={(event) => {
+    setNameValue(event.target.value)
+  }}/>
+</div>
+
+{/* 이메일 설정 */}
+<div style={{display:'flex', flexDirection:'column' ,marginTop:'20px', marginBottom:'50px'}}>
+  <div>
+  <Typography variant='overline' style={{fontSize:'15px',marginRight:'5px'}}>· 이메일 : </Typography>
+  <TextField
+  hiddenLabel
+  id="userEmail"
+  error={emailError !== ''}
+  helperText={emailError}
+  variant="standard"
+  onChange={(event) => {
+    setEmailValue(event.target.value)
+  }}/>
+  <Button 
+  disabled={isEmailSend}
+   variant="contained" style={{color:'white',fontSize:'10px' , marginLeft:'15px' , marginBottom:'3px'}} onClick={handleFindId}>발송</Button>
+  </div>
+</div>  
+  </Box>
+</Modal>
+
+
+<Modal
+  open={findPwModalopen}
+  onClose={handleFindPwModalClose}
+  aria-labelledby="modal-modal-title"
+  aria-describedby="modal-modal-description"
+>
+  <Box sx={modalStyle}>
+  <IconButton
+          style={{ position: 'absolute', top: '25px', right: '20px' }}
+          onClick={handleFindPwModalClose}
+        >
+          <CancelIcon />
+        </IconButton>
+    <Typography id="modal-modal-title" variant="h6" component="h2">
+     비밀번호 찾기
+    </Typography>
+    <Typography id="modal-modal-title" variant="h6" component="h2" style={{fontSize:'12px'}}>
+     가입 시 등록했던 이름,아이디,이메일을 입력해주세요.
+    </Typography>
+<div style={{marginTop:'30px'}}>
+<Typography variant='overline' style={{fontSize:'15px',marginRight:'5px'}}>· 이름 : </Typography>
+<TextField
+  hiddenLabel
+  id="userName"
+  variant="standard"
+  onChange={(event) => {
+    setNameValue(event.target.value)
+  }}/>
+</div>
+
+{/* 이메일 설정 */}
+<div style={{display:'flex', flexDirection:'column' ,marginTop:'20px', marginBottom:'50px'}}>
+<Typography variant='overline' style={{fontSize:'15px',marginRight:'5px'}}>· 아이디 : </Typography>
+  <TextField
+  hiddenLabel
+  id="userId"
+  variant="standard"
+  onChange={(event) => {
+    setIdValue(event.target.value)
+  }}/>
+  <div>
+  <Typography variant='overline' style={{fontSize:'15px',marginRight:'5px'}}>· 이메일 : </Typography>
+  <TextField
+  hiddenLabel
+  id="userEmail"
+  error={emailError !== ''}
+  helperText={emailError}
+  variant="standard"
+  onChange={(event) => {
+    setEmailValue(event.target.value)
+  }}/>
+  <Button 
+  disabled={isEmailSend}
+   variant="contained" style={{color:'white',fontSize:'10px' , marginLeft:'15px' , marginBottom:'3px'}} onClick={handleFindPw}>메일 발송</Button>
+  </div>
+</div>  
+  </Box>
+</Modal>
+
+
+
         <Snackbar open={alertOn} autoHideDuration={3000} onClose={handleClose}>
           <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
             로그인에 성공했습니다!

@@ -85,7 +85,10 @@ import com.back.user.repository.LoginDao;
 			                    if (!apiDao.existsDirectorById(movieDirectorsDto.getDirectorId())) {
 				                    apiDao.saveDirectors(movieDirectorsDto);
 				                } else {
-				                    log.info("감독 정보가 이미 존재합니다. directorId: {}", movieDirectorsDto.getDirectorId());
+									/*
+									 * log.info("감독 정보가 이미 존재합니다. directorId: {}",
+									 * movieDirectorsDto.getDirectorId());
+									 */
 				                }
 		                    }
 	                        String directorIds = String.join("," , directorIdList);
@@ -107,7 +110,7 @@ import com.back.user.repository.LoginDao;
 			                    if (!apiDao.existsActorById(movieActorsDto.getActorId())) {
 				                    apiDao.saveActors(movieActorsDto);
 				                } else {
-				                    log.info("배우 정보가 이미 존재합니다. directorId: {}", movieActorsDto.getActorId());
+									/* log.info("배우 정보가 이미 존재합니다. directorId: {}", movieActorsDto.getActorId()); */
 				                }
 		                   }
 		                   String actorNms = String.join(",", actorNmList);
@@ -219,7 +222,10 @@ import com.back.user.repository.LoginDao;
 			                    if (!apiDao.existsDirectorById(movieDirectorsDto.getDirectorId())) {
 				                    apiDao.saveDirectors(movieDirectorsDto);
 				                } else {
-				                    log.info("감독 정보가 이미 존재합니다. directorId: {}", movieDirectorsDto.getDirectorId());
+									/*
+									 * log.info("감독 정보가 이미 존재합니다. directorId: {}",
+									 * movieDirectorsDto.getDirectorId());
+									 */
 				                }
 		                    }
 	                       String directorIds = String.join("," , directorIdList);
@@ -241,7 +247,7 @@ import com.back.user.repository.LoginDao;
 			                    if (!apiDao.existsActorById(movieActorsDto.getActorId())) {
 				                    apiDao.saveActors(movieActorsDto);
 				                } else {
-				                    log.info("배우 정보가 이미 존재합니다. directorId: {}", movieActorsDto.getActorId());
+									/* log.info("배우 정보가 이미 존재합니다. directorId: {}", movieActorsDto.getActorId()); */
 				                }
 		                   }
 		                   String actorNms = String.join(",", actorNmList);
@@ -281,7 +287,7 @@ import com.back.user.repository.LoginDao;
 		                	System.out.println(title);
 		                    apiDao.saveBoxOffice(boxOfficeDto);
 		                } else {
-		                    log.info("영화명 '{}'이(가) 이미 존재하여 저장하지 않음", title);
+							/* log.info("영화명 '{}'이(가) 이미 존재하여 저장하지 않음", title); */
 		                }
 	               }
 	           } catch (IOException e) {
@@ -361,7 +367,10 @@ import com.back.user.repository.LoginDao;
 					                    if (!apiDao.existsDirectorById(movieDirectorsDto.getDirectorId())) {
 						                    apiDao.saveDirectors(movieDirectorsDto);
 						                } else {
-						                    log.info("감독 정보가 이미 존재합니다. directorId: {}", movieDirectorsDto.getDirectorId());
+											/*
+											 * log.info("감독 정보가 이미 존재합니다. directorId: {}",
+											 * movieDirectorsDto.getDirectorId());
+											 */
 						                }
 				                    }
 			                       String directorIds = String.join("," , directorIdList);
@@ -383,7 +392,9 @@ import com.back.user.repository.LoginDao;
 					                    if (!apiDao.existsActorById(movieActorsDto.getActorId())) {
 						                    apiDao.saveActors(movieActorsDto);
 						                } else {
-						                    log.info("배우 정보가 이미 존재합니다. directorId: {}", movieActorsDto.getActorId());
+											/*
+											 * log.info("배우 정보가 이미 존재합니다. directorId: {}", movieActorsDto.getActorId());
+											 */
 						                }
 				                   }
 				                   String actorNms = String.join(",", actorNmList);
@@ -422,7 +433,7 @@ import com.back.user.repository.LoginDao;
 				                if (!apiDao.existsBoxofficeByTitle(title)) {
 				                    apiDao.saveBoxOffice(boxOfficeDto);
 				                } else {
-				                    log.info("영화명 '{}'이(가) 이미 존재하여 저장하지 않음", title);
+									/* log.info("영화명 '{}'이(가) 이미 존재하여 저장하지 않음", title); */
 				                }
 			               }
 			           } catch (IOException e) {
@@ -481,7 +492,10 @@ import com.back.user.repository.LoginDao;
 				                    if (!apiDao.existsDirectorById(movieDirectorsDto.getDirectorId())) {
 					                    apiDao.saveDirectors(movieDirectorsDto);
 					                } else {
-					                    log.info("감독 정보가 이미 존재합니다. directorId: {}", movieDirectorsDto.getDirectorId());
+										/*
+										 * log.info("감독 정보가 이미 존재합니다. directorId: {}",
+										 * movieDirectorsDto.getDirectorId());
+										 */
 					                }
 			                    }
 		                        String directorIds = String.join("," , directorIdList);
@@ -505,7 +519,7 @@ import com.back.user.repository.LoginDao;
 				                    if (!apiDao.existsActorById(movieActorsDto.getActorId())) {
 					                    apiDao.saveActors(movieActorsDto);
 					                } else {
-					                    log.info("배우 정보가 이미 존재합니다. directorId: {}", movieActorsDto.getActorId());
+										/* log.info("배우 정보가 이미 존재합니다. directorId: {}", movieActorsDto.getActorId()); */
 					                }
 			                   }
 			                   String actorNms = String.join(",", actorNmList);
@@ -598,7 +612,10 @@ import com.back.user.repository.LoginDao;
 				                    if (!apiDao.existsDirectorById(movieDirectorsDto.getDirectorId())) {
 					                    apiDao.saveDirectors(movieDirectorsDto);
 					                } else {
-					                    log.info("감독 정보가 이미 존재합니다. directorId: {}", movieDirectorsDto.getDirectorId());
+										/*
+										 * log.info("감독 정보가 이미 존재합니다. directorId: {}",
+										 * movieDirectorsDto.getDirectorId());
+										 */
 					                }
 			                    }
 		                        String directorIds = String.join("," , directorIdList);
@@ -620,7 +637,7 @@ import com.back.user.repository.LoginDao;
 				                    if (!apiDao.existsActorById(movieActorsDto.getActorId())) {
 					                    apiDao.saveActors(movieActorsDto);
 					                } else {
-					                    log.info("배우 정보가 이미 존재합니다. directorId: {}", movieActorsDto.getActorId());
+										/* log.info("배우 정보가 이미 존재합니다. directorId: {}", movieActorsDto.getActorId()); */
 					                }
 			                   }
 			                   String actorNms = String.join(",", actorNmList);

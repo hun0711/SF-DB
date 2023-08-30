@@ -12,8 +12,9 @@ export default function MyInfoPage() {
  
   const userId = getCookie('userId')
   const userName = getCookie('userName')
+  const userEmail = getCookie('userEmail');
   const userProfileImage = getCookie('userProfileImage');
-  const userInfo = {userId, userName, userProfileImage}
+  const userInfo = {userId, userName, userEmail,userProfileImage}
 
   
 

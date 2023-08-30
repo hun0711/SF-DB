@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        /* CSS 스타일 작성 */
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .mail-container {
+            background-color: #f3f3f3;
+            padding: 20px;
+        }
+       .poster-style{
+        width:'100%';
+        height:auto;
+        margin-top:'10px';
+        margin-bottom:'10px';
+       }
+        .mail-title {
+            color: #333333;
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+        .mail-content {
+            color: #555555;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+<div style="margin:100px;">
+    <h1> 안녕하세요, SFDB 입니다.</h1>
+    <h1> 회원님이 알림 설정 하신 영화가 개봉했어요!</h1>
+</div>
+    <div align='center' class="mail-container">
+        <h1 class="mail-title">영화 개봉 알림</h1>
+        <img src="{{posterUrls}}" class="poster-style" alt="포스터 이미지">
+        <p class="mail-content">
+            영화 제목: {{title}}<br>
+            출연진: {{actorNms}}<br>
+            줄거리: {{plotText}}
+ </p>
+    </div>
+</body>
+</html>

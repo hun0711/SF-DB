@@ -12,5 +12,9 @@ public interface InfoDao {
 
 	public int updateProfileImage(Map<String, String> requestData);
 
+	public String findIdByUserNameAndEmail(Map<String, String> userData);
+
+	public String findPwByUserNameAndIdAndEmail(Map<String, String> userData);
+
 
 }
