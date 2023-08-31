@@ -32,7 +32,8 @@ dependencies {
     implementation 'org.springframework.security:spring-security-crypto'
 	implementation 'org.springframework:spring-context-support:5.3.9' 
 	implementation 'com.sun.mail:javax.mail:1.6.2'
-	implementation 'org.freemarker:freemarker:2.3.31'
+	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+	
     implementation 'org.mybatis.dynamic-sql:mybatis-dynamic-sql:1.5.0'
     implementation 'mysql:mysql-connector-java:8.0.33'
     

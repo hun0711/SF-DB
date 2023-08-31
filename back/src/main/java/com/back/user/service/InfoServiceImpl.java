@@ -2,6 +2,7 @@ package com.back.user.service;
 
 import java.util.Map;
 
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.back.user.controller.InfoController;
@@ -43,6 +44,20 @@ public class InfoServiceImpl implements InfoService {
 		log.info("InfoServiceImpl : findPwByUserNameAndIdAndEmail 호출");
 		String userPw = infoDao.findPwByUserNameAndIdAndEmail(userData);
 		return userPw;
+	}
+
+	@Override
+	public void updateUserPassword(String userId, String encodedPassword) {
+		log.info("InfoServiceImpl : updateUserPassword 호출");
+		infoDao.updateUserPassword(userId, encodedPassword);
+		
+	}
+
+
+	@Override
+	public String getEncryptedPassword(String userId) {
+		log.info("InfoServiceImpl : getEncryptedPassword 호출");
+		 return infoDao.getEncryptedPassword(userId);
 	}
 	
 

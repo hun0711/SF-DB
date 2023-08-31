@@ -11,7 +11,7 @@ import KakaoLogin from './KakaoLogin';
 import NaverLogin from './NaverLogin';
 import { useSnackbar } from 'notistack';
 import { getCookie } from '../../utils/getCookies';
-import { findId, findPw } from '../../axios/user/mailLogic';
+import { checkTempPw, findId, findPw } from '../../axios/user/mailLogic';
 
 
 const FormHelperTexts = styled(FormHelperText)`
@@ -32,11 +32,14 @@ const Login = () => {
   const [id, setId] = useState('');
   const [pw, setPw] = useState('');
   const [emailValue, setEmailValue] = useState('')
+  const [tempPwValue, setTempPwValue] = useState('')
   const [idValue, setIdValue] = useState('')
   const [nameValue, setNameValue] = useState('')
   const [alertOn, setAlertOn] = useState(false);
   const [findIdModalopen, setFindIdModalOpen] = useState(false);
   const [findPwModalopen, setFindPwModalOpen] = useState(false);
+  const [tempPwError, setTempPwError] = useState('');
+  const [isCheckedTempPw, setIsCheckedTempPw] = useState(false);
   const [emailError, setEmailError] = useState('');
   const [isEmailSend, setIsEmailSend] = useState(false);
   const emailRegex = /([\w-.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
@@ -104,20 +107,22 @@ const Login = () => {
       userName : nameValue,
       userEmail : emailValue
     }
+    setIsEmailSend(true);
     try {
       const res = await findId(userData)
       if(res === 1){
         enqueueSnackbar('이메일이 발송되었습니다, 확인해주세요.', { variant: 'success' });
         setAlertOn(true);
-        setIsEmailSend(true);
       }else{
-        enqueueSnackbar('`${nameValue}님의 아이디가 존재하지 않습니다.`', { variant: 'error' });
+        enqueueSnackbar(`${nameValue}님의 아이디가 존재하지 않습니다.`, { variant: 'error' });
         setAlertOn(true);
+        setIsEmailSend(false)
         console.log('아이디 찾기 실패');
       }
     } catch (error) {
       enqueueSnackbar('네트워크 오류', { variant: 'error' });
         setAlertOn(true);
+        setIsEmailSend(false)
       console.log('아이디 찾기 실패 : ', error);
     }
    }
@@ -133,21 +138,50 @@ const Login = () => {
       userId : idValue,
       userEmail : emailValue
     }
+    setIsEmailSend(true);
     try {
       const res = await findPw(userData)
       if(res === 1){
         enqueueSnackbar('이메일이 발송되었습니다, 확인해주세요.', { variant: 'success' });
         setAlertOn(true);
-        setIsEmailSend(true);
       }else{
-        enqueueSnackbar('입력 정보를 다시 확인해주세요.', { variant: 'error' });
+        enqueueSnackbar('일치하는 정보가 없습니다. 정보를 다시 확인해주세요.', { variant: 'error' });
         setAlertOn(true);
-        console.log('아이디 찾기 실패');
+        setIsEmailSend(false)
+        console.log('비밀번호 찾기 실패');
       }
     } catch (error) {
       enqueueSnackbar('네트워크 오류', { variant: 'error' });
         setAlertOn(true);
-      console.log('아이디 찾기 실패 : ', error);
+        setIsEmailSend(false)
+      console.log('비밀번호 찾기 실패 : ', error);
+    }
+   }
+
+/* 임시 비번 확인 (이메일 발송) */
+   const handleCheckTempPw = async() => {
+    const userId = idValue;
+    const tempPw = tempPwValue;
+
+    setIsCheckedTempPw(true);
+    try {
+      const res = await checkTempPw(userId , tempPw)
+      if(res){
+        enqueueSnackbar('임시 비밀번호가 확인되었습니다, 로그인해주세요.', { variant: 'success' });
+        setAlertOn(true);
+        setTempPwError('')
+      }else{
+        enqueueSnackbar('입력 값이 임시 비밀번호와 일치하지 않습니다.', { variant: 'error' });
+        setAlertOn(true);
+        setTempPwError('임시 비밀번호를 정확히 입력해주세요.')
+        setIsCheckedTempPw(false)
+        console.log('임시 비밀번호 확인 실패');
+      }
+    } catch (error) {
+      enqueueSnackbar('네트워크 오류', { variant: 'error' });
+        setAlertOn(true);
+        setIsCheckedTempPw(false)
+      console.log(' 임시 비밀번호 확인 실패 : ', error);
     }
    }
 
@@ -157,10 +191,11 @@ const Login = () => {
   /* Style */
   const modalStyle = {
     position: 'absolute', top: '50%',left: '50%',
-    transform: 'translate(-50%, -50%)', width: 500, height: 300,
+    transform: 'translate(-50%, -50%)', width: 500, height: 350,
     bgcolor: 'background.paper', borderRadius: '10px', boxShadow: 24, p: 4,
     display: 'flex', flexDirection: 'column', justifyContent: 'space-between'
   };
+
   
 
   return (
@@ -292,6 +327,7 @@ const Login = () => {
   hiddenLabel
   id="userName"
   variant="standard"
+  style={{marginLeft:'15px'}}
   onChange={(event) => {
     setNameValue(event.target.value)
   }}/>
@@ -312,13 +348,14 @@ const Login = () => {
   }}/>
   <Button 
   disabled={isEmailSend}
-   variant="contained" style={{color:'white',fontSize:'10px' , marginLeft:'15px' , marginBottom:'3px'}} onClick={handleFindId}>발송</Button>
+   variant="contained" style={{color:'white',fontSize:'10px' , marginLeft:'15px' , marginBottom:'3px'}} onClick={handleFindId}>메일 확인</Button>
   </div>
 </div>  
   </Box>
 </Modal>
 
 
+{/* 비밀번호  */}
 <Modal
   open={findPwModalopen}
   onClose={handleFindPwModalClose}
@@ -329,7 +366,7 @@ const Login = () => {
   <IconButton
           style={{ position: 'absolute', top: '25px', right: '20px' }}
           onClick={handleFindPwModalClose}
-        >
+          >
           <CancelIcon />
         </IconButton>
     <Typography id="modal-modal-title" variant="h6" component="h2">
@@ -338,19 +375,24 @@ const Login = () => {
     <Typography id="modal-modal-title" variant="h6" component="h2" style={{fontSize:'12px'}}>
      가입 시 등록했던 이름,아이디,이메일을 입력해주세요.
     </Typography>
-<div style={{marginTop:'30px'}}>
+    <Typography id="modal-modal-title" variant="h6" component="h2" style={{fontSize:'12px'}}>
+     이메일로 발송된 임시 비밀번호를 입력해주세요.
+    </Typography>
+<div style={{marginTop:'10px', marginBottom:'40px' ,display:'flex', flexDirection:'column'}}>
+  <div>
 <Typography variant='overline' style={{fontSize:'15px',marginRight:'5px'}}>· 이름 : </Typography>
 <TextField
   hiddenLabel
   id="userName"
   variant="standard"
+  style={{marginLeft:'15px'}}
   onChange={(event) => {
     setNameValue(event.target.value)
   }}/>
-</div>
+  </div>
 
-{/* 이메일 설정 */}
-<div style={{display:'flex', flexDirection:'column' ,marginTop:'20px', marginBottom:'50px'}}>
+
+<div>
 <Typography variant='overline' style={{fontSize:'15px',marginRight:'5px'}}>· 아이디 : </Typography>
   <TextField
   hiddenLabel
@@ -359,7 +401,9 @@ const Login = () => {
   onChange={(event) => {
     setIdValue(event.target.value)
   }}/>
-  <div>
+  </div>
+
+<div>
   <Typography variant='overline' style={{fontSize:'15px',marginRight:'5px'}}>· 이메일 : </Typography>
   <TextField
   hiddenLabel
@@ -372,8 +416,26 @@ const Login = () => {
   }}/>
   <Button 
   disabled={isEmailSend}
-   variant="contained" style={{color:'white',fontSize:'10px' , marginLeft:'15px' , marginBottom:'3px'}} onClick={handleFindPw}>메일 발송</Button>
+  variant="contained" style={{color:'white',fontSize:'10px' , marginLeft:'15px' , marginBottom:'3px'}} onClick={handleFindPw}>메일 확인</Button>
   </div>
+
+<div style={{marginTop:'5px' , marginBottom:'5px'}}>
+  <Typography variant='overline' style={{fontSize:'15px',  marginRight:'5px'}}>· 임시 비밀번호 : </Typography>
+  <TextField
+  hiddenLabel
+  id="tempPw"
+  error={tempPwError !== ''}
+  helperText={tempPwError}
+  variant="standard"
+  onChange={(event) => {
+    setTempPwValue(event.target.value)
+  }}/>
+  <Button 
+  disabled={isCheckedTempPw}
+  variant="contained" style={{color:'white',fontSize:'10px' , marginLeft:'15px' , marginBottom:'3px'}} onClick={handleCheckTempPw}>확인</Button>
+  </div>
+
+
 </div>  
   </Box>
 </Modal>
@@ -381,9 +443,6 @@ const Login = () => {
 
 
         <Snackbar open={alertOn} autoHideDuration={3000} onClose={handleClose}>
-          <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
-            로그인에 성공했습니다!
-          </Alert>
         </Snackbar>
       </Container>
     </ThemeProvider>

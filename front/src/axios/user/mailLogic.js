@@ -36,6 +36,7 @@ export const findId = async (userData) => {
       "http://localhost:8000/user/findId",
       userData
     );
+    console.log(res.data);
     return res.data;
   } catch (error) {
     console.error("Error : ", error);
@@ -50,6 +51,21 @@ export const findPw = async (userData) => {
       "http://localhost:8000/user/findPw",
       userData
     );
+    return res.data;
+  } catch (error) {
+    console.error("Error : ", error);
+    throw error;
+  }
+};
+
+export const checkTempPw = async (userId , tempPw) => {
+  try {
+    const res = await axios.get(
+      "http://localhost:8000/user/checkTempPw",{
+        params:{
+          userId : userId,
+          tempPw : tempPw
+        }});
     return res.data;
   } catch (error) {
     console.error("Error : ", error);

@@ -32,4 +32,18 @@ WHERE userName = #{userName}
   AND userId = #{userId}
   AND userEmail = #{userEmail}
 </select>
+
+<!-- 임시 비번으로 업데이트  -->
+<update id="updateUserPassword" parameterType="map">
+UPDATE user
+   SET userPw = #{encodedPassword}
+ WHERE userId = #{userId} 
+</update>
+
+<!-- 임시 비번 확인  -->
+<select id="getEncryptedPassword" parameterType="string" resultType="string">
+    SELECT userPw
+    FROM user
+    WHERE userId = #{userId}
+</select>
 </mapper>

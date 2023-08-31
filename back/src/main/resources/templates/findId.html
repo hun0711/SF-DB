@@ -1,11 +1,9 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <style>
-        /* CSS 스타일 작성 */
-        body {
-            font-family: Arial, sans-serif;
-        }
+    <meta charset="UTF-8">
+    <!-- 이하 생략 -->
+     <style>
         .mail-container {
             background-color: #f3f3f3;
             padding: 20px;
@@ -13,24 +11,21 @@
         .mail-title {
             color: #333333;
             font-size: 24px;
-            margin-bottom: 10px;
-        }
+            margin-bottom: 20px;
+      }
         .mail-content {
             color: #555555;
-            font-size: 16px;
+            margin-top: 20px;
+            font-size: 22px;
         }
     </style>
 </head>
 <body>
-<div style="margin:100px;">
-    <h1> 안녕하세요, SFDB 입니다.</h1>
-    <h1> 회원 님의 아이디 입니다.</h1>
-</div>
-    <div align='center' class="mail-container">
+    <div style="margin:50px;" class="mail-container">
         <h1 class="mail-title">아이디 찾기 결과</h1>
         <p class="mail-content">
-            {{userName}} 님의 SFDB 아이디는 '{{userId}}' 입니다.
- </p>
+            '<span th:text="${userName}"></span>' 님의 SFDB 아이디는 '<span th:text="${userId}"></span>' 입니다.
+        </p>
     </div>
 </body>
 </html>

@@ -16,5 +16,9 @@ public interface InfoService {
 
 	String findPwByUserNameAndIdAndEmail(Map<String, String> userData);
 
+	void updateUserPassword(String userId, String encodedPassword);
+
+	String getEncryptedPassword(String userId);
+
 
 }
