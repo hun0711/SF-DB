@@ -1,12 +1,11 @@
 import * as React from 'react';
-import Link from '@mui/material/Link';
 import Typography from '@mui/material/Typography';
 import Title from './Title';
 import EditIcon from '@mui/icons-material/Edit';
 import CancelIcon from '@mui/icons-material/Cancel';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
-import { Box, Button, IconButton, Modal, Snackbar, TextField } from '@mui/material';
+import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, Modal, Snackbar, TextField } from '@mui/material';
 import { useState } from 'react';
 import { useSnackbar } from 'notistack';
 import { changeUserNameDB, updateProfileImageDB } from '../../axios/user/editLogic';
@@ -15,18 +14,31 @@ import { useEffect } from 'react';
 import { userInfoDB } from '../../axios/user/loginLogic';
 import { getCookie } from '../../utils/getCookies';
 import { firebaseStorage } from '../../utils/firebase';
+import { withdrawUserDB } from '../../axios/user/registerLogic';
+import { useNavigate } from 'react-router';
+import { useMovieArchiveContext } from '../../utils/movieArchiveContext';
 
 
 export default function UserProfile({ userInfo }) {
   const userId = userInfo.userId
   const userName = getCookie('userName')
   const userProfileImage = getCookie('userProfileImage')
+  const { userArchive } = useMovieArchiveContext()
+  const [isExistArchive , setIsExistArchive] = useState(false)
   const [open, setOpen] = useState(false);
   const [userNameValue , setUserNameValue] = useState('')
   const [userProfileImageValue , setUserProfileImageValue] = useState('')
   const [isNameChanged, setIsNameChanged] = useState(false);
+  const [dialogOpen, setDialogOpen] = useState(false);
   const [alertOn, setAlertOn] = useState(false);  
   const { enqueueSnackbar } = useSnackbar(); 
+  const navigate = new useNavigate()
+
+  useEffect(() => {
+   if(userArchive) {
+     setIsExistArchive(userArchive.length > 0)
+   }
+  }, [userArchive])
 
   useEffect(() => {
     const getUserInfo = async() => {
@@ -44,9 +56,10 @@ export default function UserProfile({ userInfo }) {
     setOpen(true)
   }
   const handleClose = () => setOpen(false); 
-  const handleAlertClose = () => {
-    setAlertOn(false)
-  }
+  const handleAlertClose = () => {setAlertOn(false)}
+  const handleDialogClick = () => {setDialogOpen(true)};
+  const handleDialogClose = () => {setDialogOpen(false);};
+
 
  /* 프사 변경 */
 const handleImageChange = async () => {
@@ -109,7 +122,28 @@ const handleImageChange = async () => {
   }
 }
 
-
+/* 회원 탈퇴 */
+const handleWithdrawUser = async() => {
+  try {
+    const res = await withdrawUserDB(userId)
+    if(res === 1){
+    // 쿠키 삭제
+     document.cookie = serialize('userId', '', { path: '/', maxAge: -1 });
+     document.cookie = serialize('userName', '', { path: '/', maxAge: -1 });
+     document.cookie = serialize('userEmail', '', { path: '/', maxAge: -1 });
+     document.cookie = serialize('userBirth', '', { path: '/', maxAge: -1 });
+     document.cookie = serialize('userProfileImage', '', { path: '/', maxAge: -1 });
+      navigate('/main')
+      enqueueSnackbar('회원 탈퇴가 완료되었습니다.', { variant: 'success' });
+      setAlertOn(true);
+    }else{
+      enqueueSnackbar('회원 탈퇴 실패.', { variant: 'error' });
+        setAlertOn(true);
+    }
+  } catch (error) {
+    console.log('네트워크 오류 : ', error);
+  }
+}
 
 
 /* Style */
@@ -139,7 +173,7 @@ const handleImageChange = async () => {
           </IconButton>
         </div>
         <div style={{ display: 'flex', alignItems: 'center' }}>
-          <IconButton>
+          <IconButton onClick={handleDialogClick}>
           <ExitToAppIcon style={{ fontSize: 15, marginRight: '5px' , marginBottom:'5px' }}/>
             <Typography variant='button'>회원 탈퇴</Typography>
           </IconButton>
@@ -190,6 +224,37 @@ const handleImageChange = async () => {
 </div>  
   </Box>
 </Modal>
+            {/* 탈퇴 확인 */}
+            <Dialog
+          open={dialogOpen}
+          onClose={handleDialogClose}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+          <DialogTitle id="alert-dialog-title">
+            {"SFDB 탈퇴"}
+          </DialogTitle>
+          <DialogContent style={{display:'flex',flexDirection:'column'}}>
+            <Typography variant='caption' style={{fontSize:'16px'}}>
+            회원님이 보지 못한 좋은 영화들이 기다리고 있습니다. 
+            </Typography>
+           {isExistArchive ? (
+            <Typography variant='caption' style={{fontSize:'16px'}}>
+             보관함에 담아둔 영화들이 사라져요. 그래도 탈퇴하시겠어요?
+            </Typography>
+             ) : (
+             <Typography variant='caption' style={{fontSize:'16px'}}>
+             그래도 탈퇴하시겠어요?
+            </Typography>
+             )}
+        </DialogContent>
+          <DialogActions>
+            <Button onClick={handleDialogClose}>취소</Button>
+            <Button onClick={handleWithdrawUser} autoFocus>
+              탈퇴하기
+            </Button>
+          </DialogActions>
+        </Dialog>
       
                       {/* 알림 창 */}
                       <Snackbar open={alertOn} autoHideDuration={3000} onClose={handleAlertClose}>

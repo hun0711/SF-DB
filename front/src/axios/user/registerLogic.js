@@ -24,7 +24,7 @@ export const regInsertDB = (data) => {
     try {
       const response = axios({
         method: "post", //@RequestBody
-        url: "http://localhost:8000/register/userJoin", 
+        url: "http://localhost:8000/register/userJoin",
         data: data,
       });
       resolve(response);
@@ -32,4 +32,18 @@ export const regInsertDB = (data) => {
       reject(error);
     }
   });
+};
+
+export const withdrawUserDB = async (userId) => {
+  console.log(userId);
+  try {
+    const res = await axios.post(
+      `http://localhost:8000/register/withdraw`,
+      { userId }
+    );
+    return res.data;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
 };

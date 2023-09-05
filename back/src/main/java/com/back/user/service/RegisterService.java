@@ -13,5 +13,8 @@ public interface RegisterService {
 		//회원 가입
 		int userJoin(UserDto uDto);
 
+		//회원 탈퇴
+		int withdraw(UserDto uDto);
+
 
 }

@@ -13,4 +13,8 @@ public interface RegisterDao {
     public int userJoin(UserDto uDto);
 
 
+    //회원 탈퇴
+	public int withdraw(UserDto uDto);
+
+
 }

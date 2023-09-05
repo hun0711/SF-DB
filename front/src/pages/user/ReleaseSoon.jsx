@@ -19,8 +19,8 @@ export default function ReleaseSoon({ userInfo }) {
   const [posterUrls, setPosterUrls] = useState();
   const [trailerId, setTrailerId] = useState(null);
   const [anchorEl, setAnchorEl] = React.useState(null);
-  const [open, setOpen] = useState(falsse);
-  const [alertOn, setAlertOn] = useState(fale)
+  const [open, setOpen] = useState(false);
+  const [alertOn, setAlertOn] = useState(false)
   const [isChecked, setIsChecked] = useState(false)
   const [isNoticeTaken, setIsNoticeTaken] = useState(false)
   const { enqueueSnackbar } = useSnackbar(); 

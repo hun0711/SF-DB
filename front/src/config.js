@@ -4,6 +4,10 @@ const config = {
     "360256300731-odu5dfeupc2d32nnc4d9tmai3gdmkjms.apps.googleusercontent.com",
   googleClientSecret: "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",
 
+  //google CSE api
+  cseApiKey : "AIzaSyBFCfqrliS3ZNqIJ8F0jRtdEwvNAr9yzPA",
+  cseEngineID : "17f3edce110b24531",
+
   //naver api
   naverClientId: "oizN99Oi1Z5vhgeRLGMB",
   naverClientSecret: "oEkoNiO2bk",

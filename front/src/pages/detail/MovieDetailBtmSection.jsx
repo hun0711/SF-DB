@@ -176,7 +176,7 @@ const fetchUserInfo = async (userId) => {
       marginLeft: '100px',
       marginTop: '30px',
       maxWidth: '1500px',
-      minHeight: '450px',
+      minHeight: '420px',
       maxHeight: '1600px',
     } 
 
@@ -221,7 +221,11 @@ const fetchUserInfo = async (userId) => {
             {movieCommentList.length}
           </Typography>
           </div>
-
+          {movieCommentList.length === 0 ? (
+    <Typography variant="h6" style={{ opacity: '50%',fontSize: '30px', marginTop: '150px' , marginLeft:'20px'}}>
+      아직 코멘트가 없습니다.
+    </Typography>
+  ) : (
           <div
       style={{
         display: 'grid',
@@ -422,6 +426,7 @@ const fetchUserInfo = async (userId) => {
                       <Snackbar open={alertOn} autoHideDuration={3000} onClose={handleAlertClose}>
           </Snackbar>
           </div>
+      )}
         </div>
 
 

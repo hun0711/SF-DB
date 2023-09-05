@@ -31,6 +31,14 @@ public int userJoin(UserDto rDto) {
 	return result;
 }
 
+//회원탈퇴
+@Override
+public int withdraw(UserDto uDto) {
+	log.info("withdraw 확인");
+    int	result = registerDao.withdraw(uDto);
+	return result;
+}
+
 	
 
 

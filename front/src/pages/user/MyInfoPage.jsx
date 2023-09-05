@@ -6,6 +6,7 @@ import UserProfile from './UserProfile';
 import MovieArchive from './MovieArchive';
 import { getCookie } from '../../utils/getCookies';
 import ReleaseSoon from './ReleaseSoon';
+import { ArchiveProvider } from '../../utils/movieArchiveContext';
 
 
 export default function MyInfoPage() {
@@ -20,6 +21,8 @@ export default function MyInfoPage() {
 
   return (
     <>
+    <ArchiveProvider>
+
       <HeaderBar/>
       <Container maxWidth="lg" sx={{ mt: 4, mb: 4 , marginTop: 15}}>
             <Grid container spacing={3}>
@@ -65,6 +68,7 @@ export default function MyInfoPage() {
     <div style={{marginTop:'100px'}}>
     <Footer/> 
     </div>
+    </ArchiveProvider>
     </>
   );
 }

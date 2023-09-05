@@ -8,10 +8,12 @@ import { Alert, Button, Card, CardContent, Checkbox, FormControlLabel, Snackbar,
 import { firebaseStorage } from '../../utils/firebase';
 import { useNavigate } from 'react-router';
 import { useSnackbar } from 'notistack';
+import { useMovieArchiveContext } from '../../utils/movieArchiveContext';
 
 export default function MovieArchive({ userInfo }) {
   const userId = userInfo.userId;
   const navigate = useNavigate();
+  const { userArchive, setUserArchive } = useMovieArchiveContext();
   const [userMovieArchive, setUserMovieArchive] = useState([]); 
   const [posterUrls, setPosterUrls] = useState([]);
   const [checked, setChecked] = useState([]);
@@ -27,6 +29,8 @@ export default function MovieArchive({ userInfo }) {
       try {
         const res = await getUserArchiveDB(userId);
         setUserMovieArchive(res);
+        setUserArchive(res)
+        console.log(userArchive);
       } catch (error) {
         console.log('유저 보관함 로드 실패 : ', error);
       }

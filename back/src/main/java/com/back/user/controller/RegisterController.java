@@ -46,7 +46,13 @@ public class RegisterController {
 		return result;
 	}
 	
-	
+	//회원 탈퇴
+	@PostMapping("/withdraw")
+	public int withdraw(@RequestBody UserDto uDto) {
+		log.info("withdraw 확인");
+		int result = registerService.withdraw(uDto);
+		return result;
+	}
 
 	
 }

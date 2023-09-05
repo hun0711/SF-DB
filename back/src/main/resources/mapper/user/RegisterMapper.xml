@@ -26,5 +26,9 @@ INSERT into user(
 )
 </insert>
 
+<delete id="withdraw" parameterType="UserDto">
+DELETE FROM user
+ WHERE userId = #{userId}
+</delete>
 
 </mapper>
