@@ -42,4 +42,25 @@ public class InfoController {
 		int result = infoService.updateProfileImage(requestData);
 		return result;
 	}
+	
+	//비밀번호 변경
+	@PostMapping("/changePw")
+	public int changePw(@RequestBody Map<String, String> requestData) {
+	  log.info("InfoController : changePw 호출");	
+	  String userId = requestData.get("userId");
+	  String userPw = requestData.get("userPw");
+	  String userChangePw = requestData.get("userChangePw");
+      String getUserPw = infoService.getEncryptedPassword(userId);
+      BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+      if (encoder.matches(userPw, getUserPw)) { //기존 비밀번호와 일치시
+    	  log.info("비밀번호 일치 확인");
+    	  String encodedNewPassword = encoder.encode(userChangePw); //변경할 비밀번호 암호화
+    	  int result = infoService.changeUserPw(userId , encodedNewPassword);
+    	  return result;
+      }else {
+    	  log.info("비밀번호 불일치");
+    	  return 0;
+      }
+	}
+	
 }

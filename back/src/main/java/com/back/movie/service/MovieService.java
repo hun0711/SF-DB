@@ -34,6 +34,8 @@ public interface MovieService {
 	/********** 박스오피스 순위***********/
 	List<BoxOfficeDto> todayBoxofficeRank();
 	
+	/********** 박스오피스 상세보기 ****************/
+	List<BoxOfficeDto> boxofficeDetail(BoxOfficeDto boDto);
 	
 	/********** 개봉 예정 영화 ********/
 	List<ReleaseSoonMovieDto> releaseSoonMovie();
@@ -46,6 +48,7 @@ public interface MovieService {
 
 	/**************** 배우 정보 ***************/
 	List<MovieActorsDto> actorsInfo(MovieActorsDto maDto);
+
 
 
 }

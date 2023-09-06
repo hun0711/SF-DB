@@ -35,8 +35,6 @@ and movieId = #{movieId}
   </select>
 
 
-
-
 <!-- Top 20 영화  -->
 <select id="top20SfMovie" resultType="Top20SfMovieDto">
 select *
@@ -61,6 +59,20 @@ from boxoffice
 order by boxofficeRank asc
 </select>
 
+  
+<!-- 박스오피스 상세보기 -->   
+     <select id="boxofficeDetail" parameterType="BoxOfficeDto" resultType="BoxOfficeDto">
+  select *
+  from boxoffice
+<where>
+<if test='movieId!=null'>
+and movieId = #{movieId}
+</if>
+  <if test='movieSeq!=null'> 
+    and movieSeq = #{movieSeq}
+    </if>
+     </where>
+  </select>
 
 
 <!-- 개봉 예정 영화  -->

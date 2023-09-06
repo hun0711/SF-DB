@@ -21,5 +21,7 @@ public interface InfoDao {
 
 	public String getEncryptedPassword(String userId);
 
+	public int changeUserPw(@Param("userId")String userId, @Param("encodedNewPassword")String encodedNewPassword);
+
 
 }

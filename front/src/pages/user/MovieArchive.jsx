@@ -141,7 +141,9 @@ export default function MovieArchive({ userInfo }) {
                 src={posterUrls[index]}
                 alt={movie.title}
                 style={{ width: '100%', height: '350px', borderRadius: '3px 3px 3px 3px' ,cursor:'pointer'}}
-                onClick={() => navigate(`/movieDetail/${movie.movieId}${movie.movieSeq}`)}
+                onClick={() => 
+                    navigate(`/movieDetail/${movie.movieId}${movie.movieSeq}`)
+                  }
               />
               <CardContent style={{ border: 'none', display: 'flex', flexDirection: 'column', justifyContent: 'flex-start'}}>
                 <Typography variant="subtitle2" sx={{ fontSize: 15 }}>

@@ -12,6 +12,7 @@ export const changeUserNameDB = async (requestData) => {
   }
 };
 
+//프사 변경
 export const updateProfileImageDB = async(requestData) => {
   console.log(requestData);
   try {
@@ -20,5 +21,16 @@ export const updateProfileImageDB = async(requestData) => {
   } catch (error) {
     console.error("Error during updateProfileImageDB request:", error);
     throw error; 
+  }
+}
+
+//비밀번호 변경
+export const changePwDB = async(requestData) => {
+  console.log(requestData);
+  try {
+    const res = await axios.post(`http://localhost:8000/user/changePw`, requestData)
+    return res.data
+  } catch (error) {
+    console.error("Error during changePw request:" , error)
   }
 }

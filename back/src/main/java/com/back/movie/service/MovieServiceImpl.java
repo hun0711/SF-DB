@@ -87,6 +87,14 @@ public class MovieServiceImpl implements MovieService {
 		return todayBoxofficeRank;
 	}
 	
+	//박스오피스 상세보기
+	@Override
+	public List<BoxOfficeDto> boxofficeDetail(BoxOfficeDto boDto) {
+		log.info("MovieServiceImpl : boxofficeDetail 호출");
+		List<BoxOfficeDto> boxofficeDetail = movieDao.boxofficeDetail(boDto);
+		return boxofficeDetail;
+	}
+	
 	//개봉 예정 영화
 	@Override
 	public List<ReleaseSoonMovieDto> releaseSoonMovie() {

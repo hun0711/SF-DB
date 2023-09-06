@@ -37,6 +37,7 @@ const App = () => {
       
       {/* 영화 정보 상세페이지 */}
       <Route path='/movieDetail/*' element={<MovieDetailPage />}/>
+    
 
    </Routes>
     </ThemeProvider>

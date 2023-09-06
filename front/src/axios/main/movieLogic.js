@@ -119,3 +119,20 @@ export const directorInfoByNameDB = async (directorNm) => {
     throw error;
   }
 };
+
+
+export const BoxOfficeDetailDB = async (movieId, movieSeq) => {
+  try {
+    const res = await axios.get(`http://localhost:8000/movie/boxofficeDetail`, {
+      params: {
+        movieId: movieId,
+        movieSeq: movieSeq,
+      },
+    });
+    console.log(res.data);
+    return res.data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};

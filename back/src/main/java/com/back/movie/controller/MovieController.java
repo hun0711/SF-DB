@@ -53,6 +53,7 @@ public class MovieController {
     }
     
     
+    
     /******** Top 20 영화  ********/
     @GetMapping("/top20SfMovie")
     public List<Top20SfMovieDto> top20SfMovie() {
@@ -80,6 +81,13 @@ public class MovieController {
         return todayBoxofficeRank;
     }
     
+    /******** 박스오피스 영화 상세보기 ********/
+    @GetMapping("/boxofficeDetail")
+    public List<BoxOfficeDto> movieDetail(BoxOfficeDto boDto) {
+    	log.info("MovieController : boxofficeDetail 호출");
+    	List<BoxOfficeDto> boxofficeDetail = movieService.boxofficeDetail(boDto);
+    	return boxofficeDetail;
+    }
     
     /********** 개봉 예정 영화 ********/
     @GetMapping("/releaseSoonMovie")

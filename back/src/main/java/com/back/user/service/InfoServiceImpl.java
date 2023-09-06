@@ -59,6 +59,13 @@ public class InfoServiceImpl implements InfoService {
 		log.info("InfoServiceImpl : getEncryptedPassword 호출");
 		 return infoDao.getEncryptedPassword(userId);
 	}
+
+
+	@Override
+	public int changeUserPw(String userId, String encodedNewPassword) {
+		log.info("InfoServiceImpl : checkUserPw 호출");
+		 return infoDao.changeUserPw(userId, encodedNewPassword);
+	}
 	
 
 }

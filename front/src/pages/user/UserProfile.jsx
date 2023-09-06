@@ -5,10 +5,11 @@ import EditIcon from '@mui/icons-material/Edit';
 import CancelIcon from '@mui/icons-material/Cancel';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
+import PasswordIcon from '@mui/icons-material/Password';
 import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, Modal, Snackbar, TextField } from '@mui/material';
 import { useState } from 'react';
 import { useSnackbar } from 'notistack';
-import { changeUserNameDB, updateProfileImageDB } from '../../axios/user/editLogic';
+import { changePwDB, changeUserNameDB, updateProfileImageDB } from '../../axios/user/editLogic';
 import { serialize } from 'cookie';
 import { useEffect } from 'react';
 import { userInfoDB } from '../../axios/user/loginLogic';
@@ -28,8 +29,13 @@ export default function UserProfile({ userInfo }) {
   const [open, setOpen] = useState(false);
   const [userNameValue , setUserNameValue] = useState('')
   const [userProfileImageValue , setUserProfileImageValue] = useState('')
+  const [pwValue , setPwValue] = useState('')
+  const [changePwValue , setChangePwValue] = useState('')
+  const [pwError , setPwError] = useState('')
+  const [changePwError , setChangePwError] = useState('')
   const [isNameChanged, setIsNameChanged] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [pwDialogOpen, setPwDialogOpen] = useState(false);
   const [alertOn, setAlertOn] = useState(false);  
   const { enqueueSnackbar } = useSnackbar(); 
   const navigate = new useNavigate()
@@ -59,6 +65,8 @@ export default function UserProfile({ userInfo }) {
   const handleAlertClose = () => {setAlertOn(false)}
   const handleDialogClick = () => {setDialogOpen(true)};
   const handleDialogClose = () => {setDialogOpen(false);};
+  const handlePwDialogClick = () => {setPwDialogOpen(true)};
+  const handlePwDialogClose = () => {setPwDialogOpen(false); setPwError(''); setChangePwError('')};
 
 
  /* 프사 변경 */
@@ -122,6 +130,35 @@ const handleImageChange = async () => {
   }
 }
 
+const pwRegex = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+/* 비밀번호 변경 */
+const handleChangePw = async() => {
+  if (!pwRegex.test(changePwValue)) {
+    setChangePwError('조건에 부합하지 않은 비밀번호 입니다.');
+    return;
+  }
+  const requestData = {
+    userId : userId,
+    userPw : pwValue,
+    userChangePw : changePwValue
+  } 
+  try{
+   const res = await changePwDB(requestData)
+   if(res === 1){
+    setPwDialogOpen(false)
+    enqueueSnackbar('비밀번호 변경이 완료되었습니다.', { variant: 'success' });
+    setAlertOn(true);
+   }else{
+    setPwError('비밀번호가 일치하지 않습니다.')
+    enqueueSnackbar('비밀번호 변경에 실패하였습니다.', { variant: 'warning' });
+    setAlertOn(true);
+   }
+  }catch(error){
+    console.log('네트워크 오류 : ' , error);
+  }
+}
+
+
 /* 회원 탈퇴 */
 const handleWithdrawUser = async() => {
   try {
@@ -159,20 +196,26 @@ const handleWithdrawUser = async() => {
       <div style={{display:'flex'}}>
       <AccountCircleIcon style={{marginLeft:'15px',marginRight:'5px',marginTop:'2px'}}/><Title>프로필</Title>
       </div>
-      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column',marginTop:'15px' }}>
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column',marginTop:'3px' }}>
         <div style={{ width: '120px', height: '120px', borderRadius: '50%', overflow: 'hidden', marginBottom: '10px' }}>
           <img src={userProfileImage ? userProfileImage : '/images/astronaut.jpg'} style={{ width: '100%', height: '100%', objectFit: 'cover' }}/>
         </div>
         <div>
         <Typography variant="h6">{userName}</Typography>
         </div>
-        <div style={{ marginTop: '10px', display: 'flex', alignItems: 'center'}}>
+        <div style={{ marginTop: '10px',display: 'flex', alignItems: 'center'}}>
         <IconButton onClick={handleEditProfile}>
           <EditIcon style={{ fontSize: 15, marginRight: '5px' , marginBottom:'5px' }} />
           <Typography variant='button'>프로필 편집</Typography>
           </IconButton>
         </div>
-        <div style={{ display: 'flex', alignItems: 'center' }}>
+        <div style={{ display: 'flex', alignItems: 'center' , marginTop:'-5px' }}>
+          <IconButton onClick={handlePwDialogClick}>
+          <PasswordIcon style={{ fontSize: 15, marginRight: '5px' , marginBottom:'5px' }}/>
+            <Typography variant='button'>비밀번호 변경</Typography>
+          </IconButton>
+        </div>
+        <div style={{ display: 'flex' , alignItems: 'center', marginTop:'-5px'}}>
           <IconButton onClick={handleDialogClick}>
           <ExitToAppIcon style={{ fontSize: 15, marginRight: '5px' , marginBottom:'5px' }}/>
             <Typography variant='button'>회원 탈퇴</Typography>
@@ -224,6 +267,55 @@ const handleWithdrawUser = async() => {
 </div>  
   </Box>
 </Modal>
+
+
+            {/* 비밀번호 변경 */}
+            <Dialog
+          open={pwDialogOpen}
+          onClose={handlePwDialogClose}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+          <DialogTitle id="alert-dialog-title">
+            {"비밀번호 변경"}
+          </DialogTitle>
+          <DialogContent>
+         <Typography variant='h5' style={{fontSize:'15px'}}>
+          숫자,영문자,특수문자를 조합하여 8자리 이상 입력해주세요.
+         </Typography>
+          </DialogContent>
+          <DialogContent style={{display:'flex', flexDirection:'column' , marginTop:'12px' , alignItems:'center'}}>
+            <div style={{display:'flex' , flexDirection:'row'}}>
+            <Typography variant='caption' style={{fontSize:'16px'}}>
+            비밀번호
+            </Typography>
+            <TextField hiddenLabel id="userPw" color="secondary" type='password' variant="standard" size='small' style={{marginLeft:'35px',marginBottom:'10px'}}
+  error={pwError !== ''}
+  helperText={pwError}
+  onChange={(event) => {
+    setPwValue(event.target.value)
+  }}/>
+  </div>
+  <div style={{display:'flex' , flexDirection:'row' , marginTop:'30px' , marginBottom:'10px'}}>
+            <Typography variant='caption' style={{fontSize:'16px'}}>
+             새 비밀번호
+            </Typography>
+            <TextField hiddenLabel id="changePw" color="secondary" type="password" variant="standard" style={{marginLeft:'15px'}}
+ error={changePwError !== ''}
+ helperText={changePwError}
+ onChange={(event) => {
+    setChangePwValue(event.target.value);
+  }}/>
+  </div>
+        </DialogContent>
+          <DialogActions>
+            <Button onClick={handlePwDialogClose}>취소</Button>
+            <Button onClick={handleChangePw} disabled={changePwValue === '' || pwValue === ''}>
+              변경하기
+            </Button>
+          </DialogActions>
+        </Dialog>
+
             {/* 탈퇴 확인 */}
             <Dialog
           open={dialogOpen}

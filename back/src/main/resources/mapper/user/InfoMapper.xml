@@ -46,4 +46,14 @@ UPDATE user
     FROM user
     WHERE userId = #{userId}
 </select>
+
+
+<!-- pw 변경 -->
+<update id="changeUserPw" parameterType="map">
+UPDATE user
+   SET userPw = #{encodedNewPassword}
+ WHERE userId = #{userId}
+</update>
+
 </mapper>
+

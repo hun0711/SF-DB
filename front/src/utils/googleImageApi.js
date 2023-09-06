@@ -1,8 +1,8 @@
 import axios from "axios";
 import config from "../config";
 
-const apiKey = config.cseApiKey
-const engineID = config.cseEngineID
+const apiKey = config.cseApiKey;
+const engineID = config.cseEngineID;
 
 export async function getGoogleImageApi(query) {
   console.log(query);
@@ -12,14 +12,14 @@ export async function getGoogleImageApi(query) {
       {
         params: {
           key: apiKey,
-          cx : engineID,
+          cx: engineID,
           q: query,
-          num : 3,
+          num: 3,
           start: 1,
           fileType: "jpg",
           searchType: "image",
           imgType: "photo",
-          gl : 'us'
+          gl: "us",
         },
       }
     );

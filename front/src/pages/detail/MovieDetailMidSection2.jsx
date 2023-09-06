@@ -48,8 +48,8 @@ const MovieDetailMidSection2 = ({ movieDetail }) => {
     display: 'flex',
     flexDirection: 'row', 
     alignItems: 'center', 
-    justifyContent: 'flex-start', // 이 줄을 추가합니다
-    flexWrap: 'wrap', // 필요한 경우 다음 줄로 넘어갈 수 있도록 설정합니다
+    justifyContent: 'flex-start', 
+    flexWrap: 'wrap'
   }
 
   const actorStyle = {
