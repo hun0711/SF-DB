@@ -6,17 +6,17 @@ import { useState } from 'react';
 
 
 const MovieDetailMidSection2 = ({ movieDetail }) => {
+  const directors = movieDetail && movieDetail.directorNms ? movieDetail.directorNms.split(',') : [];
+  const actors = movieDetail && movieDetail.actorNms ? movieDetail.actorNms.split(',') : [];
   const [directorImageUrls, setDirectorImageUrls] = useState([])
   const [actorImageUrls, setActorImageUrls] = useState([])
-  const [isImageLoaded, setIsImageLoaded] = useState(false);
 
   useEffect(()=>{
    const searchDirectorImages = async() => {
     try{
       if(movieDetail && movieDetail.directorNms){
-        const directorNames = movieDetail.directorNms.split(',')
         const imageResults = await Promise.all(
-          directorNames.map(async (directorName) => {
+          directors.map(async (directorName) => {
             const query = directorName.trim() + ' 감독' + ' 사진'
             return await getDirectorImageApi(query)
           })
@@ -29,16 +29,17 @@ const MovieDetailMidSection2 = ({ movieDetail }) => {
       console.log("감독 사진 검색 실패 : ", error);
     }
   }
-    searchDirectorImages()
+  if (movieDetail) {
+    searchDirectorImages();
+  }
 },[movieDetail]);
 
   useEffect(()=>{
    const searchActorImages = async() => {
     try{
       if(movieDetail && movieDetail.actorNms){
-        const actorNames = movieDetail.directorNms.split(',')
         const imageResults = await Promise.all(
-          actorNames.map(async (actorName) => {
+          actors.map(async (actorName) => {
             const query = actorName.trim() + ' 배우' + ' 사진'
             return await getActorImageApi(query)
           })
@@ -51,7 +52,9 @@ const MovieDetailMidSection2 = ({ movieDetail }) => {
       console.log("배우 사진 검색 실패 : ", error);
     }
   }
+  if (movieDetail) {
     searchActorImages()
+  }
 },[movieDetail]);
 
 
@@ -116,12 +119,6 @@ const MovieDetailMidSection2 = ({ movieDetail }) => {
     marginBottom:'30px'
   }
 
-
-
-  const directors = movieDetail && movieDetail.directorNms ? movieDetail.directorNms.split(',') : [];
-  const actors = movieDetail && movieDetail.actorNms ? movieDetail.actorNms.split(',') : [];
-  console.log(actors);
-
   return (
     <>
       <div style={midSection2Style}>
@@ -132,7 +129,7 @@ const MovieDetailMidSection2 = ({ movieDetail }) => {
         <div style={staffRoleStyle}>
           {directors.map((director, index) => (
             <div key={index} style={directorStyle}>
-              <Avatar style={avatarStyle} src={directorImageUrls[index]}/>
+               <Avatar style={avatarStyle} src={directorImageUrls[index]}/> 
               <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
                 <Typography variant="subtitle2" style={{ fontSize: '16px' }}>
                   {director.trim()}
@@ -161,7 +158,6 @@ const MovieDetailMidSection2 = ({ movieDetail }) => {
   </div>
   ))}
   </div>
-  {/* 배우 정보 */}
 
       </div>
     </>
