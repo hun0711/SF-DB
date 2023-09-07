@@ -28,3 +28,53 @@ export async function getGoogleImageApi(query) {
     throw error;
   }
 }
+
+export async function getDirectorImageApi(query) {
+  console.log(query);
+  try {
+    const response = await axios.get(
+      "https://www.googleapis.com/customsearch/v1",
+      {
+        params: {
+          key: apiKey,
+          cx: engineID,
+          q: query,
+          num: 1,
+          start: 1,
+          fileType: "jpg",
+          searchType: "image",
+          imgType: "face",
+          gl: "kr",
+        },
+      }
+    );
+    return response.data.items;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function getActorImageApi(query) {
+  console.log(query);
+  try {
+    const response = await axios.get(
+      "https://www.googleapis.com/customsearch/v1",
+      {
+        params: {
+          key: apiKey,
+          cx: engineID,
+          q: query,
+          num: 1,
+          start: 1,
+          fileType: "jpg",
+          searchType: "image",
+          imgType: "face",
+          gl: "kr",
+        },
+      }
+    );
+    return response.data.items;
+  } catch (error) {
+    throw error;
+  }
+}

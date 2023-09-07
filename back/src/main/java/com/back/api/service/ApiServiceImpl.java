@@ -182,10 +182,11 @@ import com.back.user.repository.LoginDao;
 	               for (JsonNode movieNode : dailyBoxOfficeList) {
 	            	   
 	            	   int boxofficeRank = Integer.parseInt(movieNode.path("rank").asText());
+	            	   String releaseDts = movieNode.path("openDt").asText().replace("-", "");
 	            	   String salesShare = movieNode.path("salesShare").asText();
 	            	   String audiAcc = movieNode.path("audiAcc").asText();
 	            	   String title = movieNode.path("movieNm").asText();
-	                   String secondApiUrl = "http://api.koreafilm.or.kr/openapi-data2/wisenut/search_api/search_json2.jsp?collection=kmdb_new2&detail=Y&ServiceKey=95B85M4L8264VL3I1IYE&ratedYn=y&sort=prodYear,1&listCount=1&title=" + title;
+	                   String secondApiUrl = "http://api.koreafilm.or.kr/openapi-data2/wisenut/search_api/search_json2.jsp?collection=kmdb_new2&detail=Y&ServiceKey=95B85M4L8264VL3I1IYE&ratedYn=y&sort=prodYear,1&listCount=1&releaseDts="+releaseDts+"&title=" + title;
 	
 	                   ResponseEntity<String> secondApiResponse = restTemplate.getForEntity(secondApiUrl, String.class);
 	                   String secondResponseBody = secondApiResponse.getBody();
@@ -296,10 +297,6 @@ import com.back.user.repository.LoginDao;
 	}
 
 
-
-			
-			
-
 	         //박스오피스 변경 사항 반영
 				@Override
 				public void updateBoxofficeFromApi() {
@@ -327,11 +324,11 @@ import com.back.user.repository.LoginDao;
 			
 			               for (JsonNode movieNode : dailyBoxOfficeList) {
 			            	   int boxofficeRank = Integer.parseInt(movieNode.path("rank").asText()); 
+			            	   String releaseDts = movieNode.path("openDt").asText().replace("-", "");
 			                   String salesShare = movieNode.path("salesShare").asText();
 			            	   String audiAcc = movieNode.path("audiAcc").asText();
-			                   
 			                   String title = movieNode.path("movieNm").asText();
-			                   String secondApiUrl = "http://api.koreafilm.or.kr/openapi-data2/wisenut/search_api/search_json2.jsp?collection=kmdb_new2&detail=Y&ServiceKey=95B85M4L8264VL3I1IYE&ratedYn=y&sort=prodYear,1&listCount=1&title=" + title;
+			                   String secondApiUrl = "http://api.koreafilm.or.kr/openapi-data2/wisenut/search_api/search_json2.jsp?collection=kmdb_new2&detail=Y&ServiceKey=95B85M4L8264VL3I1IYE&ratedYn=y&sort=prodYear,1&listCount=1&releaseDts="+releaseDts+"&title=" + title;
 			
 			                   ResponseEntity<String> secondApiResponse = restTemplate.getForEntity(secondApiUrl, String.class);
 			                   String secondResponseBody = secondApiResponse.getBody();

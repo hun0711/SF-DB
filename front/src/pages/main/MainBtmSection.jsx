@@ -64,7 +64,7 @@ const MainBtmSection = () => {
     <Slider {...settings}>
       {todayBoxofficeRank.map((movie, index) => (
         <div key={index} style={{ position: 'relative' }}>
-          <Card sx={{ maxWidth: 250, height: 450 ,mx: 2 , border:'none' , margin: '0 auto',cursor:'pointer'}}
+          <Card sx={{ maxWidth: 250, height: 450 ,mx: 2 , border:'none' , margin: '0 auto'}}
           onClick={() => navigate(`/boxofficeDetail/${movie.movieId}${movie.movieSeq}`)}>
             <img src={movie.poster} alt={movie.title} style={{ width: '100%', height: '350px' , borderRadius:'3px 3px 3px 3px' }} />
             <CardContent style={{ border:'none', display: 'flex', flexDirection: 'column', justifyContent: 'flex-start' }}>

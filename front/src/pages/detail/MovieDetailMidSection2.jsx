@@ -1,7 +1,62 @@
 import { Avatar, Typography } from '@mui/material';
 import React from 'react';
+import { useEffect } from 'react';
+import { getDirectorImageApi , getActorImageApi } from '../../utils/googleImageApi';
+import { useState } from 'react';
+
 
 const MovieDetailMidSection2 = ({ movieDetail }) => {
+  const [directorImageUrls, setDirectorImageUrls] = useState([])
+  const [actorImageUrls, setActorImageUrls] = useState([])
+  const [isImageLoaded, setIsImageLoaded] = useState(false);
+
+  useEffect(()=>{
+   const searchDirectorImages = async() => {
+    try{
+      if(movieDetail && movieDetail.directorNms){
+        const directorNames = movieDetail.directorNms.split(',')
+        const imageResults = await Promise.all(
+          directorNames.map(async (directorName) => {
+            const query = directorName.trim() + ' 감독' + ' 사진'
+            return await getDirectorImageApi(query)
+          })
+        )
+        console.log(imageResults);
+        const imageURLs = imageResults.map((result) => result.link)
+        setDirectorImageUrls(imageURLs);
+      }
+    }catch(error){
+      console.log("감독 사진 검색 실패 : ", error);
+    }
+  }
+    searchDirectorImages()
+},[movieDetail]);
+
+  useEffect(()=>{
+   const searchActorImages = async() => {
+    try{
+      if(movieDetail && movieDetail.actorNms){
+        const actorNames = movieDetail.directorNms.split(',')
+        const imageResults = await Promise.all(
+          actorNames.map(async (actorName) => {
+            const query = actorName.trim() + ' 배우' + ' 사진'
+            return await getActorImageApi(query)
+          })
+        )
+        console.log(imageResults);
+        const imageURLs = imageResults.map((result) => result.link)
+        setActorImageUrls(imageURLs);
+      }
+    }catch(error){
+      console.log("배우 사진 검색 실패 : ", error);
+    }
+  }
+    searchActorImages()
+},[movieDetail]);
+
+
+
+
 
   {/* Style */}
   const midSection2Style = {
@@ -77,7 +132,7 @@ const MovieDetailMidSection2 = ({ movieDetail }) => {
         <div style={staffRoleStyle}>
           {directors.map((director, index) => (
             <div key={index} style={directorStyle}>
-              <Avatar style={avatarStyle} />
+              <Avatar style={avatarStyle} src={directorImageUrls[index]}/>
               <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
                 <Typography variant="subtitle2" style={{ fontSize: '16px' }}>
                   {director.trim()}
@@ -97,7 +152,7 @@ const MovieDetailMidSection2 = ({ movieDetail }) => {
  <div style={actorSectionStyle}>
   {actors.map((actor,index) => (
     <div key={index} style={actorStyle}>
-      <Avatar style={avatarStyle} />
+      <Avatar style={avatarStyle} src={actorImageUrls[index]} />
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' , marginTop:'10px' }}>
        <Typography variant="subtitle2" style={{ fontSize: '16px' }}>
  {actor.trim()}
