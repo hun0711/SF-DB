@@ -79,10 +79,7 @@ const MovieDetailMidSection2 = ({ movieDetail }) => {
     alignItems: 'center', 
   };
 
-  const avatarStyle = {
-    marginTop: '5px',
-    marginRight: '10px',
-  };
+
 
   const directorStyle = {
     width : '220px',
@@ -129,7 +126,10 @@ const MovieDetailMidSection2 = ({ movieDetail }) => {
         <div style={staffRoleStyle}>
           {directors.map((director, index) => (
             <div key={index} style={directorStyle}>
-               <Avatar style={avatarStyle} src={directorImageUrls[index]}/> 
+               <div style={{ width: 35, height: 35, borderRadius: '50%', overflow: 'hidden', marginRight: '10px' }}>
+        <img src={directorImageUrls[index] ? directorImageUrls[index] : '/images/astronaut.jpg'} alt="감독" style={{ width: '100%', height: '100%', objectFit: 'cover' ,    marginTop: '5px',
+    marginRight: '10px',}} />
+      </div>
               <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
                 <Typography variant="subtitle2" style={{ fontSize: '16px' }}>
                   {director.trim()}
@@ -149,7 +149,10 @@ const MovieDetailMidSection2 = ({ movieDetail }) => {
  <div style={actorSectionStyle}>
   {actors.map((actor,index) => (
     <div key={index} style={actorStyle}>
-      <Avatar style={avatarStyle} src={actorImageUrls[index]} />
+      <div style={{ width: 35, height: 35, borderRadius: '50%', overflow: 'hidden', marginRight: '10px' }}>
+        <img src={actorImageUrls[index] ? actorImageUrls[index] : '/images/astronaut.jpg'} alt="감독" style={{ width: '100%', height: '100%', objectFit: 'cover' ,    marginTop: '5px',
+    marginRight: '10px',}} />
+      </div>
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' , marginTop:'10px' }}>
        <Typography variant="subtitle2" style={{ fontSize: '16px' }}>
  {actor.trim()}
