@@ -136,3 +136,36 @@ export const BoxOfficeDetailDB = async (movieId, movieSeq) => {
     throw error;
   }
 };
+
+
+export const directorImageDB = async (directors) => {
+  console.log(directors);
+  try {
+    const res = await axios.get(`http://localhost:8000/movie/directorImage`,{
+    params : {
+      directorNm : directors
+    }
+  });
+    console.log(res.data);
+    return res.data;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
+export const actorImageDB = async (actors) => {
+  console.log(actors);
+  try {
+    const res = await axios.get(`http://localhost:8000/movie/actorImage`,{
+      params : {
+        actorNm : actors
+      }
+    });
+    console.log(res.data);
+    return res.data;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};

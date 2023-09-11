@@ -5,7 +5,6 @@ import java.security.SecureRandom;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -90,9 +89,8 @@ public class EmailController {
             helper.setText(htmlContent, true);
 
             // 메일 전송
-            LocalDateTime scheduledTime = LocalDateTime.of(repRlsDate, LocalTime.of(12, 0)); // 예약하려는 시간 (예: 8시)
-            Instant instant = scheduledTime.atZone(ZoneId.systemDefault()).toInstant();
-            taskScheduler.schedule(() -> javaMailSender.send(mimeMessage), new Date(instant.toEpochMilli()));
+            Date scheduledDate = Date.from(repRlsDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+            taskScheduler.schedule(() -> javaMailSender.send(mimeMessage), scheduledDate);
             int result = emailService.releaseNoticeEmail(requestData);
             return result;
 

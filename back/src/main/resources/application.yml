@@ -30,6 +30,8 @@ management:
         allowed-origins: "http://localhost:3000"
         allowed-methods: GET, POST, PUT, DELETE
         allowed-headers: "*"
+        exposed-headers: "Authorization, Custom-Header"
+        allow-credentials: true
         max-age: 3600
 
 

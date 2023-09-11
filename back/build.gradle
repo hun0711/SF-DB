@@ -33,6 +33,12 @@ dependencies {
 	implementation 'org.springframework:spring-context-support:5.3.9' 
 	implementation 'com.sun.mail:javax.mail:1.6.2'
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+	implementation group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.13'
+    implementation group: 'org.json', name: 'json', version: '20210307'
+
+    implementation 'com.google.firebase:firebase-admin:8.0.0'
+    implementation 'com.google.cloud:google-cloud-storage:2.26.1'	
+    implementation 'com.google.api-client:google-api-client:1.31.5'
 	
     implementation 'org.mybatis.dynamic-sql:mybatis-dynamic-sql:1.5.0'
     implementation 'mysql:mysql-connector-java:8.0.33'

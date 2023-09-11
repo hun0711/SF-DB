@@ -1,14 +1,29 @@
 package com.back.api.controller;
 
+import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.Arrays;
+
 import java.util.List;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.util.EntityUtils;
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.back.api.repository.MovieActorsDto;
+import com.back.api.repository.MovieDirectorsDto;
 import com.back.api.service.ApiService;
 
 import lombok.RequiredArgsConstructor;
@@ -64,5 +79,20 @@ public class ApiController {
 	    	return ResponseEntity.ok("ReleaseSoon Movies saved from Api.");
 	    }
 	    
+	    //감독 이미지 api 저장
+	    @GetMapping("/save/directorImages")
+	    public ResponseEntity<String> saveDirectorImages() {
+	        apiService.saveDirectorImages();
+	        return ResponseEntity.ok("감독 이미지 저장");
+	    }
 	    
+	    //배우 이미지 api 저장
+	    @GetMapping("/save/actorImages")
+	    public ResponseEntity<String> getActorImages() {
+	    	log.info("배우 이미지 api 업로드 호출");
+	    	  apiService.saveActorImages();
+		      return ResponseEntity.ok("배우 이미지 저장");  		
+	    }
+
+
 }

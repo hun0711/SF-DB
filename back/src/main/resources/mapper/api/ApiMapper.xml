@@ -75,4 +75,31 @@
      </delete>
     
    
+   <!-- 감독 목록  -->
+   <select id="directorList" resultType="MovieDirectorsDto">
+   SELECT *
+     FROM moviedirectors
+   </select>
+
+   <!-- 배우 목록  -->
+   <select id="actorList" resultType="MovieActorsDto">
+   SELECT *
+     FROM movieactors
+   </select>
+   
+<!-- 감독 이미지 api 저장  -->
+<update id='saveDirectorImages' parameterType="map">
+UPDATE moviedirectors
+   SET imageUrl = #{imageUrl}
+   WHERE directorId = #{directorId}
+</update>
+
+<!-- 배우 이미지 api 저장  -->
+<update id='saveActorImages' parameterType="map">
+UPDATE movieactors
+   SET imageUrl = #{imageUrl}
+   WHERE actorId = #{actorId}
+</update>
+
+
 </mapper>

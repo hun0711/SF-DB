@@ -1,7 +1,7 @@
 	package com.back.api.service;
 	
-	import java.io.IOException;
-	import java.time.LocalDate;
+import java.io.IOException;
+import java.time.LocalDate;
 	import java.time.format.DateTimeFormatter;
 	import java.util.ArrayList;
 	import java.util.Arrays;
@@ -10,7 +10,8 @@
 	import org.springframework.http.HttpEntity;
 	import org.springframework.http.HttpHeaders;
 	import org.springframework.http.HttpMethod;
-	import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 	import org.springframework.stereotype.Service;
 	import org.springframework.web.bind.annotation.ResponseBody;
 	import org.springframework.web.client.RestTemplate;
@@ -22,11 +23,13 @@
 	import com.back.api.repository.MovieDto;
 import com.back.api.repository.RecommendMovieDto;
 import com.back.api.repository.ReleaseSoonMovieDto;
-import com.back.user.repository.LoginDao;
 	import com.fasterxml.jackson.databind.JsonNode;
 	import com.fasterxml.jackson.databind.ObjectMapper;
-	
-	import lombok.RequiredArgsConstructor;
+	import java.io.FileOutputStream;
+	import java.io.InputStream;
+	import java.net.URL;
+	import java.net.URLConnection;
+import lombok.RequiredArgsConstructor;
 	import lombok.extern.slf4j.Slf4j;
 	
 	@Service
@@ -42,7 +45,11 @@ import com.back.user.repository.LoginDao;
 		    		"09710", "05440", "31128", "02219", "07555", "04948", "05107", "07998", "38932", "13479");
 		    RestTemplate restTemplate = new RestTemplate();
 		  
-		    
+		  
+		    private static final String NAVER_API_URL = "https://openapi.naver.com/v1/search/image";
+		    private static final String NAVER_CLIENT_ID = "oizN99Oi1Z5vhgeRLGMB"; 
+		    private static final String NAVER_SECRET = "oEkoNiO2bk";
+
 		    //영화 정보
 		    @Override
 		    public void saveMoviesFromApi() {
@@ -677,4 +684,132 @@ import com.back.user.repository.LoginDao;
 
 
 
+
+		@Override
+		    public void saveDirectorImages() {
+			log.info("apiServiceImpl : saveDirectorImages 호출");
+		        HttpHeaders headers = new HttpHeaders();
+		        headers.set("X-Naver-Client-Id", NAVER_CLIENT_ID);
+		        headers.set("X-Naver-Client-Secret", NAVER_SECRET);
+
+		        HttpEntity<String> entity = new HttpEntity<>(headers);
+		        ObjectMapper objectMapper = new ObjectMapper();
+                
+		        List<MovieDirectorsDto> directorList = apiDao.directorList();
+		        for(MovieDirectorsDto director : directorList) {
+		        	String query = director.getDirectorNm() + "감독 사진"; 
+		        
+		        try {
+		            ResponseEntity<String> response = restTemplate.exchange(
+		                    NAVER_API_URL + "?query=" + query + "&display=1&sort=sim",
+		                    HttpMethod.GET,
+		                    entity,
+		                    String.class
+		            );
+		            if (response.getStatusCode() == HttpStatus.OK) {
+		                String responseBody = response.getBody();
+		                
+		                JsonNode jsonNode = objectMapper.readTree(responseBody);
+		                JsonNode itemsNode = jsonNode.get("items");
+		                if (itemsNode != null && itemsNode.isArray() && itemsNode.size() > 0) {
+		                    String imageUrl = itemsNode.get(0).get("link").asText();
+		                    downloadDirectorImage(imageUrl, director.getDirectorNm());
+		                }
+		            }else {
+		            	log.info("saveDirectorImages 실패");
+		            }
+		        } catch (Exception e) {
+		        	log.info("saveDirectorImages 호출 오류",e);
+		        }
+		    }
+		}
+
+
+
+
+		@Override
+	    public void saveActorImages() {
+			log.info("apiServiceImpl : saveActorImages 호출");
+	        HttpHeaders headers = new HttpHeaders();
+	        headers.set("X-Naver-Client-Id", NAVER_CLIENT_ID);
+	        headers.set("X-Naver-Client-Secret", NAVER_SECRET);
+
+	        HttpEntity<String> entity = new HttpEntity<>(headers);
+	        ObjectMapper objectMapper = new ObjectMapper();
+            
+	        List<MovieActorsDto> actorList = apiDao.actorList();
+	        for(MovieActorsDto actor : actorList) {
+	        	String query = actor.getActorNm() + "배우 사진";
+	        
+	        try {
+	            ResponseEntity<String> response = restTemplate.exchange(
+	                    NAVER_API_URL + "?query=" + query + "&display=1&sort=sim",
+	                    HttpMethod.GET,
+	                    entity,
+	                    String.class
+	            );
+	            if (response.getStatusCode() == HttpStatus.OK) {
+	                String responseBody = response.getBody();
+	                
+	                JsonNode jsonNode = objectMapper.readTree(responseBody);
+	                JsonNode itemsNode = jsonNode.get("items");
+	                if (itemsNode != null && itemsNode.isArray() && itemsNode.size() > 0) {
+	                    String imageUrl = itemsNode.get(0).get("link").asText();
+	                    downloadActorImage(imageUrl, actor.getActorNm());
+	                }
+	            }else {
+	            	log.info("saveActorImages 실패");
+	            }
+	        } catch (Exception e) {
+	        	log.info("saveActorImages 호출 오류",e);
+	        }
+	    }
+	}
+
+
+		private void downloadDirectorImage(String imageUrl, String directorNm) {
+		    try {
+		        URL url = new URL(imageUrl);
+		        URLConnection connection = url.openConnection();
+		        InputStream inputStream = connection.getInputStream();
+
+		        // 이미지를 저장할 파일 경로 및 이름
+		        String outputPath = "C:\\Users\\carax\\Pictures\\SFDB\\director\\" + directorNm + ".jpg"; 
+
+		        // 이미지를 파일로 저장
+		        try (FileOutputStream outputStream = new FileOutputStream(outputPath)) {
+		            byte[] buffer = new byte[1024];
+		            int bytesRead;
+		            while ((bytesRead = inputStream.read(buffer)) != -1) {
+		                outputStream.write(buffer, 0, bytesRead);
+		            }
+		        }
+
+		    } catch (Exception e) {
+		    }
+		}
+		
+		private void downloadActorImage(String imageUrl, String actorNm) {
+			try {
+				URL url = new URL(imageUrl);
+				URLConnection connection = url.openConnection();
+				InputStream inputStream = connection.getInputStream();
+				
+				// 이미지를 저장할 파일 경로 및 이름
+				String outputPath = "C:\\Users\\carax\\Pictures\\SFDB\\actor\\" + actorNm + ".jpg"; 
+				
+				// 이미지를 파일로 저장
+				try (FileOutputStream outputStream = new FileOutputStream(outputPath)) {
+					byte[] buffer = new byte[1024];
+					int bytesRead;
+					while ((bytesRead = inputStream.read(buffer)) != -1) {
+						outputStream.write(buffer, 0, bytesRead);
+					}
+				}
+				
+			} catch (Exception e) {
+			}
+		}
+
+			
 	}

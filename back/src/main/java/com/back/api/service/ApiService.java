@@ -1,6 +1,12 @@
 package com.back.api.service;
 
+import java.io.IOException;
+import java.util.List;
+
 import org.springframework.stereotype.Service;
+
+import com.back.api.repository.MovieActorsDto;
+import com.back.api.repository.MovieDirectorsDto;
 
 @Service
 public interface ApiService {
@@ -14,6 +20,10 @@ public interface ApiService {
 	void recommendMovies();
 
 	void releaseSoonMovies();
+
+	void saveDirectorImages();
+
+	void saveActorImages();
 
 
 }

@@ -117,4 +117,21 @@ and actorNm = #{actorNm}
 </if>
 </where>
 </select>
+
+<!-- 감독 이미지 -->
+<select id="directorImage" parameterType="MovieDirectorsDto" resultType="MovieDirectorsDto">
+select imageUrl
+  from moviedirectors
+ where directorNm = #{directorNm}
+</select>
+
+<!-- 배우 이미지 -->
+<select id="actorImage" parameterType="MovieActorsDto" resultType="MovieActorsDto">
+select imageUrl
+  from movieactors
+ where actorNm = #{actorNm}
+</select>
+
 </mapper>
+
+

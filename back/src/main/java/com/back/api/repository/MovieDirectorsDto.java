@@ -18,4 +18,5 @@ public class MovieDirectorsDto {
 	private String directorNm;
     private String directorEnNm;
     private String directorId;
+    private String imageUrl;
 }

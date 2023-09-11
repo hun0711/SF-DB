@@ -49,6 +49,12 @@ public interface MovieService {
 	/**************** 배우 정보 ***************/
 	List<MovieActorsDto> actorsInfo(MovieActorsDto maDto);
 
+	/***************** 감독 이미지 ******************/
+	List<MovieDirectorsDto> directorImage(MovieDirectorsDto mdDto);
+
+	/*************** 배우 이미지 ****************/
+	List<MovieActorsDto> actorImage(MovieActorsDto maDto);
+
 
 
 }

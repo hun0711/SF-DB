@@ -136,4 +136,25 @@ public class MovieServiceImpl implements MovieService {
 
 
 
+   //감독 이미지
+	@Override
+	public List<MovieDirectorsDto> directorImage(MovieDirectorsDto mdDto) {
+		log.info("MovieServiceImpl : directorImage 호출");
+		List<MovieDirectorsDto> directorImage = movieDao.directorImage(mdDto);
+		return directorImage;
+	}
+
+
+
+
+	//배우 이미지
+	@Override
+	public List<MovieActorsDto> actorImage(MovieActorsDto maDto) {
+		log.info("MovieServiceImpl : actorImage 호출");
+		List<MovieActorsDto> actorImage = movieDao.actorImage(maDto);
+		return actorImage;
+	}
+
+
+
 }

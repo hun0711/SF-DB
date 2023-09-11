@@ -18,5 +18,6 @@ public class MovieActorsDto {
 	private String actorNm;
 	private String actorEnNm;
 	private String actorId;
+	private String imageUrl;
 
 }

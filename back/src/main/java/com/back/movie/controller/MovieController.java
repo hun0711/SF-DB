@@ -124,6 +124,22 @@ public class MovieController {
         List<MovieActorsDto> actorsInfo = movieService.actorsInfo(maDto);
         return actorsInfo;
        }
+
+    /******* 감독 정보 ***********/
+    @GetMapping("/directorImage")
+    public List<MovieDirectorsDto> directorImage(MovieDirectorsDto mdDto) {
+        log.info("MovieController : directorImage 호출");
+        List<MovieDirectorsDto> directorImage = movieService.directorImage(mdDto);
+        return directorImage;
+       }
+    
+    
+    @GetMapping("/actorImage")
+    public List<MovieActorsDto> actorImage(MovieActorsDto maDto) {
+        log.info("MovieController : actorImage 호출");
+        List<MovieActorsDto> actorImage = movieService.actorImage(maDto);
+        return actorImage;
+       }
     
     
 }

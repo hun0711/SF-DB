@@ -1,6 +1,9 @@
 package com.back.api.repository;
 
+import java.util.List;
+
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 @Mapper
 public interface ApiDao {
@@ -44,6 +47,19 @@ public interface ApiDao {
 	
 	//개봉 예정 sf영화
     void saveReleaseSoonMovie(ReleaseSoonMovieDto releasesoonmovieDto);
+
+
+    //감독 목록
+	List<MovieDirectorsDto> directorList();
+
+    //배우 목록
+	List<MovieActorsDto> actorList();
+
+    //감독 이미지 저장
+	void saveDirectorImages(@Param("directorId")String directorId,@Param("imageUrl")String imageUrl);
+
+    //배우 이미지 저장
+	void saveActorImages(@Param("actorId")String actorId,@Param("imageUrl")String imageUrl);
 
 
 }

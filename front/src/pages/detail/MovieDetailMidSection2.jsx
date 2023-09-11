@@ -1,8 +1,8 @@
-import { Avatar, Typography } from '@mui/material';
+import { Typography } from '@mui/material';
 import React from 'react';
 import { useEffect } from 'react';
-import { getDirectorImageApi , getActorImageApi } from '../../utils/googleImageApi';
 import { useState } from 'react';
+import { actorImageDB, directorImageDB } from '../../axios/main/movieLogic';
 
 
 const MovieDetailMidSection2 = ({ movieDetail }) => {
@@ -11,51 +11,29 @@ const MovieDetailMidSection2 = ({ movieDetail }) => {
   const [directorImageUrls, setDirectorImageUrls] = useState([])
   const [actorImageUrls, setActorImageUrls] = useState([])
 
-  useEffect(()=>{
-   const searchDirectorImages = async() => {
-    try{
-      if(movieDetail && movieDetail.directorNms){
-        const imageResults = await Promise.all(
-          directors.map(async (directorName) => {
-            const query = directorName.trim() + ' 감독' + ' 사진'
-            return await getDirectorImageApi(query)
-          })
-        )
-        console.log(imageResults);
-        const imageURLs = imageResults.map((result) => result.link)
-        setDirectorImageUrls(imageURLs);
-      }
-    }catch(error){
-      console.log("감독 사진 검색 실패 : ", error);
-    }
+ const getDirectorImages = async () => {
+  console.log(directors);
+  try {
+    const res = await directorImageDB(directors)
+    setDirectorImageUrls(res);
+  } catch (error) {
+    console.error('감독 이미지 가져오기 오류', error);
   }
-  if (movieDetail) {
-    searchDirectorImages();
-  }
-},[movieDetail]);
+};
 
-  useEffect(()=>{
-   const searchActorImages = async() => {
-    try{
-      if(movieDetail && movieDetail.actorNms){
-        const imageResults = await Promise.all(
-          actors.map(async (actorName) => {
-            const query = actorName.trim() + ' 배우' + ' 사진'
-            return await getActorImageApi(query)
-          })
-        )
-        console.log(imageResults);
-        const imageURLs = imageResults.map((result) => result.link)
-        setActorImageUrls(imageURLs);
-      }
-    }catch(error){
-      console.log("배우 사진 검색 실패 : ", error);
-    }
+const getActorImages = async () => {
+  try {
+    const res = await actorImageDB(actors)
+    setActorImageUrls(res);
+  } catch (error) {
+    console.error('배우 이미지 가져오기 오류', error);
   }
-  if (movieDetail) {
-    searchActorImages()
-  }
-},[movieDetail]);
+};
+
+useEffect(() => {
+  getDirectorImages();
+  getActorImages();
+}, [movieDetail]); 
 
 
 
