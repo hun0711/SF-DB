@@ -117,7 +117,7 @@ const MovieDetailBtmSection2 = ({ movieDetail }) => {
           </div>
 
 {/* 동영상 div */}
-    <div style={{ display: 'flex', alignItems: 'center' , marginTop:'80px'}}>
+    <div style={{ display: 'flex', alignItems: 'center' , marginTop:'120px'}}>
         <Typography variant="h4" style={{ fontSize: '25px' }}>
           동영상 
         </Typography>

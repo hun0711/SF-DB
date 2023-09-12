@@ -125,7 +125,8 @@ import { MovieProvider } from '../../utils/movieDetailContext';
     </div>
 <div style={{marginTop:'100px'}}>
   <MovieDetailBtmSection2 movieDetail={movieDetail}/>
-</div>
+</div >
+
   <Footer/>
   </MovieProvider>
       </>

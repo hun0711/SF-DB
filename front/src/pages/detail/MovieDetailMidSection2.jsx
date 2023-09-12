@@ -2,39 +2,50 @@ import { Typography } from '@mui/material';
 import React from 'react';
 import { useEffect } from 'react';
 import { useState } from 'react';
-import { actorImageDB, directorImageDB } from '../../axios/main/movieLogic';
+import { firebaseStorage } from '../../utils/firebase';
 
 
 const MovieDetailMidSection2 = ({ movieDetail }) => {
   const directors = movieDetail && movieDetail.directorNms ? movieDetail.directorNms.split(',') : [];
   const actors = movieDetail && movieDetail.actorNms ? movieDetail.actorNms.split(',') : [];
-  const [directorImageUrls, setDirectorImageUrls] = useState([])
-  const [actorImageUrls, setActorImageUrls] = useState([])
+  const [directorImage, setDirectorImage] = useState([])
+  const [actorImage, setActorImage] = useState([])
 
- const getDirectorImages = async () => {
-  console.log(directors);
-  try {
-    const res = await directorImageDB(directors)
-    setDirectorImageUrls(res);
-  } catch (error) {
-    console.error('감독 이미지 가져오기 오류', error);
-  }
-};
+  useEffect(() => {
+    const getDirectorImage = async () => {
+      const images = await Promise.all(directors.map(async (director) => {
+        const storageRef = firebaseStorage.ref(`director/${director}.jpg`);
+        try {
+          const image = await storageRef.getDownloadURL();
+          return image;
+        } catch (error) {
+          console.log("감독 이미지 다운로드 에러 : " , error);
+          return null;
+        }
+      }));
+      setDirectorImage(images);
+    };
 
-const getActorImages = async () => {
-  try {
-    const res = await actorImageDB(actors)
-    setActorImageUrls(res);
-  } catch (error) {
-    console.error('배우 이미지 가져오기 오류', error);
-  }
-};
+    getDirectorImage();
+  }, [movieDetail]);
 
-useEffect(() => {
-  getDirectorImages();
-  getActorImages();
-}, [movieDetail]); 
+  useEffect(() => {
+    const getActorImage = async () => {
+      const images = await Promise.all(actors.map(async (actor) => {
+        const storageRef = firebaseStorage.ref(`actor/${actor}.jpg`);
+        try {
+          const image = await storageRef.getDownloadURL();
+          return image;
+        } catch (error) {
+          console.log("배우 이미지 다운로드 에러 : " , error);
+          return null;
+        }
+      }));
+      setActorImage(images);
+    };
 
+    getActorImage();
+  }, [movieDetail]);
 
 
 
@@ -60,16 +71,16 @@ useEffect(() => {
 
 
   const directorStyle = {
-    width : '220px',
+    width : '250px',
     maxWidth: '400px',
     display: 'flex',
     alignItems: 'center',
-    marginRight: '30px'
+    marginRight: '80px'
 
   };
 
   const underlineStyle = {
-    width : '1200px',
+    width : '1280px',
     borderBottom: '1px solid black',
     opacity: '10%',
     marginTop:'30px'
@@ -89,9 +100,9 @@ useEffect(() => {
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'flex-start',
-    width: '220px',
-    marginRight: '30px',
-    marginBottom:'30px'
+    width: '250px',
+    marginRight: '80px',
+    marginBottom:'40px'
   }
 
   return (
@@ -104,16 +115,15 @@ useEffect(() => {
         <div style={staffRoleStyle}>
           {directors.map((director, index) => (
             <div key={index} style={directorStyle}>
-               <div style={{ width: 35, height: 35, borderRadius: '50%', overflow: 'hidden', marginRight: '10px' }}>
-        <img src={directorImageUrls[index] ? directorImageUrls[index] : '/images/astronaut.jpg'} alt="감독" style={{ width: '100%', height: '100%', objectFit: 'cover' ,    marginTop: '5px',
-    marginRight: '10px',}} />
+               <div style={{ width: '80px', height: '80px', borderRadius: '50%', overflow: 'hidden', marginRight: '10px' }}>
+        <img src={directorImage[index] ? directorImage[index] : '/images/astronaut.jpg'} alt="감독" style={{ width: '100%', height: '100%', objectFit: 'cover' , marginRight: '10px',}} />
       </div>
-              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
-                <Typography variant="subtitle2" style={{ fontSize: '16px' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' , marginLeft:'5px' , marginTop:'5px'}}>
+                <Typography variant="subtitle2" style={{ fontSize: '14px' }}>
                   {director.trim()}
                 </Typography>
                 <div style={{ marginTop: '5px' }}>
-                  <Typography variant="button" style={{ opacity: '60%', fontSize: '15px' }}>
+                  <Typography variant="button" style={{ opacity: '60%', fontSize: '14px' }}>
                     감독
                   </Typography>
                 </div>
@@ -127,12 +137,11 @@ useEffect(() => {
  <div style={actorSectionStyle}>
   {actors.map((actor,index) => (
     <div key={index} style={actorStyle}>
-      <div style={{ width: 35, height: 35, borderRadius: '50%', overflow: 'hidden', marginRight: '10px' }}>
-        <img src={actorImageUrls[index] ? actorImageUrls[index] : '/images/astronaut.jpg'} alt="감독" style={{ width: '100%', height: '100%', objectFit: 'cover' ,    marginTop: '5px',
-    marginRight: '10px',}} />
+      <div style={{ width: '80px', height: '80px', borderRadius: '50%', overflow: 'hidden', marginRight: '10px' }}>
+        <img src={actorImage[index] ? actorImage[index] : '/images/astronaut.jpg'} alt="배우" style={{ width: '100%', height: '100%', objectFit: 'cover' ,marginRight: '50px'}} />
       </div>
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' , marginTop:'10px' }}>
-       <Typography variant="subtitle2" style={{ fontSize: '16px' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' , marginLeft:'5px',marginTop:'30px' }}>
+       <Typography variant="subtitle2" style={{ fontSize: '14px' }}>
  {actor.trim()}
 </Typography>
       </div>
