@@ -95,7 +95,7 @@ and movieSeq = #{movieSeq}
 <!-- 감독 정보 -->
 <select id="directorsInfo" parameterType="MovieDirectorsDto" resultType="MovieDirectorsDto">
 select *
-from movieDirectors
+from moviedirectors
 <where>
 <if test='directorId!=null'>
 and directorId = #{directorId}
@@ -110,7 +110,7 @@ or directorNm = #{directorNm}
 <!-- 배우 정보  -->
 <select id="actorsInfo" parameterType="MovieActorsDto" resultType="MovieActorsDto">
 select *
-from movieActors
+from movieactors
 <where>
 <if test='actorNm!=null'>
 and actorNm = #{actorNm}

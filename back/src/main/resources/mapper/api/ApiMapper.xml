@@ -11,26 +11,26 @@
   
   <!-- 감독 정보 -->
    <insert id='saveDirectors' parameterType="MovieDirectorsDto">
-        INSERT INTO movieDirectors (movieDirectorsNo , directorNm , directorEnNm , directorId)
+        INSERT INTO moviedirectors (movieDirectorsNo , directorNm , directorEnNm , directorId)
         VALUES (#{movieDirectorsNo} , #{directorNm} , #{directorEnNm} , #{directorId})
    </insert>
    
    
   <!-- 감독 중복 확인 -->
     <select id="existsDirectorById" parameterType="java.lang.String" resultType="boolean">
-        SELECT EXISTS (SELECT 1 FROM movieDirectors WHERE directorId = #{directorId})
+        SELECT EXISTS (SELECT 1 FROM moviedirectors WHERE directorId = #{directorId})
     </select> 
    
    
   <!-- 배우 정보  --> 
    <insert id='saveActors' parameterType="MovieActorsDto">
-        INSERT INTO movieActors (movieActorsNo , actorNm , actorEnNm , actorId)
+        INSERT INTO movieactors (movieActorsNo , actorNm , actorEnNm , actorId)
         VALUES (#{movieActorsNo} , #{actorNm} , #{actorEnNm}, #{actorId})
    </insert>
    
    <!-- 배우 중복 확인 -->
    <select id="existsActorById" parameterType="java.lang.String" resultType="boolean">
-       SELECT EXISTS (SELECT 1 FROM movieActors WHERE actorId = #{actorId})
+       SELECT EXISTS (SELECT 1 FROM movieactors WHERE actorId = #{actorId})
    </select>
    
    
