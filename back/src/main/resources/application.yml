@@ -14,7 +14,7 @@ spring:
           starttls:
             enable: true
   datasource:
-    url: jdbc:mysql://localhost:3306/SFDB?useSSL=false&allowPublicKeyRetrieval=true
+    url: jdbc:mysql://localhost:3306/sfdb?useSSL=false&allowPublicKeyRetrieval=true
     username: root
     password: 1567
     driver-class-name: com.mysql.cj.jdbc.Driver
