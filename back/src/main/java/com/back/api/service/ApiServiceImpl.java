@@ -15,10 +15,10 @@ import org.springframework.http.ResponseEntity;
 	import org.springframework.stereotype.Service;
 	import org.springframework.web.bind.annotation.ResponseBody;
 	import org.springframework.web.client.RestTemplate;
-	
-	import com.back.api.repository.BoxOfficeDto;
+
+import com.back.api.repository.ApiDao;
+import com.back.api.repository.BoxOfficeDto;
 	import com.back.api.repository.MovieActorsDto;
-	import com.back.api.repository.ApiDao;
 	import com.back.api.repository.MovieDirectorsDto;
 	import com.back.api.repository.MovieDto;
 import com.back.api.repository.RecommendMovieDto;
