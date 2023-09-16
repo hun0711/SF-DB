@@ -13,11 +13,11 @@ spring:
           auth: true
           starttls:
             enable: true
-  datasource:
-    url: jdbc:mysql://localhost:3306/sfdb?useSSL=false&allowPublicKeyRetrieval=true
-    username: root
-    password: 1567
-    driver-class-name: com.mysql.cj.jdbc.Driver
+datasource:
+  url: jdbc:mysql://sfdb.mysql.database.azure.com:3306/sfdb?useSSL=true
+  username: caraxxx13
+  password: 075471aa1!
+  driver-class-name: com.mysql.cj.jdbc.Driver
 
 mybatis:
   type-aliases-package: com.back.*.repository
@@ -27,7 +27,7 @@ management:
   endpoints:
     web:
       cors:
-        allowed-origins: "http://localhost:3000"
+        allowed-origins: "https://sfdb-front.web.app"
         allowed-methods: GET, POST, PUT, DELETE
         allowed-headers: "*"
         exposed-headers: "Authorization, Custom-Header"

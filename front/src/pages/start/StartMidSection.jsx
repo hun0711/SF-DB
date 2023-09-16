@@ -25,7 +25,7 @@ function StartMidSection() {
           component="img"
           src="/images/curvyLines.png"
           alt="curvy lines"
-          sx={{ pointerEvents: 'none', position: 'absolute', top: -180 }}
+          sx={{ pointerEvents: 'none', position: 'absolute', top: -300 }}
         />
         <Grid container spacing={5}>
           <Grid item xs={12} md={4}>

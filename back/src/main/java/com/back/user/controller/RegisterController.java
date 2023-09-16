@@ -18,7 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Controller
 @ResponseBody
-@CrossOrigin("http://localhost:3000")
+@CrossOrigin("https://sfdb-front.web.app")
 @RequestMapping("/register")
 @RequiredArgsConstructor
 @Slf4j
