@@ -46,7 +46,7 @@ management:
           google:  
             client-id: 360256300731-odu5dfeupc2d32nnc4d9tmai3gdmkjms.apps.googleusercontent.com
             client-secret: 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
-            redirect-uri: "http://106.10.41.84:1567/user/login/google"
+            redirect-uri: "http://101.101.219.216:1567/user/login/google"
             scope:
               - email
               - profile
@@ -60,7 +60,7 @@ management:
           naver:
             client-id: oizN99Oi1Z5vhgeRLGMB
             client-secret: oEkoNiO2bk
-            redirect-uri: http://106.10.41.84:1567/user/login/naver
+            redirect-uri: http://101.101.219.216:1567/user/login/naver
             client-authentication-method: form
             authorization-uri: https://nid.naver.com/oauth2.0/authorize
             token-uri: https://nid.naver.com/oauth2.0/token
