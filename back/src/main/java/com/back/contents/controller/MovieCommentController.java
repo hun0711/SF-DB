@@ -16,7 +16,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @RestController
-@CrossOrigin("https://sfdb-front.web.app")
+@CrossOrigin("https://sfdb-front-98c09.web.app")
 @RequestMapping("/contents")
 @RequiredArgsConstructor
 @Slf4j
