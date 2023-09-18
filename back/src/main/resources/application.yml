@@ -1,5 +1,7 @@
 server:
-  port: 8000
+  address: 0.0.0.0  # 모든 IP 주소에서 요청 허용
+  port: 1567  # 외부 포트 번호
+
 
 spring:
   mail:
