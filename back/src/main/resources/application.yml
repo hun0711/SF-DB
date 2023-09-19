@@ -50,7 +50,7 @@ management:
           google:  
             client-id: 360256300731-odu5dfeupc2d32nnc4d9tmai3gdmkjms.apps.googleusercontent.com
             client-secret: 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
-            redirect-uri: "https://101.101.219.216:443/user/login/google"
+            redirect-uri: "https://www.sfdb2023.shop/user/login/google"
             scope:
               - email
               - profile
@@ -64,7 +64,7 @@ management:
           naver:
             client-id: oizN99Oi1Z5vhgeRLGMB
             client-secret: oEkoNiO2bk
-            redirect-uri: https://101.101.219.216:443/user/login/naver
+            redirect-uri: https://www.sfdb2023.shop/user/login/naver
             client-authentication-method: form
             authorization-uri: https://nid.naver.com/oauth2.0/authorize
             token-uri: https://nid.naver.com/oauth2.0/token
