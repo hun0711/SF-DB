@@ -1,6 +1,11 @@
 server:
   address: 0.0.0.0  # 모든 IP 주소에서 요청 허용
-  port: 1567  # 외부 포트 번호
+  port: 8443 # HTTPS 포트 설정 
+  ssl:
+    enabled: true
+    key-store: classpath:keystore.p12 # keystore 파일 경로 (리소스 내에서)
+    key-store-password: 1567  # keystore 비밀번호
+    keyStoreType: PKCS12 # keystore 유형 (PKCS12 또는 JKS)
 
 spring:
   mail:
@@ -45,7 +50,7 @@ management:
           google:  
             client-id: 360256300731-odu5dfeupc2d32nnc4d9tmai3gdmkjms.apps.googleusercontent.com
             client-secret: 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
-            redirect-uri: "http://101.101.219.216:1567/user/login/google"
+            redirect-uri: "http://101.101.219.216:8443/user/login/google"
             scope:
               - email
               - profile
@@ -59,7 +64,7 @@ management:
           naver:
             client-id: oizN99Oi1Z5vhgeRLGMB
             client-secret: oEkoNiO2bk
-            redirect-uri: http://101.101.219.216:1567/user/login/naver
+            redirect-uri: http://101.101.219.216:8443/user/login/naver
             client-authentication-method: form
             authorization-uri: https://nid.naver.com/oauth2.0/authorize
             token-uri: https://nid.naver.com/oauth2.0/token
