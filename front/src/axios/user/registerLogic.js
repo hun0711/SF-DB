@@ -1,0 +1,47 @@
+import axios from "axios";
+
+//ID 중복체크 axios 로직
+export const idCheckDB = async (id) => {
+  try {
+    const res = await axios.get(`https://101.101.219.216:8443/register/idCheck`, {
+      params: {
+        userId: id,
+      },
+    });
+    return res.data;
+  } catch (error) {
+    console.error("Error during idCheckDB request:", error);
+    throw error; 
+  }
+};
+
+//회원가입 axios 로직
+export const regInsertDB = (data) => {
+  console.log(data);
+  return new Promise((resolve, reject) => {
+    try {
+      const response = axios({
+        method: "post", //@RequestBody
+        url: "https://101.101.219.216:8443/register/userJoin",
+        data: data,
+      });
+      resolve(response);
+    } catch (error) {
+      reject(error);
+    }
+  });
+};
+
+export const withdrawUserDB = async (userId) => {
+  console.log(userId);
+  try {
+    const res = await axios.post(
+      `https://101.101.219.216:8443/register/withdraw`,
+      { userId }
+    );
+    return res.data;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};

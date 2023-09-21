@@ -1,6 +1,6 @@
 server:
   address: 0.0.0.0  # 모든 IP 주소에서 요청 허용
-  port: 443 # HTTPS 포트 설정 
+  port: 8443 # HTTPS 포트 설정 
   ssl:
     enabled: true
     key-store: classpath:keystore.p12 # keystore 파일 경로 (리소스 내에서)
