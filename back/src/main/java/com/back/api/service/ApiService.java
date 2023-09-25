@@ -15,8 +15,6 @@ public interface ApiService {
 
 	void todayBoxofficeFromApi();
 	
-	void updateBoxofficeFromApi();
-
 	void recommendMovies();
 
 	void releaseSoonMovies();

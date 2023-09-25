@@ -54,14 +54,6 @@ public class ApiController {
 	       return ResponseEntity.ok("Boxoffice saved from Api.");
 	    }
 	    
-	    
-	    //박스오피스 변경사항 업데이트
-	    @PostMapping("/movies/updateBoxoffice")
-	    public ResponseEntity<String> updateBoxofficeFromApi(){
-	    	log.info("박스오피스 업데이트 호출");
-	    	apiService.updateBoxofficeFromApi();
-	    	return ResponseEntity.ok("Boxoffice updated from Api.");
-	    }
 
        //추천 영화 정보 호출
 	    @PostMapping("/movies/recommendMovies")
